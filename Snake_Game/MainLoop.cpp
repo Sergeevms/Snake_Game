@@ -8,7 +8,7 @@ namespace SnakeGame
 {
 	MainLoop::MainLoop()
 	{
-		window = new sf::RenderWindow(sf::VideoMode(SCREEN_WIDTH, SCEEN_HEIGHT), sf::String::fromUtf16(GAME_NAME.begin(), GAME_NAME.end()));
+		window = new sf::RenderWindow(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), sf::String::fromUtf16(GAME_NAME.begin(), GAME_NAME.end()));
 		game = new Game();
 	}
 
@@ -32,6 +32,7 @@ namespace SnakeGame
 
 		while (window->isOpen())
 		{
+			sf::sleep(sf::milliseconds(1));
 			std::vector<sf::Event> inputEvents;
 			sf::Event event;
 			while (window->pollEvent(event))

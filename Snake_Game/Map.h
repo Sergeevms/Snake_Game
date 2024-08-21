@@ -14,16 +14,22 @@ namespace SnakeGame
 		void LoadFromFile(std::string fileName);
 		void CreateSavedLvl();
 		void Draw(sf::RenderWindow& window) const;
-		void EmplaceMapObject(std::shared_ptr <MapObject>);
-		void RemoveMapObject(std::shared_ptr<MapObject>);
-		sf::Vector2i const& getSnakeHeadPosition() const;
-		std::vector <std::string> const& getcharMap() const;
+		void EmplaceMapObject(std::shared_ptr <MapObject> object);
+		void EmplaceNewApple();
+		void RemoveMapObject(std::shared_ptr<MapObject> object);
+		void RemoveMapObject(sf::Vector2i const& cell);
+		MapObjectType GetObjectType(sf::Vector2i const& cell) const;
+		sf::Vector2i GetRandomEmptyCell() const;
+		sf::Vector2i const& GetSnakeHeadPosition() const;
+		sf::Vector2i GetMapSize() const;
+		std::vector <std::string> const& GetcharMap() const;
 	private:
 		std::vector <std::shared_ptr<MapObject>> map;
 		std::unordered_map<char, sf::Texture> spritesCharToTexture;
 		std::vector <std::string> charMap;
 		sf::Vector2i loadedSnakeHeadPosition{ -1, -1 };
 		Settings const& currentSettings;
+		int CellToMapIndex(sf::Vector2i const& cell) const;
 		int width{ 0 };
 		int height{ 0 };
 		int applesCount{ 0 };

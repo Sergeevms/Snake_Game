@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <unordered_map>
 #include <concepts>
+//#include <compare>
 
 namespace SnakeGame
 {
@@ -68,5 +69,14 @@ namespace SnakeGame
 		object.setScale(xScale, yScale);
 	}
 
-	void loadTexture(std::string const& fileName, sf::Texture& texture);
+	void LoadTexture(std::string const& fileName, sf::Texture& texture);
+
+	/*Function to check than valueToCheck is in right-open interval [begin, end)
+	 *return true if begin <= valueToCheck and valueToCheck < end*/
+	template<typename T>
+	bool InRightOpenInterval(T begin, T end, T valueToCheck)
+		requires std::totally_ordered<T>
+	{
+		return begin <= valueToCheck and valueToCheck < end;
+	}
 }

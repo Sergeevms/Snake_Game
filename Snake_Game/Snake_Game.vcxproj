@@ -139,11 +139,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Apple.cpp" />
+    <ClCompile Include="BaseInputHandler.cpp" />
+    <ClCompile Include="DebugGrid.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainLoop.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapObject.cpp" />
+    <ClCompile Include="PlayingInputHandler.cpp" />
     <ClCompile Include="PlayingState.cpp" />
     <ClCompile Include="Snake.cpp" />
     <ClCompile Include="Utility.cpp" />
@@ -151,11 +154,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Apple.h" />
+    <ClInclude Include="BaseInputHandler.h" />
     <ClInclude Include="BaseState.h" />
+    <ClInclude Include="DebugGrid.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="MainLoop.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapObject.h" />
+    <ClInclude Include="PlayingInputHandler.h" />
     <ClInclude Include="PlayingState.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="Snake.h" />

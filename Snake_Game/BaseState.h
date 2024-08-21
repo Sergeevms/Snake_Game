@@ -11,11 +11,12 @@ namespace SnakeGame
 		MainMenu,
 		Playing
 	}; 
+	class Game;
 
 	class BaseState
 	{
 	public:
-		BaseState(Settings& settings) : currentSettings{ settings } { };
+		BaseState(Game* currentGame, Settings& settings) : game(currentGame), currentSettings{ settings } { };
 		virtual ~BaseState() = default;
 		virtual void Draw(sf::RenderWindow&) const = 0;
 		virtual void Update(float) = 0;
@@ -23,5 +24,6 @@ namespace SnakeGame
 		virtual GameState GetGameState() const = 0;
 	protected:
 		Settings& currentSettings;
+		Game* game;
 	};
 }

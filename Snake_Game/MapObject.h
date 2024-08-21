@@ -13,12 +13,28 @@ namespace SnakeGame
 		Snake
 	};
 
+	enum class CollisionResult
+	{
+		None,
+		GameOver,
+		AppleEaten
+	};
+
+	const std::unordered_map<MapObjectType, CollisionResult> collitionResults
+	{
+		{MapObjectType::None, CollisionResult::None},
+		{MapObjectType::Wall, CollisionResult::GameOver},
+		{MapObjectType::Apple, CollisionResult::AppleEaten},
+		{MapObjectType::Snake, CollisionResult::GameOver}
+	};
+
 	const std::unordered_map<Direction, float> directionToRotation
 	{ 
 		{Direction::Up, 0.f}, 
 		{Direction::Rigth, 90.f},
 		{Direction::Down, 180.f},
-		{Direction::Left, 270.f} };
+		{Direction::Left, 270.f} 
+	};
 
 	class MapObject
 	{

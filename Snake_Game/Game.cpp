@@ -5,7 +5,7 @@ namespace SnakeGame
 {
 	Game::Game()
 	{		
-		stateStack.push_back(std::make_shared<PlayingState>(currentSettings));
+		stateStack.push_back(std::make_shared<PlayingState>(this, currentSettings));
 	}
 
 	bool Game::IsGameShuttingDown() const
