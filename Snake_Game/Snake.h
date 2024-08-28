@@ -10,16 +10,17 @@ namespace SnakeGame
 	class SnakeNode: public MapObject
 	{
 	public:
-		SnakeNode(sf::Vector2i const& mapCell, sf::Texture const& texture, Settings const& settings, Direction direction, const float timeTillMove = 0.f);
+		SnakeNode(sf::Vector2i const& mapCell, sf::Texture const& texture, Settings const& settings, Direction direction, const bool isMovingEnabled = true);
 		void Update(const float deltaTime);
 		void SetDirection(Direction newDirection);
 		void SetCellPositionIfMoving(sf::Vector2i const& newCell);
 		void UpdateScreenPositionByCell();
+		void SetMovingEnabledState(bool isEnabled);
 		Direction GetDirection() const;
 		virtual MapObjectType GetObjectType() const override { return MapObjectType::Snake; };
 	private:
 		Direction currentDirection;
-		float timeTillMovingAvaliable;
+		bool isMoving;		
 	};
 
 	class PlayingState;

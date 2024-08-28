@@ -148,6 +148,7 @@
     <ClCompile Include="MapObject.cpp" />
     <ClCompile Include="PlayingInputHandler.cpp" />
     <ClCompile Include="PlayingState.cpp" />
+    <ClCompile Include="Settings.cpp" />
     <ClCompile Include="Snake.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="Wall.cpp" />

@@ -24,13 +24,14 @@ namespace SnakeGame
 
 	enum class RelativePosition
 	{
-		Center, TopLeft
+		Center, TopLeft, TopRight
 	};
 
 	const std::unordered_map<RelativePosition, sf::Vector2f> relativePositions
 	{
 		{RelativePosition::Center, { 0.5f, 0.5f }},
-		{RelativePosition::TopLeft, { 0.f, 0.f }}
+		{RelativePosition::TopLeft, { 0.f, 0.f }},
+		{RelativePosition::TopRight, { 1.f, 0.f }}
 	};
 
 	/*Concept for function to set origin by RelativeOrigin*/

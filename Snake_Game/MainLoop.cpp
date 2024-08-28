@@ -32,7 +32,7 @@ namespace SnakeGame
 
 		while (window->isOpen())
 		{
-			sf::sleep(sf::milliseconds(1));
+			//sf::sleep(sf::milliseconds(1));
 			std::vector<sf::Event> inputEvents;
 			sf::Event event;
 			while (window->pollEvent(event))

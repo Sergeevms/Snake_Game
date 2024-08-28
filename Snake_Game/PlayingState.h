@@ -17,14 +17,17 @@ namespace SnakeGame
         virtual void Update(const float deltaTime) override;
         virtual void HandleInput(std::vector<sf::Event> const& inputEvents) override;
         virtual GameState GetGameState() const override { return GameState::Playing; } ;
-        void CheckColition(sf::Vector2i& cell);
+        CollisionResult CheckColition(sf::Vector2i& cell);
     private:
         bool isGameOvered{ false };
+        int scoreCount{ 0 };
+        float delayBeforeMoving;
         Map map;
         Snake snake;
-        PlayingInputHandler inputHandler;
+        PlayingInputHandler inputHandler;        
         sf::Font font;
         sf::Text gameOver;
+        sf::Text scoreText;
         DebugGrid debugGrid;
     };
 }
