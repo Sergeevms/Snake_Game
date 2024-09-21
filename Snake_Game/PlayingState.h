@@ -16,7 +16,8 @@ namespace SnakeGame
         virtual void Draw(sf::RenderWindow& window) const override;
         virtual void Update(const float deltaTime) override;
         virtual void HandleInput(std::vector<sf::Event> const& inputEvents) override;
-        virtual GameState GetGameState() const override { return GameState::Playing; } ;
+        void resetMovingDelay();
+        //virtual GameState GetGameState() const override { return GameState::Playing; } ;
         CollisionResult CheckColition(sf::Vector2i& cell);
     private:
         bool isGameOvered{ false };

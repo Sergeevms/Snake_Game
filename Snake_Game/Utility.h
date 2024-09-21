@@ -2,7 +2,6 @@
 #include <SFML/Graphics.hpp>
 #include <unordered_map>
 #include <concepts>
-//#include <compare>
 
 namespace SnakeGame
 {
@@ -24,14 +23,27 @@ namespace SnakeGame
 
 	enum class RelativePosition
 	{
-		Center, TopLeft, TopRight
+		TopLeft, TopMiddle, TopRight, MiddleLeft, Center, BottomLeft
 	};
 
 	const std::unordered_map<RelativePosition, sf::Vector2f> relativePositions
 	{
-		{RelativePosition::Center, { 0.5f, 0.5f }},
 		{RelativePosition::TopLeft, { 0.f, 0.f }},
-		{RelativePosition::TopRight, { 1.f, 0.f }}
+		{RelativePosition::TopMiddle, { 0.5f, 0.f }},
+		{RelativePosition::TopRight, { 1.f, 0.f }},
+		{RelativePosition::MiddleLeft, { 0.f, 0.5f }},
+		{RelativePosition::Center, { 0.5f, 0.5f }},
+		{RelativePosition::BottomLeft, { 0.f, 1.f }}
+	};
+
+	enum class Orientation
+	{
+		Horizontal, Vertical
+	};
+
+	enum class Alignment
+	{
+		Min, Middle, Max
 	};
 
 	/*Concept for function to set origin by RelativeOrigin*/
@@ -80,4 +92,13 @@ namespace SnakeGame
 	{
 		return begin <= valueToCheck and valueToCheck < end;
 	}
+
+	/**/
+	template<typename T>
+	void DrawObjects()
+	{
+
+	}
+
+	sf::Vector2f RelativePositionByOrientationAndAlignment(const Orientation orientation, const Alignment alignment);
 }

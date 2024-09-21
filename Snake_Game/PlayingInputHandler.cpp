@@ -1,44 +1,59 @@
 #include <functional>
 #include "PlayingInputHandler.h"
+#include "PlayingState.h"
+#include "Game.h"
+#include "Snake.h"
 
-SnakeGame::PlayingInputHandler::PlayingInputHandler(Game* currentGame, Settings & currentSettings, Snake* currentSnake) : BaseInputHandler(currentGame, currentSettings), snake(currentSnake)
+namespace SnakeGame
 {
-	actionMapping[ActionsTypesOnInput::Up] = &PlayingInputHandler::turnSnakeUp;
-	actionMapping[ActionsTypesOnInput::Down] = &PlayingInputHandler::turnSnakeDown;
-	actionMapping[ActionsTypesOnInput::Left] = &PlayingInputHandler::turnSnakeLeft;
-	actionMapping[ActionsTypesOnInput::Right] = &PlayingInputHandler::turnSnakeRight;
-};
-
-void SnakeGame::PlayingInputHandler::HandleInputEvents(std::vector<sf::Event> const& input)
-{
-	for (auto& inputEvent : input)
+	PlayingInputHandler::PlayingInputHandler(Game* currentGame, Settings& currentSettings, Snake* currentSnake, PlayingState* currentState)
+		: BaseInputHandler(currentGame, currentSettings), snake(currentSnake), state(currentState)
 	{
-		if (settings.keyMap.contains(inputEvent.key.code))
+		actionMapping[ActionsTypesOnInput::Up] = &PlayingInputHandler::turnSnakeUp;
+		actionMapping[ActionsTypesOnInput::Down] = &PlayingInputHandler::turnSnakeDown;
+		actionMapping[ActionsTypesOnInput::Left] = &PlayingInputHandler::turnSnakeLeft;
+		actionMapping[ActionsTypesOnInput::Right] = &PlayingInputHandler::turnSnakeRight;
+
+		actionMapping[ActionsTypesOnInput::Pause] = &PlayingInputHandler::pauseGame;
+	};
+
+	void PlayingInputHandler::HandleInputEvents(std::vector<sf::Event> const& input)
+	{
+		for (auto& inputEvent : input)
 		{
-			if (actionMapping.contains(settings.keyMap[inputEvent.key.code]))
+			if (settings.keyMap.contains(inputEvent.key.code))
 			{
-				std::invoke(actionMapping[settings.keyMap[inputEvent.key.code]], this);
+				if (actionMapping.contains(settings.keyMap[inputEvent.key.code]))
+				{
+					std::invoke(actionMapping[settings.keyMap[inputEvent.key.code]], this);
+				}
 			}
 		}
 	}
-}
 
-void SnakeGame::PlayingInputHandler::turnSnakeUp()
-{
-	snake->SetNewDirection(Direction::Up);
-}
+	void PlayingInputHandler::turnSnakeUp()
+	{
+		snake->SetNewDirection(Direction::Up);
+	}
 
-void SnakeGame::PlayingInputHandler::turnSnakeRight()
-{
-	snake->SetNewDirection(Direction::Rigth);
-}
+	void PlayingInputHandler::turnSnakeRight()
+	{
+		snake->SetNewDirection(Direction::Rigth);
+	}
 
-void SnakeGame::PlayingInputHandler::turnSnakeDown()
-{
-	snake->SetNewDirection(Direction::Down);
-}
+	void PlayingInputHandler::turnSnakeDown()
+	{
+		snake->SetNewDirection(Direction::Down);
+	}
 
-void SnakeGame::PlayingInputHandler::turnSnakeLeft()
-{
-	snake->SetNewDirection(Direction::Left);
+	void PlayingInputHandler::turnSnakeLeft()
+	{
+		snake->SetNewDirection(Direction::Left);
+	}
+
+	void PlayingInputHandler::pauseGame()
+	{
+		state->resetMovingDelay();
+		game->SwitchToState(GameState::Pause);
+	}
 }

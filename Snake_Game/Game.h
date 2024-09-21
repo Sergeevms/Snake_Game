@@ -13,7 +13,10 @@ namespace SnakeGame
 		bool IsGameShuttingDown() const;
 		void Update(float deltaTime, std::vector <sf::Event> const& inputEvents);
 		void Draw(sf::RenderWindow&) const;
+		void SwitchToState(GameState newState);
+		void ShutDown();
 	private:
+		bool isShuttingDown{ false };
 		Settings currentSettings;
 		std::vector<std::shared_ptr<BaseState>> stateStack;
 	};

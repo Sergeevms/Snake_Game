@@ -9,7 +9,8 @@ namespace SnakeGame
 	{
 		None,
 		MainMenu,
-		Playing
+		Playing,
+		Pause
 	}; 
 	class Game;
 
@@ -21,7 +22,7 @@ namespace SnakeGame
 		virtual void Draw(sf::RenderWindow&) const = 0;
 		virtual void Update(float) = 0;
 		virtual void HandleInput(std::vector<sf::Event> const&) = 0;
-		virtual GameState GetGameState() const = 0;
+		//virtual GameState GetGameState() const = 0;
 	protected:
 		Settings& currentSettings;
 		Game* game;

@@ -6,7 +6,7 @@
 namespace SnakeGame
 {
 	PlayingState::PlayingState(Game* game, Settings& settings) : BaseState(game, settings), map(settings), snake(settings, this, &map),
-		inputHandler(game, settings, &snake), debugGrid(settings), delayBeforeMoving(settings.movingDelayOnStart)
+		inputHandler(game, settings, &snake, this), debugGrid(settings), delayBeforeMoving(settings.movingDelayOnStart)
 	{		
 		map.LoadFromFile(settings.selectedLevel);
 		map.CreateSavedLvl();
@@ -71,6 +71,11 @@ namespace SnakeGame
 	void PlayingState::HandleInput(std::vector<sf::Event> const& inputEvents)
 	{
 		inputHandler.HandleInputEvents(inputEvents);
+	}
+
+	void PlayingState::resetMovingDelay()
+	{
+		delayBeforeMoving = currentSettings.movingDelayOnStart;
 	}
 
 	CollisionResult PlayingState::CheckColition(sf::Vector2i& cell)

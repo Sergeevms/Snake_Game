@@ -31,8 +31,7 @@ namespace SnakeGame
 		float lastTime = clock.getElapsedTime().asSeconds();
 
 		while (window->isOpen())
-		{
-			//sf::sleep(sf::milliseconds(1));
+		{		
 			std::vector<sf::Event> inputEvents;
 			sf::Event event;
 			while (window->pollEvent(event))
@@ -56,6 +55,11 @@ namespace SnakeGame
 			window->clear();
 			game->Draw(*window);
 			window->display();
+
+			if (game->IsGameShuttingDown())
+			{
+				window->close();
+			}
 		}
 	}
 }

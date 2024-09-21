@@ -46,4 +46,28 @@ namespace SnakeGame
         texture.loadFromFile(RESOURCES_PATH + fileName);
 #endif
     }
+
+    sf::Vector2f RelativePositionByOrientationAndAlignment(const Orientation orientation, const Alignment alignment)
+    {
+        RelativePosition relativeOrigin;
+        switch (alignment)
+        {
+        case Alignment::Min:
+        {
+            relativeOrigin = RelativePosition::TopLeft;
+            break;
+        }
+        case Alignment::Middle:
+        {
+            relativeOrigin = orientation == Orientation::Vertical ? RelativePosition::TopMiddle : RelativePosition::MiddleLeft;
+            break;
+        }
+        case Alignment::Max:
+        {
+            relativeOrigin = orientation == Orientation::Vertical ? RelativePosition::TopRight : RelativePosition::BottomLeft;
+            break;
+        }
+        }
+        return relativePositions.at(relativeOrigin);
+    }
 }
