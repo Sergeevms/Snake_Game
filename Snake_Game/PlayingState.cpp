@@ -2,6 +2,7 @@
 #include <string>
 #include "PlayingState.h"
 #include "Apple.h"
+#include "Game.h"
 
 namespace SnakeGame
 {
@@ -17,16 +18,16 @@ namespace SnakeGame
 
 
 #ifdef _DEBUG
-		assert(font.loadFromFile(RESOURCES_PATH + "Fonts/Roboto-Regular.ttf"));
+		assert(font.loadFromFile(settings.fontPath +  "Roboto-Regular.ttf"));
 #elif
-		font.loadFromFile(RESOURCES_PATH + "Fonts/Roboto-Regular.ttf");
+		font.loadFromFile(FONT_PATH + "Roboto-Regular.ttf");
 #endif // DEBUG
 		gameOver.setFont(font);
 		gameOver.setString("GAME OVER");
 		gameOver.setFillColor(sf::Color::Red);
 		gameOver.setCharacterSize(80);
 		SetOriginByRelative(gameOver, relativePositions.at(RelativePosition::Center));
-		gameOver.setPosition({SCREEN_WIDTH / 2.f, SCREEN_HEIGHT / 2.f});
+		gameOver.setPosition({ settings.screenWidth / 2.f, settings.screenHeight / 2.f});
 
 		scoreText.setFont(font);
 		scoreText.setFillColor(sf::Color::Green);
@@ -35,7 +36,9 @@ namespace SnakeGame
 		std::u16string currentScore(u"Очки:\n");
 		scoreText.setString(sf::String::fromUtf16(currentScore.begin(), currentScore.end()) + std::to_string(scoreCount));
 		SetOriginByRelative(scoreText, relativePositions.at(RelativePosition::TopRight));
-		scoreText.setPosition({ SCREEN_WIDTH - 1.f, 0.f });
+		scoreText.setPosition({ settings.screenWidth - 1.f, 0.f });
+
+		game->SwitchMusicPlaying(true);
 	}
 
 	void PlayingState::Draw(sf::RenderWindow& window) const
@@ -54,9 +57,14 @@ namespace SnakeGame
 	{
 		if (!isGameOvered)
 		{
-			if (delayBeforeMoving <= EPSILON)
+			if (delayBeforeMoving <= settings.epsilon)
 			{
 				snake.Update(deltaTime);
+				if (!sessionStarted)
+				{
+					sessionStarted = true;
+					game->PlaySound(soundType::OnSessionStart);
+				}
 			}
 			else
 			{
@@ -75,7 +83,8 @@ namespace SnakeGame
 
 	void PlayingState::resetMovingDelay()
 	{
-		delayBeforeMoving = currentSettings.movingDelayOnStart;
+		delayBeforeMoving = settings.movingDelayOnStart;
+		sessionStarted = false;
 	}
 
 	CollisionResult PlayingState::CheckColition(sf::Vector2i& cell)
@@ -85,20 +94,22 @@ namespace SnakeGame
 		{
 		case CollisionResult::AppleEaten:
 		{			
+			game->PlaySound(soundType::OnSnakeHit);
 			snake.AddNewBody();
 			map.EmplaceNewApple();
-			scoreCount += currentSettings.difficultyToScore[currentSettings.currentDifficulty];
+			scoreCount += settings.difficultyToScore[settings.currentDifficulty];
 			map.RemoveMapObject(cell);
 			break;
 		}
 		case CollisionResult::GameOver:
 		{
 			isGameOvered = true;
+			game->PlaySound(soundType::OnLose);
 			break;
 		}
 		case CollisionResult::None:
 		{
-
+			break;
 		}
 		}
 		return collitionResult;

@@ -9,19 +9,16 @@
 
 namespace SnakeGame
 {
-	Map::Map(Settings const& settings) : currentSettings{settings}
+	Map::Map(Settings const& currentSettings) : settings{ currentSettings }
 	{
-		//loading sprites for MapObects
 		addSpriteTexture('W', "Wall.png");
-		/*addSpriteTexture('H', "SnakeHead.png");
-		addSpriteTexture('B', "SnakeBody.png");*/
 		addSpriteTexture('A', "Apple.png");
 	}
 
 	void Map::LoadFromFile(std::string fileName)
 	{
 		std::ifstream input;
-		input.open(LEVEL_PATH + fileName);
+		input.open(settings.levelPath + fileName);
 		if (input.is_open())
 		{
 			input >> width >> height;
@@ -56,12 +53,12 @@ namespace SnakeGame
 				{
 				case 'W':
 				{
-					currentObject = std::make_shared<Wall>(currentCell, spritesCharToTexture['W'], currentSettings, getWallDirection(currentCell));
+					currentObject = std::make_shared<Wall>(currentCell, spritesCharToTexture['W'], settings, getWallDirection(currentCell));
 					break;
 				}
 				case 'A':
 				{
-					currentObject = std::make_shared<Apple>(currentCell, spritesCharToTexture['A'], currentSettings);
+					currentObject = std::make_shared<Apple>(currentCell, spritesCharToTexture['A'], settings);
 					break;
 				}
 				case 'H':
@@ -95,7 +92,7 @@ namespace SnakeGame
 	void Map::EmplaceNewApple()
 	{
 		sf::Vector2i newAppleCell = GetRandomEmptyCell();
-		map[CellToMapIndex(newAppleCell)] = std::make_shared<Apple>(newAppleCell, spritesCharToTexture['A'], currentSettings);
+		map[CellToMapIndex(newAppleCell)] = std::make_shared<Apple>(newAppleCell, spritesCharToTexture['A'], settings);
 	}
 
 	void Map::RemoveMapObject(std::shared_ptr<MapObject> object)
@@ -161,7 +158,7 @@ namespace SnakeGame
 	void Map::addSpriteTexture(char type, std::string fileName)
 	{
 		sf::Texture currentTexture;
-		LoadTexture(fileName, currentTexture);
+		LoadTexture(settings.texturePath + fileName, currentTexture);
 		spritesCharToTexture[type] = currentTexture;
 	}
 

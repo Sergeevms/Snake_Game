@@ -193,12 +193,12 @@ namespace SnakeGame
 		currentNode->GetCurrentlySelectedChild()->SetStyle(&selectedStyle);
 	}
 
-	void MenuNodeStyle::Init(const std::string fontName, const sf::Color newColor, const sf::Text::Style newTextStyle, const unsigned int newSize)
+	void MenuNodeStyle::Init(const std::string fontName, const Settings& settings, const sf::Color newColor, const sf::Text::Style newTextStyle, const unsigned int newSize)
 	{
 #ifdef _DEBUG
-		assert(font.loadFromFile(RESOURCES_PATH + "Fonts/" + fontName));
+		assert(font.loadFromFile(settings.fontPath + fontName));
 #elif
-		font.loadFromFile(RESOURCES_PATH + "Fonts/" + fontName);
+		font.loadFromFile(settings.FONT_PATH + fontName);
 #endif // DEBUG
 		color = newColor;
 		textStyle = newTextStyle;

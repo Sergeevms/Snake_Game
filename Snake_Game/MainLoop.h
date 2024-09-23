@@ -8,11 +8,12 @@ namespace SnakeGame
 	{
 	public:
 		MainLoop();
-		~MainLoop();
+		~MainLoop() = default;
 		void Run();
-	private:
-		sf::RenderWindow* window{ nullptr };
-		Game* game{ nullptr };
+	private:		
+		Settings settings;
+		std::unique_ptr<sf::RenderWindow> window;
+		std::unique_ptr<Game> game;
 	};
 
 }

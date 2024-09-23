@@ -184,8 +184,8 @@
     <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Levels\empty.lvl" />
-    <None Include="Levels\level1.lvl" />
+    <None Include="Resources\Levels\empty.lvl" />
+    <None Include="Resources\Levels\level1.lvl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

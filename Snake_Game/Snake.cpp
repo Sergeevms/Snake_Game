@@ -55,17 +55,17 @@ namespace SnakeGame
 		return currentDirection;
 	}
 
-	Snake::Snake(Settings const& settings, PlayingState* currentState, Map* currentMap): currentSettings(settings), playingState(currentState),
+	Snake::Snake(Settings const& currentSettings, PlayingState* currentState, Map* currentMap): settings(currentSettings), playingState(currentState),
 		newDirection(Direction::None), map(currentMap)
 	{
-		LoadTexture("SnakeHead2.png", headTexture);
-		LoadTexture("SnakeBody2.png", bodyTexture);
+		LoadTexture(settings.texturePath + "SnakeHead.png", headTexture);
+		LoadTexture(settings.texturePath + "SnakeBody.png", bodyTexture);
 	}
 
 	void Snake::Update(const float deltaTime)
 	{		
 		timeTillNextCell -= deltaTime;
-		if (timeTillNextCell > EPSILON)
+		if (timeTillNextCell > settings.epsilon)
 		{
 			for (auto& node : nodes)
 			{
@@ -74,7 +74,7 @@ namespace SnakeGame
 		}
 		else
 		{
-			timeTillNextCell = currentSettings.timeOnCell;
+			timeTillNextCell = settings.timeOnCell;
 			nodes.back()->SetMovingEnabledState(true);
 			std::shared_ptr<SnakeNode> head = nodes.front();
 			sf::Vector2i cellToCheck{ head->GetCellPosition().x + (int)directionVectors.at(newDirection).x,
@@ -125,14 +125,14 @@ namespace SnakeGame
 			addedToSnake.push_back(std::vector<bool>(row.size(), false));
 		}
 		addedToSnake[currentCell.y][currentCell.x] = true;
-		nodes.push_back(std::make_shared<SnakeNode>(currentCell, headTexture, currentSettings, Direction::None));
+		nodes.push_back(std::make_shared<SnakeNode>(currentCell, headTexture, settings, Direction::None));
 		while (AddNextBodyFromMap(addedToSnake, charMap, currentCell))
 		{
 			currentCell = nodes.back()->GetCellPosition();
 		}
 		Direction possibleDirection = ((++nodes.begin())->get())->GetDirection();
-		if (charMap[headPosition.y + (int)(directionVectors.at(possibleDirection).y)][headPosition.x + (int)(directionVectors.at(possibleDirection).x)] == 'E' ||
-			charMap[headPosition.y + (int)(directionVectors.at(possibleDirection).y)][headPosition.x + (int)(directionVectors.at(possibleDirection).x)] == 'A')
+		if (charMap[headPosition.y + static_cast<int>(directionVectors.at(possibleDirection).y)][headPosition.x + static_cast<int>(directionVectors.at(possibleDirection).x)] == 'E' ||
+			charMap[headPosition.y + static_cast<int>(directionVectors.at(possibleDirection).y)][headPosition.x + static_cast<int>(directionVectors.at(possibleDirection).x)] == 'A')
 		{
 			nodes.front()->SetDirection(possibleDirection);
 			newDirection = possibleDirection;
@@ -141,8 +141,8 @@ namespace SnakeGame
 		{
 			for (auto& curDir : directionVectors)
 			{
-				if (charMap[headPosition.y + (int)curDir.second.y][headPosition.x + (int)curDir.second.x] == 'E' || 
-					charMap[headPosition.y + (int)curDir.second.y][headPosition.x + (int)curDir.second.x] == 'A')
+				if (charMap[headPosition.y + static_cast<int>(curDir.second.y)][headPosition.x + static_cast<int>(curDir.second.x)] == 'E' ||
+					charMap[headPosition.y + static_cast<int>(curDir.second.y)][headPosition.x + static_cast<int>(curDir.second.x)] == 'A')
 				{
 					nodes.front()->SetDirection(curDir.first);
 					newDirection = curDir.first;
@@ -154,7 +154,7 @@ namespace SnakeGame
 	void Snake::AddNewBody()
 	{
 		std::shared_ptr<SnakeNode> lastNode = nodes.back();
-		nodes.push_back(std::make_shared<SnakeNode>(lastNode->GetCellPosition(), bodyTexture, currentSettings, lastNode->GetDirection(), false));
+		nodes.push_back(std::make_shared<SnakeNode>(lastNode->GetCellPosition(), bodyTexture, settings, lastNode->GetDirection(), false));
 	}
 
 	std::list<std::shared_ptr<SnakeNode>> const& Snake::GetNodes() const
@@ -173,7 +173,7 @@ namespace SnakeGame
 				charMap[checkingCell.y][checkingCell.x] == 'B' &&
 				addedCells[checkingCell.y][checkingCell.x] == false)
 			{				
-				nodes.push_back(std::make_shared<SnakeNode>(checkingCell, bodyTexture, currentSettings, OpossiteDirection(curDir.first)));
+				nodes.push_back(std::make_shared<SnakeNode>(checkingCell, bodyTexture, settings, OpossiteDirection(curDir.first)));
 				addedCells[checkingCell.y][checkingCell.x] = true;
 				return true;
 			}

@@ -21,6 +21,7 @@ namespace SnakeGame
         CollisionResult CheckColition(sf::Vector2i& cell);
     private:
         bool isGameOvered{ false };
+        bool sessionStarted{ false };
         int scoreCount{ 0 };
         float delayBeforeMoving;
         Map map;

@@ -30,9 +30,9 @@ namespace SnakeGame
 	DebugGrid::DebugGrid(Settings const& currentSettings) : settings(currentSettings)
 	{
 #ifdef _DEBUG
-		assert(font.loadFromFile(RESOURCES_PATH + "Fonts/Roboto-Regular.ttf"));
+		assert(font.loadFromFile(settings.fontPath + "Roboto-Regular.ttf"));
 #elif
-		font.loadFromFile(RESOURCES_PATH + "Fonts/Roboto-Regular.ttf");
+		font.loadFromFile(settings.FONT_PATH + "Roboto-Regular.ttf");
 #endif // DEBUG
 	}
 

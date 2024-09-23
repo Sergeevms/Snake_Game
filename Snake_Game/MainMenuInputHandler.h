@@ -28,6 +28,8 @@ namespace SnakeGame
         void GoBack();
         void ExitGame();
         void StartPlaying();
+        void SwitchMusic();
+        void SwitchSound();
     };
 }
 

@@ -29,7 +29,7 @@ namespace SnakeGame
 	class Snake
 	{
 	public:
-		Snake(Settings const& settings, PlayingState* currentState, Map* currentMap);
+		Snake(Settings const& currentSettings, PlayingState* currentState, Map* currentMap);
 		void Update(const float deltaTime);
 		void SetNewDirection(Direction direction);
 		void Draw(sf::RenderWindow& window) const;
@@ -41,7 +41,7 @@ namespace SnakeGame
 		Map* map;
 		std::list<std::shared_ptr<SnakeNode>> nodes;
 		Direction newDirection;
-		Settings const& currentSettings;
+		Settings const& settings;
 		sf::Texture headTexture;
 		sf::Texture bodyTexture;
 		float timeTillNextCell{ 0.f };

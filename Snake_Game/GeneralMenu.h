@@ -16,7 +16,7 @@ namespace SnakeGame
 		sf::Color color{ sf::Color::White };
 		sf::Text::Style textStyle{ sf::Text::Style::Regular };
 		unsigned int characterSize{ 20 };
-		void Init(const std::string fontName, const sf::Color newColor = sf::Color::White, const sf::Text::Style newTextStyle = sf::Text::Style::Regular, const unsigned int newSize = 20);
+		void Init(const std::string fontName, const Settings& settings, const sf::Color newColor = sf::Color::White, const sf::Text::Style newTextStyle = sf::Text::Style::Regular, const unsigned int newSize = 20);
 	};
 
 	struct MenuStyle
@@ -41,11 +41,12 @@ namespace SnakeGame
 		virtual void SelectNextChild();
 		virtual void SelectPreviousChild();
 		virtual std::vector<MenuNodePtr>* GetChilds();
+	protected:
+		sf::Text text;
 	private:
 		int selectedChildID{ -1 };
 		MenuStyle* subMenuStyle{ nullptr };
 		MenuNodePtrW parentNode{};
-		sf::Text text;
 		std::vector<MenuNodePtr> childNodes;
 	};	
 

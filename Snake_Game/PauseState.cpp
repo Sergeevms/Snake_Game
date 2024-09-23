@@ -7,12 +7,12 @@ namespace SnakeGame
 		BaseState(currentGame, settings), menu(settings), inputHandler(currentGame, settings, &menu)
 	{
 		overallBackground.setPosition(relativePositions.at(RelativePosition::TopLeft));
-		overallBackground.setSize({ SCREEN_WIDTH, SCREEN_HEIGHT });
+		overallBackground.setSize({ static_cast<float>(settings.screenWidth), static_cast<float>(settings.screenHeight) });
 		overallBackground.setFillColor({255, 255, 255, 125});
 
-		menuBackground.setSize({ SCREEN_WIDTH / 4.f, SCREEN_HEIGHT / 2.f });
+		menuBackground.setSize({ settings.screenWidth / 4.f, settings.screenHeight / 2.f });
 		SetOriginByRelative(menuBackground, relativePositions.at(RelativePosition::Center));
-		menuBackground.setPosition({ SCREEN_WIDTH / 2.f, SCREEN_HEIGHT / 2.f });
+		menuBackground.setPosition({ settings.screenWidth / 2.f, settings.screenHeight / 2.f });
 		menuBackground.setFillColor(sf::Color::Black);
 		menuBackground.setOutlineColor(sf::Color::White);
 		menuBackground.setOutlineThickness(-3.f);

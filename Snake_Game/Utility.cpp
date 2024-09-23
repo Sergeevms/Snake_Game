@@ -41,9 +41,9 @@ namespace SnakeGame
     void LoadTexture(std::string const& fileName, sf::Texture& texture)
     {
 #ifndef NDEBUG
-        assert(texture.loadFromFile(RESOURCES_PATH + fileName));
+        assert(texture.loadFromFile(fileName));
 #else 
-        texture.loadFromFile(RESOURCES_PATH + fileName);
+        texture.loadFromFile(fileName);
 #endif
     }
 

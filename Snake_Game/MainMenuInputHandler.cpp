@@ -14,6 +14,8 @@ namespace SnakeGame
 
 		activateMapping[ActivateReactionMainMenu::Exit] = &MainMenuInputHandler::ExitGame;
 		activateMapping[ActivateReactionMainMenu::Play] = &MainMenuInputHandler::StartPlaying;
+		activateMapping[ActivateReactionMainMenu::SwitchMusic] = &MainMenuInputHandler::SwitchMusic;
+		activateMapping[ActivateReactionMainMenu::SwitchSound] = &MainMenuInputHandler::SwitchSound;
 	}
 
 	void MainMenuInputHandler::HandleInputEvents(std::vector<sf::Event> const& input)
@@ -24,6 +26,7 @@ namespace SnakeGame
 			{
 				if (actionMapping.contains(settings.keyMap.at(inputEvent.key.code)))
 				{
+					game->PlaySound(soundType::OnKeyHit);
 					std::invoke(actionMapping[settings.keyMap[inputEvent.key.code]], this);
 				}
 			}
@@ -61,5 +64,17 @@ namespace SnakeGame
 	void MainMenuInputHandler::StartPlaying()
 	{
 		game->SwitchToState(GameState::Playing);
+	}
+
+	void MainMenuInputHandler::SwitchMusic()
+	{
+		settings.musicOn = !settings.musicOn;
+		menu->UpdateChecked(settings.musicOn);
+	}
+
+	void MainMenuInputHandler::SwitchSound()
+	{
+		settings.soundOn = !settings.soundOn;
+		menu->UpdateChecked(settings.soundOn);
 	}
 }

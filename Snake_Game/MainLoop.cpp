@@ -8,21 +8,8 @@ namespace SnakeGame
 {
 	MainLoop::MainLoop()
 	{
-		window = new sf::RenderWindow(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), sf::String::fromUtf16(GAME_NAME.begin(), GAME_NAME.end()));
-		game = new Game();
-	}
-
-	MainLoop::~MainLoop()
-	{
-		if (window)
-		{
-			delete window;
-		}
-
-		if (game)
-		{
-			delete game;
-		}
+		window = std::make_unique<sf::RenderWindow>(sf::VideoMode(settings.screenWidth, settings.screenHeight), sf::String::fromUtf16(settings.gameName.begin(), settings.gameName.end()));
+		game = std::make_unique<Game>(settings);
 	}
 
 	void MainLoop::Run()
