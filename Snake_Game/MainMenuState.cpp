@@ -1,4 +1,5 @@
 #include "MainMenuState.h"
+#include "Settings.h"
 
 namespace SnakeGame
 {
@@ -18,7 +19,7 @@ namespace SnakeGame
 
 	}
 
-	void MainMenuState::HandleInput(std::vector<sf::Event> const& input)
+	void MainMenuState::HandleInput(const std::vector<sf::Event>& input)
 	{
 		inputHandler.HandleInputEvents(input);
 	}

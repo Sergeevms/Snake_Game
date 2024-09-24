@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "Settings.h"
 #include "Utility.h"
 
 namespace SnakeGame
@@ -36,10 +35,12 @@ namespace SnakeGame
 		{Direction::Left, 270.f} 
 	};
 
+	struct Settings;
+
 	class MapObject
 	{
 	public:
-		MapObject(sf::Vector2i const& mapCell, sf::Texture const& texture, Settings const& settings);
+		MapObject(const sf::Vector2i& mapCell, const sf::Texture& texture, const Settings& settings);
 		virtual ~MapObject() = default;
 		virtual MapObjectType GetObjectType() const = 0;
 		virtual void Draw(sf::RenderWindow&) const;
@@ -48,6 +49,6 @@ namespace SnakeGame
 		sf::Vector2i mapCoordinates;
 		sf::Vector2f screenCoordinates;
 		sf::Sprite sprite;
-		Settings const& currentSettings;
+		const Settings& currentSettings;
 	};
 }

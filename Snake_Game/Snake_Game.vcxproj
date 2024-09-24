@@ -140,7 +140,6 @@
   <ItemGroup>
     <ClCompile Include="Apple.cpp" />
     <ClCompile Include="BaseInputHandler.cpp" />
-    <ClCompile Include="DebugGrid.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainLoop.cpp" />
@@ -164,7 +163,6 @@
     <ClInclude Include="Apple.h" />
     <ClInclude Include="BaseInputHandler.h" />
     <ClInclude Include="BaseState.h" />
-    <ClInclude Include="DebugGrid.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="MainLoop.h" />
     <ClInclude Include="MainMenu.h" />

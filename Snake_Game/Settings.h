@@ -1,10 +1,11 @@
 #pragma once
 #include <unordered_map>
 #include <SFML/Graphics.hpp>
-#include "BaseInputHandler.h"
 
 namespace SnakeGame
 {
+	enum class ActionsTypesOnInput;
+
 	struct Settings
 	{
 		Settings();

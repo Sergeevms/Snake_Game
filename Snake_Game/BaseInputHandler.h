@@ -22,7 +22,7 @@ namespace SnakeGame
 	{
 	public:
 		BaseInputHandler(Game* currentGame, Settings& currentSettings) : game(currentGame), settings(currentSettings) {};
-		virtual void HandleInputEvents(std::vector<sf::Event> const& input) = 0;
+		virtual void HandleInputEvents(const std::vector<sf::Event>& input) = 0;
 		virtual ~BaseInputHandler() = default;
 	protected:
 		Game* game;

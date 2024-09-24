@@ -1,5 +1,7 @@
-#include "assert.h"
+#include <assert.h>
 #include "Game.h"
+#include "Settings.h"
+#include "BaseState.h"
 #include "PlayingState.h"
 #include "MainMenuState.h"
 #include "PauseState.h"

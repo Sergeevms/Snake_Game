@@ -1,6 +1,8 @@
 #include "PauseStateInputHandler.h"
 #include "PauseMenu.h"
 #include "Game.h"
+#include "Settings.h"
+#include "BaseState.h"
 
 namespace SnakeGame
 {
@@ -16,7 +18,7 @@ namespace SnakeGame
 		activateMapping[ActivateReactionPauseMenu::Play] = &PauseStateInputHandler::returnToGame;
 	}
 
-	void PauseStateInputHandler::HandleInputEvents(std::vector<sf::Event> const& input)
+	void PauseStateInputHandler::HandleInputEvents(const std::vector<sf::Event>& input)
 	{
 		for (auto& inputEvent : input)
 		{

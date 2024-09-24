@@ -2,7 +2,6 @@
 #include <list>
 #include "MapObject.h"
 #include "Utility.h"
-#include "Settings.h"
 
 namespace SnakeGame
 {
@@ -10,10 +9,10 @@ namespace SnakeGame
 	class SnakeNode: public MapObject
 	{
 	public:
-		SnakeNode(sf::Vector2i const& mapCell, sf::Texture const& texture, Settings const& settings, Direction direction, const bool isMovingEnabled = true);
+		SnakeNode(const sf::Vector2i& mapCell, const sf::Texture& texture, const Settings& settings, const Direction direction, const bool isMovingEnabled = true);
 		void Update(const float deltaTime);
 		void SetDirection(Direction newDirection);
-		void SetCellPositionIfMoving(sf::Vector2i const& newCell);
+		void SetCellPositionIfMoving(const sf::Vector2i& newCell);
 		void UpdateScreenPositionByCell();
 		void SetMovingEnabledState(bool isEnabled);
 		Direction GetDirection() const;
@@ -25,26 +24,27 @@ namespace SnakeGame
 
 	class PlayingState;
 	class Map;
+	struct Settings;
 
 	class Snake
 	{
 	public:
-		Snake(Settings const& currentSettings, PlayingState* currentState, Map* currentMap);
+		Snake(const Settings& currentSettings, PlayingState* currentState, Map* currentMap);
 		void Update(const float deltaTime);
 		void SetNewDirection(Direction direction);
 		void Draw(sf::RenderWindow& window) const;
-		void LoadFromCharMap(std::vector <std::string> const& charMap, sf::Vector2i const& headPosition);
+		void LoadFromCharMap(const std::vector<std::string>& charMap, const sf::Vector2i& headPosition);
 		void AddNewBody();
-		std::list<std::shared_ptr<SnakeNode>> const& GetNodes() const;
+		const std::list<std::shared_ptr<SnakeNode>>& GetNodes() const;
 	private:
 		PlayingState* playingState;
 		Map* map;
 		std::list<std::shared_ptr<SnakeNode>> nodes;
 		Direction newDirection;
-		Settings const& settings;
+		const Settings& settings;
 		sf::Texture headTexture;
 		sf::Texture bodyTexture;
 		float timeTillNextCell{ 0.f };
-		bool AddNextBodyFromMap(std::vector<std::vector<bool>>& addedCells, std::vector<std::string> const& charMap, sf::Vector2i const& currentCell);
+		bool AddNextBodyFromMap(std::vector<std::vector<bool>>& addedCells, const std::vector<std::string>& charMap, const sf::Vector2i& currentCell);
 	};
 }

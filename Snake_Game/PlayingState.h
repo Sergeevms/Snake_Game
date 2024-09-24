@@ -3,7 +3,6 @@
 #include "Map.h"
 #include "Snake.h"
 #include "PlayingInputHandler.h"
-#include "DebugGrid.h"
 
 namespace SnakeGame
 {
@@ -15,9 +14,8 @@ namespace SnakeGame
         virtual ~PlayingState() = default;
         virtual void Draw(sf::RenderWindow& window) const override;
         virtual void Update(const float deltaTime) override;
-        virtual void HandleInput(std::vector<sf::Event> const& inputEvents) override;
+        virtual void HandleInput(const std::vector<sf::Event>& inputEvents) override;
         void resetMovingDelay();
-        //virtual GameState GetGameState() const override { return GameState::Playing; } ;
         CollisionResult CheckColition(sf::Vector2i& cell);
     private:
         bool isGameOvered{ false };
@@ -30,6 +28,5 @@ namespace SnakeGame
         sf::Font font;
         sf::Text gameOver;
         sf::Text scoreText;
-        DebugGrid debugGrid;
     };
 }

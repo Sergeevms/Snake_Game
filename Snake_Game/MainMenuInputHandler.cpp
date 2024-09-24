@@ -2,6 +2,7 @@
 #include "MainMenu.h"
 #include "Settings.h"
 #include "Game.h"
+#include "BaseState.h"
 
 namespace SnakeGame
 {
@@ -19,7 +20,7 @@ namespace SnakeGame
 		activateMapping[ActivateReactionMainMenu::SwitchDifficulty] = &MainMenuInputHandler::SwitchDifficulty;
 	}
 
-	void MainMenuInputHandler::HandleInputEvents(std::vector<sf::Event> const& input)
+	void MainMenuInputHandler::HandleInputEvents(const std::vector<sf::Event>& input)
 	{
 		for (auto& inputEvent : input)
 		{

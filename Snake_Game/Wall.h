@@ -4,11 +4,14 @@
 
 namespace SnakeGame
 {
+
+    struct Settings;
+
     class Wall :
         public MapObject
     {
     public:
-        Wall(sf::Vector2i const& mapCell, sf::Texture const& texture, Settings const& settings, Direction direction);
+        Wall(const sf::Vector2i& mapCell, const sf::Texture& texture, const Settings& settings, const Direction direction);
         virtual MapObjectType GetObjectType() const override { return MapObjectType::Wall; };
     };
 }

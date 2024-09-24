@@ -2,7 +2,7 @@
 
 namespace SnakeGame
 {
-	PauseMenu::PauseMenu(Settings& currentSettings) : GeneralMenu(currentSettings)
+	PauseMenu::PauseMenu(const Settings& currentSettings) : GeneralMenu(currentSettings)
 	{
 		headerStyle.Init("Roboto-Regular.ttf", currentSettings, sf::Color::Green, sf::Text::Style(sf::Text::Style::Bold), 50);
 		normalStyle.Init("Roboto-Regular.ttf", currentSettings);

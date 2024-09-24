@@ -5,7 +5,7 @@
 namespace SnakeGame
 {
 
-	SnakeNode::SnakeNode(sf::Vector2i const& mapCell, sf::Texture const& texture, Settings const& settings, Direction direction, const bool isMovingEnabled) :
+	SnakeNode::SnakeNode(const sf::Vector2i& mapCell, const sf::Texture& texture, const Settings& settings, const Direction direction, const bool isMovingEnabled) :
 		MapObject(mapCell, texture, settings), currentDirection(direction), isMoving(isMovingEnabled)
 	{
 
@@ -29,7 +29,7 @@ namespace SnakeGame
 		sprite.setRotation(directionToRotation.at(currentDirection));
 	}
 
-	void SnakeNode::SetCellPositionIfMoving(sf::Vector2i const& newCell)
+	void SnakeNode::SetCellPositionIfMoving(const sf::Vector2i& newCell)
 	{
 		if (isMoving)
 		{
@@ -114,7 +114,7 @@ namespace SnakeGame
 		}
 	}
 
-	void Snake::LoadFromCharMap(std::vector<std::string> const& charMap, sf::Vector2i const& headPosition)
+	void Snake::LoadFromCharMap(const std::vector<std::string>& charMap, const sf::Vector2i& headPosition)
 	{
 		nodes.clear();
 		sf::Vector2i currentCell = headPosition;
@@ -157,12 +157,12 @@ namespace SnakeGame
 		nodes.push_back(std::make_shared<SnakeNode>(lastNode->GetCellPosition(), bodyTexture, settings, lastNode->GetDirection(), false));
 	}
 
-	std::list<std::shared_ptr<SnakeNode>> const& Snake::GetNodes() const
+	const std::list<std::shared_ptr<SnakeNode>>& Snake::GetNodes() const
 	{
 		return nodes;
 	}
 
-	bool Snake::AddNextBodyFromMap(std::vector<std::vector<bool>>& addedCells, std::vector<std::string> const& charMap, sf::Vector2i const& currentCell)
+	bool Snake::AddNextBodyFromMap(std::vector<std::vector<bool>>& addedCells, const std::vector<std::string>& charMap, const sf::Vector2i& currentCell)
 	{
 		for (auto& curDir : directionVectors)
 		{

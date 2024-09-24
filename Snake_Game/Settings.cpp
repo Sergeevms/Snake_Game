@@ -1,4 +1,5 @@
 #include "Settings.h"
+#include "BaseInputHandler.h"
 
 namespace SnakeGame
 {

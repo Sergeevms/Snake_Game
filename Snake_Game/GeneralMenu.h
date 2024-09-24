@@ -2,13 +2,13 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "Utility.h"
-#include "Settings.h"
 
 namespace SnakeGame
 {
 	class MenuNode;
 	typedef std::shared_ptr<MenuNode> MenuNodePtr;
 	typedef std::weak_ptr<MenuNode> MenuNodePtrW;
+	struct Settings;
 
 	struct MenuNodeStyle
 	{
@@ -54,7 +54,7 @@ namespace SnakeGame
 	class GeneralMenu
 	{
 	public:
-		GeneralMenu(Settings& currentSettings);
+		GeneralMenu(const Settings& currentSettings);
 		virtual ~GeneralMenu() {};
 		virtual void Draw(sf::RenderWindow& window, const sf::Vector2f position) const;
 		virtual bool ExpandSelected();
@@ -62,7 +62,7 @@ namespace SnakeGame
 		virtual void SelectNext() const;
 		virtual void SelectPrevious() const;
 	protected:
-		Settings& settings;
+		const Settings& settings;
 		MenuNodeStyle headerStyle;
 		MenuNodeStyle selectedStyle;
 		MenuNodeStyle normalStyle;

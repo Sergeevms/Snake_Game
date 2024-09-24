@@ -17,7 +17,7 @@ namespace SnakeGame
     {
     public:
         MainMenuInputHandler(Game* currentGame, Settings & currentSettings, MainMenu* currentMenu);
-        void HandleInputEvents(std::vector<sf::Event> const& input) override;
+        void HandleInputEvents(const std::vector<sf::Event>& input) override;
     private:
         MainMenu* menu;
         std::unordered_map<ActionsTypesOnInput, InputReaction> actionMapping;

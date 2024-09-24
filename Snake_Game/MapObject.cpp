@@ -1,10 +1,10 @@
 #include "MapObject.h"
-#include "Utility.h"
+#include "Settings.h"
 
 namespace SnakeGame
 {
 
-	MapObject::MapObject(sf::Vector2i const& mapCell, sf::Texture const& texture, Settings const& settings): 
+	MapObject::MapObject(const sf::Vector2i& mapCell, const sf::Texture& texture, const Settings& settings): 
 		sprite(texture), mapCoordinates(mapCell), currentSettings(settings)
 	{
 		SetOriginByRelative(sprite, relativePositions.at(RelativePosition::Center));

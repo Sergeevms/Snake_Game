@@ -1,5 +1,6 @@
 #include "PauseState.h"
 #include "Utility.h"
+#include "Settings.h"
 
 namespace SnakeGame
 {
@@ -33,7 +34,7 @@ namespace SnakeGame
 
 	}
 
-	void PauseState::HandleInput(std::vector<sf::Event> const& input)
+	void PauseState::HandleInput(const std::vector<sf::Event>& input)
 	{
 		inputHandler.HandleInputEvents(input);
 	}

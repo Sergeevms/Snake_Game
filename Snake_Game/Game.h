@@ -2,8 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <vector>
-#include "Settings.h"
-#include "BaseState.h"
+#include <unordered_map>
 
 namespace SnakeGame
 {
@@ -15,10 +14,14 @@ namespace SnakeGame
 		OnSessionStart
 	};
 
+	struct Settings;
+	class BaseState;
+	enum class GameState;
+
 	class Game
 	{
 	public:
-		Game(Settings&);
+		Game(Settings& currentSettings);
 		bool IsGameShuttingDown() const;
 		void Update(const float deltaTime, const std::vector<sf::Event>& inputEvents);
 		void Draw(sf::RenderWindow&) const;

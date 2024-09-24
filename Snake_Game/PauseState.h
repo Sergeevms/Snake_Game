@@ -12,8 +12,7 @@ namespace  SnakeGame
 		virtual ~PauseState() = default;
 		virtual void Draw(sf::RenderWindow& window) const  override;
 		virtual void Update(float deltaTime)  override;
-		virtual void HandleInput(std::vector<sf::Event> const& input)  override;
-		//virtual GameState GetGameState() const  override { return GameState::Pause; };
+		virtual void HandleInput(const std::vector<sf::Event>& input)  override;
 	private:
 		sf::RectangleShape overallBackground;
 		sf::RectangleShape menuBackground;

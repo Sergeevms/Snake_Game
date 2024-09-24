@@ -75,9 +75,6 @@
     <ClCompile Include="Snake.cpp">
       <Filter>Source Files\Map</Filter>
     </ClCompile>
-    <ClCompile Include="DebugGrid.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Settings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -142,9 +139,6 @@
     </ClInclude>
     <ClInclude Include="Snake.h">
       <Filter>Header Files\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="DebugGrid.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PauseState.h">
       <Filter>Header Files\GameStates</Filter>

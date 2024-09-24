@@ -15,7 +15,7 @@ namespace SnakeGame
 	{
     public:
         PauseStateInputHandler(Game* currentGame, Settings& currentSettings, PauseMenu* currentMenu);
-        void HandleInputEvents(std::vector<sf::Event> const& input) override;
+        void HandleInputEvents(const std::vector<sf::Event>& input) override;
     private:
         PauseMenu* menu;
         std::unordered_map<ActionsTypesOnInput, InputReaction> actionMapping;

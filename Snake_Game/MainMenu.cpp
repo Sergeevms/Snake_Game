@@ -1,4 +1,5 @@
 #include "MainMenu.h"
+#include "Settings.h"
 
 namespace SnakeGame
 {

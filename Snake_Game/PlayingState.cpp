@@ -1,21 +1,19 @@
 #include <assert.h>
 #include <string>
 #include "PlayingState.h"
+#include "Settings.h"
 #include "Apple.h"
 #include "Game.h"
 
 namespace SnakeGame
 {
 	PlayingState::PlayingState(Game* game, Settings& settings) : BaseState(game, settings), map(settings), snake(settings, this, &map),
-		inputHandler(game, settings, &snake, this), debugGrid(settings), delayBeforeMoving(settings.movingDelayOnStart)
+		inputHandler(game, settings, &snake, this), delayBeforeMoving(settings.movingDelayOnStart)
 	{		
 		map.LoadFromFile(settings.selectedLevel);
 		map.CreateSavedLvl();
 
 		snake.LoadFromCharMap(map.GetcharMap(), map.GetSnakeHeadPosition());
-
-		debugGrid.Init(map.GetMapSize());
-
 
 #ifdef _DEBUG
 		assert(font.loadFromFile(settings.fontPath +  "Roboto-Regular.ttf"));
@@ -45,7 +43,6 @@ namespace SnakeGame
 	{
 		map.Draw(window);
 		snake.Draw(window);
-		debugGrid.Draw(window);
 		window.draw(scoreText);
 		if (isGameOvered)
 		{
@@ -76,7 +73,7 @@ namespace SnakeGame
 		}		
 	}
 
-	void PlayingState::HandleInput(std::vector<sf::Event> const& inputEvents)
+	void PlayingState::HandleInput(const std::vector<sf::Event>& inputEvents)
 	{
 		inputHandler.HandleInputEvents(inputEvents);
 	}

@@ -3,6 +3,7 @@
 #include "PlayingState.h"
 #include "Game.h"
 #include "Snake.h"
+#include "Settings.h"
 
 namespace SnakeGame
 {
@@ -17,7 +18,7 @@ namespace SnakeGame
 		actionMapping[ActionsTypesOnInput::Pause] = &PlayingInputHandler::pauseGame;
 	};
 
-	void PlayingInputHandler::HandleInputEvents(std::vector<sf::Event> const& input)
+	void PlayingInputHandler::HandleInputEvents(const std::vector<sf::Event>& input)
 	{
 		for (auto& inputEvent : input)
 		{

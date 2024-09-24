@@ -2,20 +2,21 @@
 #include <fstream>
 
 #include "Map.h"
+#include "MapObject.h"
+#include "Utility.h"
 #include "Wall.h"
 #include "Apple.h"
 #include "Settings.h"
-#include "Utility.h"
 
 namespace SnakeGame
 {
-	Map::Map(Settings const& currentSettings) : settings{ currentSettings }
+	Map::Map(const Settings& currentSettings) : settings(currentSettings)
 	{
 		addSpriteTexture('W', "Wall.png");
 		addSpriteTexture('A', "Apple.png");
 	}
 
-	void Map::LoadFromFile(std::string fileName)
+	void Map::LoadFromFile(const std::string& fileName)
 	{
 		std::ifstream input;
 		input.open(settings.levelPath + fileName);
@@ -101,12 +102,12 @@ namespace SnakeGame
 		map[CellToMapIndex(objectCell)] = nullptr;
 	}
 
-	void Map::RemoveMapObject(sf::Vector2i const& cell)
+	void Map::RemoveMapObject(const sf::Vector2i& cell)
 	{
 		map[CellToMapIndex(cell)] = nullptr;
 	}
 
-	MapObjectType Map::GetObjectType(sf::Vector2i const& cell) const
+	MapObjectType Map::GetObjectType(const sf::Vector2i& cell) const
 	{
 		if (InRightOpenInterval(0, width, cell.x) and InRightOpenInterval(0, height, cell.y))
 		{
@@ -135,7 +136,7 @@ namespace SnakeGame
 		return checkingCell;
 	}
 
-	sf::Vector2i const& Map::GetSnakeHeadPosition() const
+	const sf::Vector2i& Map::GetSnakeHeadPosition() const
 	{
 		return loadedSnakeHeadPosition;
 	}
@@ -145,24 +146,24 @@ namespace SnakeGame
 		return sf::Vector2i{ width, height };
 	}
 
-	std::vector <std::string> const& Map::GetcharMap() const
+	const std::vector<std::string>& Map::GetcharMap() const
 	{
 		return charMap;
 	}
 
-	int Map::CellToMapIndex(sf::Vector2i const& cell) const
+	int Map::CellToMapIndex(const sf::Vector2i& cell) const
 	{
 		return cell.y * width + cell.x;
 	}
 
-	void Map::addSpriteTexture(char type, std::string fileName)
+	void Map::addSpriteTexture(const char type, const std::string fileName)
 	{
 		sf::Texture currentTexture;
 		LoadTexture(settings.texturePath + fileName, currentTexture);
 		spritesCharToTexture[type] = currentTexture;
 	}
 
-	Direction Map::getWallDirection(sf::Vector2i const& cell) const
+	Direction Map::getWallDirection(const sf::Vector2i & cell) const
 	{
 		if (cell.x > 0 && charMap[cell.y].at(cell.x - 1) == 'W')
 		{

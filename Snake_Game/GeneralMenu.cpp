@@ -91,7 +91,7 @@ namespace SnakeGame
 		}
 	}
 
-	GeneralMenu::GeneralMenu(Settings& currentSettings) : settings(currentSettings)
+	GeneralMenu::GeneralMenu(const Settings& currentSettings) : settings(currentSettings)
 	{
 		
 	}

@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Game.h"
+#include "Settings.h"
 
 namespace SnakeGame
 {
