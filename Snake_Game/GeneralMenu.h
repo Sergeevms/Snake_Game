@@ -41,6 +41,7 @@ namespace SnakeGame
 		virtual void SelectNextChild();
 		virtual void SelectPreviousChild();
 		virtual std::vector<MenuNodePtr>* GetChilds();
+		virtual void setSelectedChildID(int id);
 	protected:
 		sf::Text text;
 	private:

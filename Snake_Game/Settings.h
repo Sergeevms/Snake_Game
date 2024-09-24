@@ -10,6 +10,7 @@ namespace SnakeGame
 		Settings();
 		void LoadFromFile(const std::string& fileName);
 		void SaveToFile(const std::string& fileName);
+		void UpdateDifficulty(const int newDiffculty);
 
 		int screenWidth;
 		int screenHeight;

@@ -56,6 +56,23 @@ namespace SnakeGame
 		activateReactions[musicNode] = ActivateReactionMainMenu::SwitchMusic;
 		musicNode->setChecked(settings.musicOn);
 		musicNode->setSpacing(30.f);
+		
+		std::vector<std::u16string> difficultyNames{ u"Простой", u"Тяжелее простого", u"Средний", u"Легче тяжелого", u"Тяжелый" };
+		for (int i = 0; i < settings.difficultyLevelCount; ++i)
+		{
+			std::shared_ptr<CheckBoxMenuNode> difficultySubNode = std::make_shared<CheckBoxMenuNode>();
+			difficultySubNode->Init(difficultyNode, difficultyNames[i]);
+			difficultySubNode->SetStyle(&normalStyle);
+			difficultyNode->AddChild(difficultySubNode);
+			nodeToDifficultyLevel[difficultySubNode] = i;
+			activateReactions[difficultySubNode] = ActivateReactionMainMenu::SwitchDifficulty;
+			difficultySubNode->setChecked(false);
+			difficultySubNode->setSpacing(30.f);
+		}
+		difficultyNode->setSelectedChildID(settings.currentDifficulty);
+		std::shared_ptr<CheckBoxMenuNode> difficultySubNode = std::dynamic_pointer_cast<CheckBoxMenuNode>(difficultyNode->GetCurrentlySelectedChild());
+		difficultySubNode->SetStyle(&selectedStyle);
+		difficultySubNode->setChecked(true);
 	}
 
 	ActivateReactionMainMenu MainMenu::GetReaction() const
@@ -75,7 +92,26 @@ namespace SnakeGame
 		std::shared_ptr<CheckBoxMenuNode> selectedNode;
 		if (selectedNode = std::dynamic_pointer_cast<CheckBoxMenuNode>(currentNode->GetCurrentlySelectedChild()))
 		{
+			if (nodeToDifficultyLevel.contains(selectedNode))
+			{
+				for (auto& node : nodeToDifficultyLevel)
+				{
+					std::dynamic_pointer_cast<CheckBoxMenuNode>(node.first)->setChecked(false);
+				}
+			}
 			selectedNode->setChecked(checked);
+		}
+	}
+
+	int MainMenu::GetSelectedDifficulty()
+	{
+		if (nodeToDifficultyLevel.contains(currentNode->GetCurrentlySelectedChild()))
+		{
+			return nodeToDifficultyLevel.at(currentNode->GetCurrentlySelectedChild());
+		}
+		else
+		{
+			return 0;
 		}
 	}
 

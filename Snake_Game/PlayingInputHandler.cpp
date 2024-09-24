@@ -25,7 +25,7 @@ namespace SnakeGame
 			{
 				if (actionMapping.contains(settings.keyMap[inputEvent.key.code]))
 				{
-					game->PlaySound(soundType::OnKeyHit);
+					game->PlaySound(SoundType::OnKeyHit);
 					std::invoke(actionMapping[settings.keyMap[inputEvent.key.code]], this);
 				}
 			}

@@ -14,10 +14,10 @@ namespace SnakeGame
 #else// _DEBUG
 		backGroundMusic.openFromFile(settings.soundPath + "Clinthammer__Background_Music.wav");
 #endif
-		loadSound(soundType::OnKeyHit, "Theevilsocks__menu-hover.wav");
-		loadSound(soundType::OnLose, "Maodin204__Lose.wav");
-		loadSound(soundType::OnSnakeHit, "Owlstorm__Snake_hit.wav");
-		//loadSound(soundType::OnSessionStart, "Timgormly__Enter.aiff");
+		loadSound(SoundType::OnKeyHit, "Theevilsocks__menu-hover.wav");
+		loadSound(SoundType::OnLose, "Maodin204__Lose.wav");
+		loadSound(SoundType::OnSnakeHit, "Owlstorm__Snake_hit.wav");
+		loadSound(SoundType::OnSessionStart, "Timgormly__Enter.wav");
 	}
 
 	bool Game::IsGameShuttingDown() const
@@ -87,7 +87,7 @@ namespace SnakeGame
 		}
 	}
 
-	void Game::PlaySound(const soundType sound)
+	void Game::PlaySound(const SoundType sound)
 	{
 		if (sounds.contains(sound) && settings.soundOn)
 		{
@@ -95,15 +95,14 @@ namespace SnakeGame
 		}
 	}
 
-	void Game::loadSound(const soundType type, std::string fileName)
+	void Game::loadSound(const SoundType type, std::string fileName)
 	{
-		sf::SoundBuffer newBuffer;
+		soundBuffers.push_back(std::make_unique<sf::SoundBuffer>());
 #ifdef _DEBUG
-		assert(newBuffer.loadFromFile(settings.soundPath + fileName));
+		assert((*soundBuffers.back()).loadFromFile(settings.soundPath + fileName));
 #else
 		newBuffer.loadFromFile(settings.soundPath + fileName);
 #endif // _DEBUG
-		soundBuffers.push_back(newBuffer);
-		sounds[type] = sf::Sound(soundBuffers.back());
+		sounds[type] = sf::Sound(*soundBuffers.back());
 	}
 }

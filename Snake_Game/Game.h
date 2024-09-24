@@ -7,7 +7,7 @@
 
 namespace SnakeGame
 {
-	enum class soundType
+	enum class SoundType
 	{
 		OnKeyHit,
 		OnLose,
@@ -25,15 +25,15 @@ namespace SnakeGame
 		void SwitchToState(GameState newState);
 		void ShutDown();
 		void SwitchMusicPlaying(bool playing);
-		void PlaySound(const soundType sound);
+		void PlaySound(const SoundType sound);
 
 	private:
 		bool isShuttingDown{ false };
 		Settings& settings;
 		sf::Music backGroundMusic;
 		std::vector<std::shared_ptr<BaseState>> stateStack;
-		std::vector<sf::SoundBuffer> soundBuffers;
-		std::unordered_map<soundType, sf::Sound> sounds;
-		void loadSound(const soundType type, std::string fileName);
+		std::vector<std::unique_ptr<sf::SoundBuffer>> soundBuffers;
+		std::unordered_map<SoundType, sf::Sound> sounds;
+		void loadSound(const SoundType type, std::string fileName);
 	};
 }

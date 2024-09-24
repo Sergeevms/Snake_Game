@@ -63,7 +63,7 @@ namespace SnakeGame
 				if (!sessionStarted)
 				{
 					sessionStarted = true;
-					game->PlaySound(soundType::OnSessionStart);
+					game->PlaySound(SoundType::OnSessionStart);
 				}
 			}
 			else
@@ -94,7 +94,7 @@ namespace SnakeGame
 		{
 		case CollisionResult::AppleEaten:
 		{			
-			game->PlaySound(soundType::OnSnakeHit);
+			game->PlaySound(SoundType::OnSnakeHit);
 			snake.AddNewBody();
 			map.EmplaceNewApple();
 			scoreCount += settings.difficultyToScore[settings.currentDifficulty];
@@ -104,7 +104,7 @@ namespace SnakeGame
 		case CollisionResult::GameOver:
 		{
 			isGameOvered = true;
-			game->PlaySound(soundType::OnLose);
+			game->PlaySound(SoundType::OnLose);
 			break;
 		}
 		case CollisionResult::None:

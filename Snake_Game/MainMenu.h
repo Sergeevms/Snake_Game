@@ -10,6 +10,7 @@ namespace SnakeGame
 		Records,
 		SwitchMusic,
 		SwitchSound,
+		SwitchDifficulty,
 		Exit
 	};
 
@@ -20,9 +21,11 @@ namespace SnakeGame
 		virtual ~MainMenu() = default;
 		ActivateReactionMainMenu GetReaction() const;
 		void UpdateChecked(const bool checked);
+		int GetSelectedDifficulty();
 	private:
 		MenuStyle subMenuStyle;
 		std::unordered_map<MenuNodePtr, ActivateReactionMainMenu> activateReactions;
+		std::unordered_map<MenuNodePtr, int> nodeToDifficultyLevel;
 	};
 
 	class CheckBoxMenuNode : public MenuNode

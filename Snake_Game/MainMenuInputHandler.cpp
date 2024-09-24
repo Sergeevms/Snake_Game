@@ -16,6 +16,7 @@ namespace SnakeGame
 		activateMapping[ActivateReactionMainMenu::Play] = &MainMenuInputHandler::StartPlaying;
 		activateMapping[ActivateReactionMainMenu::SwitchMusic] = &MainMenuInputHandler::SwitchMusic;
 		activateMapping[ActivateReactionMainMenu::SwitchSound] = &MainMenuInputHandler::SwitchSound;
+		activateMapping[ActivateReactionMainMenu::SwitchDifficulty] = &MainMenuInputHandler::SwitchDifficulty;
 	}
 
 	void MainMenuInputHandler::HandleInputEvents(std::vector<sf::Event> const& input)
@@ -26,7 +27,7 @@ namespace SnakeGame
 			{
 				if (actionMapping.contains(settings.keyMap.at(inputEvent.key.code)))
 				{
-					game->PlaySound(soundType::OnKeyHit);
+					game->PlaySound(SoundType::OnKeyHit);
 					std::invoke(actionMapping[settings.keyMap[inputEvent.key.code]], this);
 				}
 			}
@@ -76,5 +77,11 @@ namespace SnakeGame
 	{
 		settings.soundOn = !settings.soundOn;
 		menu->UpdateChecked(settings.soundOn);
+	}
+
+	void MainMenuInputHandler::SwitchDifficulty()
+	{
+		settings.UpdateDifficulty(menu->GetSelectedDifficulty());
+		menu->UpdateChecked(true);
 	}
 }

@@ -83,6 +83,14 @@ namespace SnakeGame
 		return &childNodes;
 	}
 
+	void MenuNode::setSelectedChildID(int id)
+	{
+		if (id >= 0 && id < childNodes.size())
+		{
+			selectedChildID = id;
+		}
+	}
+
 	GeneralMenu::GeneralMenu(Settings& currentSettings) : settings(currentSettings)
 	{
 		

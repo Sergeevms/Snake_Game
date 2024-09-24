@@ -30,6 +30,7 @@ namespace SnakeGame
         void StartPlaying();
         void SwitchMusic();
         void SwitchSound();
+        void SwitchDifficulty();
     };
 }
 
