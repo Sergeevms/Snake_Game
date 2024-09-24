@@ -22,6 +22,7 @@ namespace SnakeGame
 		int scoreOnDifficultyStep;
 		float timeOnCell;
 		int tileSize;
+		int defaultSnakeSize;
 		int currentDifficulty;
 		float movementSpeed;
 		float movingDelayOnStart;

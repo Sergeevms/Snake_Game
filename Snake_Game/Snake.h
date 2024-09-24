@@ -35,7 +35,6 @@ namespace SnakeGame
 		void Draw(sf::RenderWindow& window) const;
 		void LoadFromCharMap(const std::vector<std::string>& charMap, const sf::Vector2i& headPosition);
 		void AddNewBody();
-		const std::list<std::shared_ptr<SnakeNode>>& GetNodes() const;
 	private:
 		PlayingState* playingState;
 		Map* map;

@@ -26,6 +26,7 @@ namespace SnakeGame
 		const sf::Vector2i& GetSnakeHeadPosition() const;
 		sf::Vector2i GetMapSize() const;
 		const std::vector<std::string>& GetcharMap() const;
+		bool HaveEmptyCells() const;
 	private:
 		std::vector <std::shared_ptr<MapObject>> map;
 		std::unordered_map<char, sf::Texture> spritesCharToTexture;
@@ -35,7 +36,6 @@ namespace SnakeGame
 		int CellToMapIndex(const sf::Vector2i& cell) const;
 		int width{ 0 };
 		int height{ 0 };
-		int applesCount{ 0 };
 		int emptyCellCount{ 0 };
 
 		void addSpriteTexture(const char type, const std::string fileName);

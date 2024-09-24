@@ -22,11 +22,13 @@ namespace SnakeGame
         bool sessionStarted{ false };
         int scoreCount{ 0 };
         float delayBeforeMoving;
+        float keepSnakeMoveingTime;
         Map map;
         Snake snake;
         PlayingInputHandler inputHandler;        
         sf::Font font;
         sf::Text gameOver;
+        sf::Text gameWinned;
         sf::Text scoreText;
     };
 }

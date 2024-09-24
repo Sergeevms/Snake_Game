@@ -42,11 +42,12 @@ namespace SnakeGame
 			map.clear();
 		}
 
+		emptyCellCount = width * height;
 		map.reserve(width * height);
 
-		for (int j = 0; j < width; ++j)
+		for (int j = 0; j < height; ++j)
 		{
-			for (int i = 0; i < height; ++i)
+			for (int i = 0; i < width; ++i)
 			{
 				sf::Vector2i currentCell{ i, j };
 				std::shared_ptr<MapObject> currentObject{ nullptr };
@@ -68,7 +69,12 @@ namespace SnakeGame
 					break;
 				}
 				}
+				
 				map.emplace_back(currentObject);
+				if (currentObject && collitionResults.at(currentObject->GetObjectType()) == CollisionResult::GameOver)
+				{
+					--emptyCellCount;
+				}
 			}
 		}
 	}
@@ -88,22 +94,34 @@ namespace SnakeGame
 	{
 		sf::Vector2i objectCell = object->GetCellPosition();
 		map[CellToMapIndex(objectCell)] = object;
+
+		if (collitionResults.at(map[CellToMapIndex(objectCell)]->GetObjectType()) == CollisionResult::GameOver)
+		{
+			--emptyCellCount;
+		}
 	}
 
 	void Map::EmplaceNewApple()
 	{
-		sf::Vector2i newAppleCell = GetRandomEmptyCell();
-		map[CellToMapIndex(newAppleCell)] = std::make_shared<Apple>(newAppleCell, spritesCharToTexture['A'], settings);
+		if (emptyCellCount > 1)
+		{
+			sf::Vector2i newAppleCell = GetRandomEmptyCell();
+			map[CellToMapIndex(newAppleCell)] = std::make_shared<Apple>(newAppleCell, spritesCharToTexture['A'], settings);
+		}
 	}
 
 	void Map::RemoveMapObject(std::shared_ptr<MapObject> object)
 	{
 		sf::Vector2i objectCell = object->GetCellPosition();
-		map[CellToMapIndex(objectCell)] = nullptr;
+		RemoveMapObject(objectCell);
 	}
 
 	void Map::RemoveMapObject(const sf::Vector2i& cell)
 	{
+		if (map[CellToMapIndex(cell)] && collitionResults.at(map[CellToMapIndex(cell)]->GetObjectType()) == CollisionResult::GameOver)
+		{
+			++emptyCellCount;
+		}
 		map[CellToMapIndex(cell)] = nullptr;
 	}
 
@@ -149,6 +167,11 @@ namespace SnakeGame
 	const std::vector<std::string>& Map::GetcharMap() const
 	{
 		return charMap;
+	}
+
+	bool Map::HaveEmptyCells() const
+	{
+		return emptyCellCount > 0;
 	}
 
 	int Map::CellToMapIndex(const sf::Vector2i& cell) const

@@ -27,6 +27,14 @@ namespace SnakeGame
 		SetOriginByRelative(gameOver, relativePositions.at(RelativePosition::Center));
 		gameOver.setPosition({ settings.screenWidth / 2.f, settings.screenHeight / 2.f});
 
+		gameWinned.setFont(font);
+		gameWinned.setString("GAME WINNED");
+		gameWinned.setFillColor(sf::Color::Green);
+		gameWinned.setCharacterSize(80);
+		SetOriginByRelative(gameWinned, relativePositions.at(RelativePosition::Center));
+		gameWinned.setPosition({ settings.screenWidth / 2.f, settings.screenHeight / 2.f});
+
+
 		scoreText.setFont(font);
 		scoreText.setFillColor(sf::Color::Green);
 		scoreText.setCharacterSize(40);
@@ -37,6 +45,8 @@ namespace SnakeGame
 		scoreText.setPosition({ settings.screenWidth - 1.f, 0.f });
 
 		game->SwitchMusicPlaying(true);
+
+		keepSnakeMoveingTime = 0.f;
 	}
 
 	void PlayingState::Draw(sf::RenderWindow& window) const
@@ -44,14 +54,23 @@ namespace SnakeGame
 		map.Draw(window);
 		snake.Draw(window);
 		window.draw(scoreText);
+		
 		if (isGameOvered)
 		{
-			window.draw(gameOver);
+			if (map.HaveEmptyCells())
+			{
+				window.draw(gameOver);
+			}
+			else
+			{
+				window.draw(gameWinned);
+			}
 		}
 	}
 
 	void PlayingState::Update(const float deltaTime)
 	{
+		keepSnakeMoveingTime -= deltaTime;
 		if (!isGameOvered)
 		{
 			if (delayBeforeMoving <= settings.epsilon)
@@ -70,7 +89,18 @@ namespace SnakeGame
 			std::u16string currentScore(u"Очки:\n");
 			scoreText.setString(sf::String::fromUtf16(currentScore.begin(), currentScore.end()) + std::to_string(scoreCount));
 			SetOriginByRelative(scoreText, relativePositions.at(RelativePosition::TopRight));
-		}		
+			if (!map.HaveEmptyCells())
+			{
+				isGameOvered = true;
+			}
+		}
+		else
+		{
+			if (keepSnakeMoveingTime > settings.epsilon)
+			{
+				snake.Update(deltaTime);				
+			}
+		}
 	}
 
 	void PlayingState::HandleInput(const std::vector<sf::Event>& inputEvents)
@@ -95,6 +125,7 @@ namespace SnakeGame
 			snake.AddNewBody();
 			map.EmplaceNewApple();
 			scoreCount += settings.difficultyToScore[settings.currentDifficulty];
+			keepSnakeMoveingTime = settings.timeOnCell;
 			map.RemoveMapObject(cell);
 			break;
 		}

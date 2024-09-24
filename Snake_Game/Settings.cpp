@@ -13,8 +13,9 @@ namespace SnakeGame
 		soundPath = resourcesPath + "Sounds\\";
 		fontPath = resourcesPath + "Fonts\\";
 		texturePath = resourcesPath + "Textures\\";
-		epsilon = 1e-7f;		
-		selectedLevel = "level1.lvl";
+		epsilon = 1e-7f;
+		defaultSnakeSize = 4;
+		selectedLevel = "micro.lvl";
 		tileSize = 30;
 		baseTimeOnCell = 0.75f;
 		difficultyLevelCount = 5;		
@@ -25,7 +26,7 @@ namespace SnakeGame
 			difficultyToTimeOnCell[i] = baseTimeOnCell - timeOnCellDifficultyStep * i;
 			difficultyToScore[i] = scoreOnDifficultyStep * (i + 1);
 		}
-		UpdateDifficulty(4);
+		UpdateDifficulty(2);
 		movementSpeed = static_cast<float>(tileSize) / timeOnCell;
 		movingDelayOnStart = 3.f;
 		musicOn = true;

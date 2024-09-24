@@ -77,8 +77,8 @@ namespace SnakeGame
 			timeTillNextCell = settings.timeOnCell;
 			nodes.back()->SetMovingEnabledState(true);
 			std::shared_ptr<SnakeNode> head = nodes.front();
-			sf::Vector2i cellToCheck{ head->GetCellPosition().x + (int)directionVectors.at(newDirection).x,
-				head->GetCellPosition().y + (int)directionVectors.at(newDirection).y };
+			sf::Vector2i cellToCheck{ head->GetCellPosition().x + static_cast<int>(directionVectors.at(newDirection).x),
+				head->GetCellPosition().y + static_cast<int>(directionVectors.at(newDirection).y) };
 			if (playingState->CheckColition(cellToCheck) != CollisionResult::GameOver)
 			{
 				Direction nextNodeDirection = newDirection;
@@ -88,12 +88,16 @@ namespace SnakeGame
 					sf::Vector2i currentCell = (*node)->GetCellPosition();
 					Direction currentDirection = (*node)->GetDirection();
 					(*node)->UpdateScreenPositionByCell();
-					(*node)->SetCellPositionIfMoving({ currentCell.x + (int)directionVectors.at(nextNodeDirection).x, currentCell.y + (int)directionVectors.at(nextNodeDirection).y });
+					(*node)->SetCellPositionIfMoving({ currentCell.x + static_cast<int>(directionVectors.at(nextNodeDirection).x), currentCell.y + static_cast<int>(directionVectors.at(nextNodeDirection).y) });
 					(*node)->SetDirection(nextNodeDirection);
 					nextNodeDirection = currentDirection;
 					map->EmplaceMapObject((*node));
 					(*node)->Update(deltaTime);
 				}
+			}
+			else
+			{
+				head->SetDirection(newDirection);
 			}
 		}
 	}
@@ -149,6 +153,10 @@ namespace SnakeGame
 				}
 			}
 		}
+		for (auto& node : nodes)
+		{
+			map->EmplaceMapObject((node));
+		}
 	}
 
 	void Snake::AddNewBody()
@@ -157,19 +165,14 @@ namespace SnakeGame
 		nodes.push_back(std::make_shared<SnakeNode>(lastNode->GetCellPosition(), bodyTexture, settings, lastNode->GetDirection(), false));
 	}
 
-	const std::list<std::shared_ptr<SnakeNode>>& Snake::GetNodes() const
-	{
-		return nodes;
-	}
-
 	bool Snake::AddNextBodyFromMap(std::vector<std::vector<bool>>& addedCells, const std::vector<std::string>& charMap, const sf::Vector2i& currentCell)
 	{
 		for (auto& curDir : directionVectors)
 		{
-			sf::Vector2i checkingCell{ currentCell.x + (int)curDir.second.x, currentCell.y + (int)curDir.second.y };
+			sf::Vector2i checkingCell{ currentCell.x + static_cast<int>(curDir.second.x), currentCell.y + static_cast<int>(curDir.second.y) };
 
-			if (InRightOpenInterval(0, (int)charMap.size(), checkingCell.y) &&
-				InRightOpenInterval(0, (int)charMap.at(checkingCell.y).size(), checkingCell.x) &&
+			if (InRightOpenInterval(0, static_cast<int>(charMap.size()), checkingCell.y) &&
+				InRightOpenInterval(0, static_cast<int>(charMap.at(checkingCell.y).size()), checkingCell.x) &&
 				charMap[checkingCell.y][checkingCell.x] == 'B' &&
 				addedCells[checkingCell.y][checkingCell.x] == false)
 			{				
