@@ -9,18 +9,18 @@ namespace SnakeGame
 		selectedStyle.Init("Roboto-Regular.ttf", currentSettings, sf::Color::Green);
 
 		rootNode = std::make_shared<MenuNode>();
-		rootNode->Init({ nullptr }, u"Пауза", &subMenuStyle);
+		rootNode->Init({ nullptr }, L"Пауза", &subMenuStyle);
 		rootNode->SetStyle(&headerStyle);
 		currentNode = rootNode;
 
 		MenuNodePtr menuNode = std::make_shared<MenuNode>();
-		menuNode->Init(rootNode, u"Выйти из игры");
+		menuNode->Init(rootNode, L"Выйти из игры");
 		menuNode->SetStyle(&selectedStyle);
 		rootNode->AddChild(menuNode);
 		activateReactions[menuNode] = ActivateReactionPauseMenu::MainMenu;
 
 		MenuNodePtr continueNode = std::make_shared<MenuNode>();
-		continueNode->Init(rootNode, u"Продолжить");
+		continueNode->Init(rootNode, L"Продолжить");
 		continueNode->SetStyle(&normalStyle);
 		rootNode->AddChild(continueNode);
 		activateReactions[continueNode] = ActivateReactionPauseMenu::Play;

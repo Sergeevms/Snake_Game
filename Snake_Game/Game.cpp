@@ -97,6 +97,16 @@ namespace SnakeGame
 		}
 	}
 
+	void Game::setLastSessionScore(const int score)
+	{
+		lastSessionScore = score;
+	}
+
+	int Game::getLastSessionScore()
+	{
+		return lastSessionScore;
+	}
+
 	void Game::loadSound(const SoundType type, std::string fileName)
 	{
 		soundBuffers.push_back(std::make_unique<sf::SoundBuffer>());

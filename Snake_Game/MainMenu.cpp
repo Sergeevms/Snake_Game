@@ -10,40 +10,40 @@ namespace SnakeGame
 		selectedStyle.Init("Roboto-Regular.ttf", settings, sf::Color::Green);
 
 		rootNode = std::make_shared<MenuNode>();
-		rootNode->Init({ nullptr }, u"Змейка", &subMenuStyle);
+		rootNode->Init({ nullptr }, L"Змейка", &subMenuStyle);
 		rootNode->SetStyle(&headerStyle);
 		currentNode = rootNode;
 
 		MenuNodePtr playNode = std::make_shared<MenuNode>();
-		playNode->Init(rootNode, u"Начать игру");
+		playNode->Init(rootNode, L"Начать игру");
 		playNode->SetStyle(&selectedStyle);
 		rootNode->AddChild(playNode);
 		activateReactions[playNode] = ActivateReactionMainMenu::Play;
 
 		MenuNodePtr difficultyNode = std::make_shared<MenuNode>();
-		difficultyNode->Init(rootNode, u"Уровень сложности", &subMenuStyle);
+		difficultyNode->Init(rootNode, L"Уровень сложности", &subMenuStyle);
 		difficultyNode->SetStyle(&normalStyle);
 		rootNode->AddChild(difficultyNode);
 
 		MenuNodePtr recordNode = std::make_shared<MenuNode>();
-		recordNode->Init(rootNode, u"Таблица рекордов");
+		recordNode->Init(rootNode, L"Таблица рекордов");
 		recordNode->SetStyle(&normalStyle);
 		rootNode->AddChild(recordNode);
 		activateReactions[recordNode] = ActivateReactionMainMenu::Records;
 
 		MenuNodePtr settingsNode = std::make_shared<MenuNode>();
-		settingsNode->Init(rootNode, u"Настройки", &subMenuStyle);
+		settingsNode->Init(rootNode, L"Настройки", &subMenuStyle);
 		settingsNode->SetStyle(&normalStyle);
 		rootNode->AddChild(settingsNode);
 
 		MenuNodePtr exitNode = std::make_shared<MenuNode>();
-		exitNode->Init(rootNode, u"Выход");
+		exitNode->Init(rootNode, L"Выход");
 		exitNode->SetStyle(&normalStyle);
 		rootNode->AddChild(exitNode);
 		activateReactions[exitNode] = ActivateReactionMainMenu::Exit;
 
 		std::shared_ptr<CheckBoxMenuNode> soundNode = std::make_shared<CheckBoxMenuNode>();
-		soundNode->Init(settingsNode, u"Звук");
+		soundNode->Init(settingsNode, L"Звук");
 		soundNode->SetStyle(&selectedStyle);
 		settingsNode->AddChild(soundNode);
 		activateReactions[soundNode] = ActivateReactionMainMenu::SwitchSound;
@@ -51,14 +51,14 @@ namespace SnakeGame
 		soundNode->setSpacing(30.f);
 
 		std::shared_ptr<CheckBoxMenuNode> musicNode = std::make_shared<CheckBoxMenuNode>();
-		musicNode->Init(settingsNode, u"Музыка");
+		musicNode->Init(settingsNode, L"Музыка");
 		musicNode->SetStyle(&normalStyle);
 		settingsNode->AddChild(musicNode);
 		activateReactions[musicNode] = ActivateReactionMainMenu::SwitchMusic;
 		musicNode->setChecked(settings.musicOn);
 		musicNode->setSpacing(30.f);
 		
-		std::vector<std::u16string> difficultyNames{ u"Простой", u"Тяжелее простого", u"Средний", u"Легче тяжелого", u"Тяжелый" };
+		std::vector<std::wstring> difficultyNames{ L"Простой", L"Тяжелее простого", L"Средний", L"Легче тяжелого", L"Тяжелый" };
 		for (int i = 0; i < settings.difficultyLevelCount; ++i)
 		{
 			std::shared_ptr<CheckBoxMenuNode> difficultySubNode = std::make_shared<CheckBoxMenuNode>();

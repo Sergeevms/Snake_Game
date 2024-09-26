@@ -39,8 +39,8 @@ namespace SnakeGame
 		scoreText.setFillColor(sf::Color::Green);
 		scoreText.setCharacterSize(40);
 		
-		std::u16string currentScore(u"西觇:\n");
-		scoreText.setString(sf::String::fromUtf16(currentScore.begin(), currentScore.end()) + std::to_string(scoreCount));
+		std::wstring currentScore(L"西觇:\n");
+		scoreText.setString(currentScore + std::to_wstring(scoreCount));
 		SetOriginByRelative(scoreText, relativePositions.at(RelativePosition::TopRight));
 		scoreText.setPosition({ settings.screenWidth - 1.f, 0.f });
 
@@ -86,12 +86,13 @@ namespace SnakeGame
 			{
 				delayBeforeMoving -= deltaTime;
 			}
-			std::u16string currentScore(u"西觇:\n");
-			scoreText.setString(sf::String::fromUtf16(currentScore.begin(), currentScore.end()) + std::to_string(scoreCount));
+			std::wstring currentScore(L"西觇:\n");
+			scoreText.setString(currentScore + std::to_wstring(scoreCount));
 			SetOriginByRelative(scoreText, relativePositions.at(RelativePosition::TopRight));
 			if (!map.HaveEmptyCells())
 			{
 				isGameOvered = true;
+				game->setLastSessionScore(scoreCount);
 			}
 		}
 		else
@@ -133,6 +134,7 @@ namespace SnakeGame
 		{
 			isGameOvered = true;
 			game->PlaySound(SoundType::OnLose);
+			game->setLastSessionScore(scoreCount);
 			break;
 		}
 		case CollisionResult::None:

@@ -29,7 +29,7 @@ namespace SnakeGame
 		menu.Draw(window, menuPosition);
 	}
 
-	void PauseState::Update(float deltaTime)
+	void PauseState::Update(const float deltaTime)
 	{
 
 	}

@@ -45,6 +45,8 @@ namespace SnakeGame
 		emptyCellCount = width * height;
 		map.reserve(width * height);
 
+		bool applePlaced = false;
+
 		for (int j = 0; j < height; ++j)
 		{
 			for (int i = 0; i < width; ++i)
@@ -61,6 +63,7 @@ namespace SnakeGame
 				case 'A':
 				{
 					currentObject = std::make_shared<Apple>(currentCell, spritesCharToTexture['A'], settings);
+					applePlaced = true;
 					break;
 				}
 				case 'H':
@@ -76,6 +79,11 @@ namespace SnakeGame
 					--emptyCellCount;
 				}
 			}
+		}
+
+		if (!applePlaced)
+		{
+			EmplaceNewApple();
 		}
 	}
 

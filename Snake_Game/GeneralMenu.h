@@ -30,11 +30,11 @@ namespace SnakeGame
 	{
 	public:
 		virtual ~MenuNode() = default;
-		virtual void Init(const MenuNodePtr parent, const std::u16string& newName, MenuStyle* newSubMenuStyle = nullptr);
+		virtual void Init(const MenuNodePtr parent, const std::wstring& newName, MenuStyle* newSubMenuStyle = nullptr);
 		virtual void Draw(sf::RenderWindow& window, const sf::Vector2f& position, const Orientation orientation, const Alignment alignment);
 		virtual sf::FloatRect GetRect();
 		virtual void SetStyle(const MenuNodeStyle* newStyle);
-		MenuNodePtr GetCurrentlySelectedChild() const;
+		virtual MenuNodePtr GetCurrentlySelectedChild() const;
 		MenuNodePtr GetParent() const;
 		MenuStyle* GetMenuStyle() const;
 		virtual void AddChild(const MenuNodePtr child);

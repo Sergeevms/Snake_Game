@@ -4,11 +4,11 @@
 
 namespace SnakeGame
 {
-	void MenuNode::Init(const MenuNodePtr parent, const std::u16string & newName, MenuStyle* newSubMenuStyle)
+	void MenuNode::Init(const MenuNodePtr parent, const std::wstring & newName, MenuStyle* newSubMenuStyle)
 	{
 		parentNode = parent;
 		subMenuStyle = newSubMenuStyle;
-		text.setString(sf::String::fromUtf16(newName.begin(), newName.end()));
+		text.setString(newName);
 	}
 	
 	void MenuNode::Draw(sf::RenderWindow& window, const sf::Vector2f& position, const Orientation orientation, const Alignment alignment)

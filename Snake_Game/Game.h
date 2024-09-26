@@ -29,9 +29,12 @@ namespace SnakeGame
 		void ShutDown();
 		void SwitchMusicPlaying(bool playing);
 		void PlaySound(const SoundType sound);
+		void setLastSessionScore(const int score);
+		int getLastSessionScore();
 
 	private:
 		bool isShuttingDown{ false };
+		int lastSessionScore{ 0 };
 		Settings& settings;
 		sf::Music backGroundMusic;
 		std::vector<std::shared_ptr<BaseState>> stateStack;
