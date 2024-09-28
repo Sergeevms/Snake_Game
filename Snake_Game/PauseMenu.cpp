@@ -8,33 +8,10 @@ namespace SnakeGame
 		normalStyle.Init("Roboto-Regular.ttf", currentSettings);
 		selectedStyle.Init("Roboto-Regular.ttf", currentSettings, sf::Color::Green);
 
-		rootNode = std::make_shared<MenuNode>();
-		rootNode->Init({ nullptr }, L"Пауза", &subMenuStyle);
-		rootNode->SetStyle(&headerStyle);
+		rootNode = InitializeNode({ nullptr }, L"Пауза", &headerStyle, MenuNodeActivateReaction::None, &subMenuStyle);
 		currentNode = rootNode;
 
-		MenuNodePtr menuNode = std::make_shared<MenuNode>();
-		menuNode->Init(rootNode, L"Выйти из игры");
-		menuNode->SetStyle(&selectedStyle);
-		rootNode->AddChild(menuNode);
-		activateReactions[menuNode] = ActivateReactionPauseMenu::MainMenu;
-
-		MenuNodePtr continueNode = std::make_shared<MenuNode>();
-		continueNode->Init(rootNode, L"Продолжить");
-		continueNode->SetStyle(&normalStyle);
-		rootNode->AddChild(continueNode);
-		activateReactions[continueNode] = ActivateReactionPauseMenu::Play;
-	}
-
-	ActivateReactionPauseMenu PauseMenu::GetReaction() const
-	{
-		if (activateReactions.contains(currentNode->GetCurrentlySelectedChild()))
-		{
-			return activateReactions.at(currentNode->GetCurrentlySelectedChild());
-		}
-		else
-		{
-			return ActivateReactionPauseMenu::None;
-		}
+		InitializeNode(rootNode, L"Выйти из игры", &selectedStyle, MenuNodeActivateReaction::MainMenu);
+		InitializeNode(rootNode, L"Продолжить", &normalStyle, MenuNodeActivateReaction::Play);
 	}
 }

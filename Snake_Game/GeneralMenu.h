@@ -5,6 +5,20 @@
 
 namespace SnakeGame
 {
+	enum class MenuNodeActivateReaction
+	{
+		None,
+		Play,
+		Records,
+		SwitchMusic,
+		SwitchSound,
+		SwitchDifficulty,
+		Exit,
+		MainMenu,
+		EnterName,
+		SkipName
+	};
+
 	class MenuNode;
 	typedef std::shared_ptr<MenuNode> MenuNodePtr;
 	typedef std::weak_ptr<MenuNode> MenuNodePtrW;
@@ -61,6 +75,7 @@ namespace SnakeGame
 		virtual void ReturnToPrevious();
 		virtual void SelectNext() const;
 		virtual void SelectPrevious() const;
+		MenuNodeActivateReaction GetReaction() const;
 	protected:
 		const Settings& settings;
 		MenuNodeStyle headerStyle;
@@ -68,6 +83,12 @@ namespace SnakeGame
 		MenuNodeStyle normalStyle;
 		std::shared_ptr<MenuNode> rootNode;
 		std::shared_ptr<MenuNode> currentNode;
+		std::unordered_map<MenuNodePtr, MenuNodeActivateReaction> activateReactions;
+		virtual MenuNodePtr InitializeNode(const MenuNodePtr parent, const std::wstring& newName, MenuNodeStyle* nodeStyle,
+			MenuNodeActivateReaction reaction, MenuStyle* newSubMenuStyle = nullptr);
+		void ConfigureateNode(MenuNodePtr node, const MenuNodePtr parent, const std::wstring& newName,
+			MenuNodeStyle* nodeStyle, MenuNodeActivateReaction reaction, MenuStyle* newSubMenuStyle = nullptr);
+		MenuStyle subMenuStyle;
 	};
 }
 

@@ -6,9 +6,6 @@
 
 namespace SnakeGame
 {
-	class PlayingInputHandler;
-	typedef void (PlayingInputHandler::*InputReaction)();
-
 	class Game;
 	class Snake;
 	class PlayingState;
@@ -18,15 +15,13 @@ namespace SnakeGame
 	{
 	public:
 		PlayingInputHandler(Game* currentGame, Settings & currentSettings, Snake* currentSnake, PlayingState* currentState);
-		void HandleInputEvents(std::vector<sf::Event> const& input) override;
+		void TurnSnakeUp();
+		void TurnSnakeRight();
+		void TurnSnakeDown();
+		void TurnSnakeLeft();
+		void PauseGame();
 	private:
 		Snake* snake;
 		PlayingState* state;
-		std::unordered_map<ActionsTypesOnInput, InputReaction> actionMapping;
-		void turnSnakeUp();
-		void turnSnakeRight();
-		void turnSnakeDown();
-		void turnSnakeLeft();
-		void pauseGame();
 	};
 }

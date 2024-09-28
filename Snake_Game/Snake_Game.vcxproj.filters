@@ -114,6 +114,9 @@
     <ClCompile Include="RecordsStateMenus.cpp">
       <Filter>Source Files\Menu</Filter>
     </ClCompile>
+    <ClCompile Include="BaseMenuInputHandler.cpp">
+      <Filter>Source Files\InputHandlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainLoop.h">
@@ -190,6 +193,9 @@
     </ClInclude>
     <ClInclude Include="RecordsStateMenus.h">
       <Filter>Header Files\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseMenuInputHandler.h">
+      <Filter>Header Files\InputHandlers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

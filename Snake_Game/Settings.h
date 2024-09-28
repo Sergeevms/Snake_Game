@@ -13,15 +13,16 @@ namespace SnakeGame
 		void SaveToFile(const std::string& fileName);
 		void UpdateDifficulty(const int newDiffculty);
 
+		//General settings
 		int screenWidth;
 		int screenHeight;
+		int tileSize;
 		float epsilon;
 		float baseTimeOnCell;
 		int difficultyLevelCount;
 		float timeOnCellDifficultyStep;
 		int scoreOnDifficultyStep;
 		float timeOnCell;
-		int tileSize;
 		int defaultSnakeSize;
 		int currentDifficulty;
 		int smallRecordsSize;

@@ -6,56 +6,18 @@
 
 namespace SnakeGame
 {
-	MainMenuInputHandler::MainMenuInputHandler(Game* currentGame, Settings & currentSettings, MainMenu* currentMenu) : BaseInputHandler(currentGame, currentSettings), menu(currentMenu)
+	MainMenuInputHandler::MainMenuInputHandler(Game* currentGame, Settings & currentSettings, MainMenu* currentMenu) : BaseMenuInputHandler(currentGame, currentSettings, currentMenu), menu(currentMenu)
 	{
-		actionMapping[ActionsTypesOnInput::Up] = &MainMenuInputHandler::SelectPrevious;
-		actionMapping[ActionsTypesOnInput::Down] = &MainMenuInputHandler::SelectNext;
-		actionMapping[ActionsTypesOnInput::Forward] = &MainMenuInputHandler::ActivateCurrent;
-		actionMapping[ActionsTypesOnInput::Back] = &MainMenuInputHandler::GoBack;
-
-		activateMapping[ActivateReactionMainMenu::Exit] = &MainMenuInputHandler::ExitGame;
-		activateMapping[ActivateReactionMainMenu::Play] = &MainMenuInputHandler::StartPlaying;
-		activateMapping[ActivateReactionMainMenu::SwitchMusic] = &MainMenuInputHandler::SwitchMusic;
-		activateMapping[ActivateReactionMainMenu::SwitchSound] = &MainMenuInputHandler::SwitchSound;
-		activateMapping[ActivateReactionMainMenu::SwitchDifficulty] = &MainMenuInputHandler::SwitchDifficulty;
-	}
-
-	void MainMenuInputHandler::HandleInputEvents(const std::vector<sf::Event>& input)
-	{
-		for (auto& inputEvent : input)
-		{
-			if (settings.keyMap.contains(inputEvent.key.code))
-			{
-				if (actionMapping.contains(settings.keyMap.at(inputEvent.key.code)))
-				{
-					game->PlaySound(SoundType::OnKeyHit);
-					std::invoke(actionMapping[settings.keyMap[inputEvent.key.code]], this);
-				}
-			}
-		}
-	}
-
-	void MainMenuInputHandler::SelectNext()
-	{
-		menu->SelectNext();
-	}
-
-	void MainMenuInputHandler::SelectPrevious()
-	{
-		menu->SelectPrevious();
-	}
-
-	void MainMenuInputHandler::ActivateCurrent()
-	{
-		if (!menu->ExpandSelected())
-		{
-			std::invoke(activateMapping[menu->GetReaction()], this);
-		}
-	}
-
-	void MainMenuInputHandler::GoBack()
-	{
-		menu->ReturnToPrevious();
+		activateMapping[MenuNodeActivateReaction::Exit] = [this](BaseInputHandler* handler)
+			{if (auto currentHandler = dynamic_cast<MainMenuInputHandler*>(this)) { currentHandler->ExitGame(); }};
+		activateMapping[MenuNodeActivateReaction::Play] = [this](BaseInputHandler* handler)
+			{if (auto currentHandler = dynamic_cast<MainMenuInputHandler*>(this)) { currentHandler->StartPlaying(); }};
+		activateMapping[MenuNodeActivateReaction::SwitchMusic] = [this](BaseInputHandler* handler)
+			{ if (auto currentHandler = dynamic_cast<MainMenuInputHandler*>(this)) { currentHandler->SwitchMusic(); }};
+		activateMapping[MenuNodeActivateReaction::SwitchSound] = [this](BaseInputHandler* handler)
+			{ if (auto currentHandler = dynamic_cast<MainMenuInputHandler*>(this)) { currentHandler->SwitchSound(); }};
+		activateMapping[MenuNodeActivateReaction::SwitchDifficulty] = [this](BaseInputHandler* handler)
+			{ if (auto currentHandler = dynamic_cast<MainMenuInputHandler*>(this)) { currentHandler->SwitchDifficulty(); }};
 	}
 
 	void MainMenuInputHandler::ExitGame()
