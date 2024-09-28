@@ -7,45 +7,14 @@
 namespace SnakeGame
 {
 	PauseStateInputHandler::PauseStateInputHandler(Game* currentGame, Settings& currentSettings, PauseMenu* currentMenu) :
-		BaseInputHandler(currentGame, currentSettings), menu(currentMenu)
-	{
-		actionMapping[ActionsTypesOnInput::Up] = &PauseStateInputHandler::selectPrevious;
-		actionMapping[ActionsTypesOnInput::Down] = &PauseStateInputHandler::selectNext;
-		actionMapping[ActionsTypesOnInput::Forward] = &PauseStateInputHandler::activateCurrent;
-		actionMapping[ActionsTypesOnInput::Back] = &PauseStateInputHandler::returnToGame;
+		BaseMenuInputHandler(currentGame, currentSettings, currentMenu)
+	{	actionMapping[ActionsTypesOnInput::Back] = [this](BaseInputHandler* handler)
+		{if (auto currentHandler = dynamic_cast<PauseStateInputHandler*>(this)) { currentHandler->returnToGame(); }};
 
-		activateMapping[ActivateReactionPauseMenu::MainMenu] = &PauseStateInputHandler::returnToMenu;
-		activateMapping[ActivateReactionPauseMenu::Play] = &PauseStateInputHandler::returnToGame;
-	}
-
-	void PauseStateInputHandler::HandleInputEvents(const std::vector<sf::Event>& input)
-	{
-		for (auto& inputEvent : input)
-		{
-			if (settings.keyMap.contains(inputEvent.key.code))
-			{
-				if (actionMapping.contains(settings.keyMap.at(inputEvent.key.code)))
-				{
-					game->PlaySound(SoundType::OnKeyHit);
-					std::invoke(actionMapping[settings.keyMap[inputEvent.key.code]], this);
-				}
-			}
-		}
-	}
-
-	void PauseStateInputHandler::selectNext()
-	{
-		menu->SelectNext();
-	}
-
-	void PauseStateInputHandler::selectPrevious()
-	{
-		menu->SelectPrevious();
-	}
-
-	void PauseStateInputHandler::activateCurrent()
-	{
-		std::invoke(activateMapping[menu->GetReaction()], this);
+		activateMapping[MenuNodeActivateReaction::MainMenu] = [this](BaseInputHandler* handler)
+			{if (auto currentHandler = dynamic_cast<PauseStateInputHandler*>(this)) { currentHandler->returnToMenu(); }};
+		activateMapping[MenuNodeActivateReaction::Play] = [this](BaseInputHandler* handler)
+			{if (auto currentHandler = dynamic_cast<PauseStateInputHandler*>(this)) { currentHandler->returnToGame(); }};
 	}
 
 	void PauseStateInputHandler::returnToGame()

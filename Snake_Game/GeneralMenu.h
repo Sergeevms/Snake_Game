@@ -5,6 +5,20 @@
 
 namespace SnakeGame
 {
+	enum class MenuNodeActivateReaction
+	{
+		None,
+		Play,
+		Records,
+		SwitchMusic,
+		SwitchSound,
+		SwitchDifficulty,
+		Exit,
+		MainMenu,
+		EnterName,
+		SkipName
+	};
+
 	class MenuNode;
 	typedef std::shared_ptr<MenuNode> MenuNodePtr;
 	typedef std::weak_ptr<MenuNode> MenuNodePtrW;
@@ -30,11 +44,11 @@ namespace SnakeGame
 	{
 	public:
 		virtual ~MenuNode() = default;
-		virtual void Init(const MenuNodePtr parent, const std::u16string& newName, MenuStyle* newSubMenuStyle = nullptr);
+		virtual void Init(const MenuNodePtr parent, const std::wstring& newName, MenuStyle* newSubMenuStyle = nullptr);
 		virtual void Draw(sf::RenderWindow& window, const sf::Vector2f& position, const Orientation orientation, const Alignment alignment);
 		virtual sf::FloatRect GetRect();
 		virtual void SetStyle(const MenuNodeStyle* newStyle);
-		MenuNodePtr GetCurrentlySelectedChild() const;
+		virtual MenuNodePtr GetCurrentlySelectedChild() const;
 		MenuNodePtr GetParent() const;
 		MenuStyle* GetMenuStyle() const;
 		virtual void AddChild(const MenuNodePtr child);
@@ -61,6 +75,7 @@ namespace SnakeGame
 		virtual void ReturnToPrevious();
 		virtual void SelectNext() const;
 		virtual void SelectPrevious() const;
+		MenuNodeActivateReaction GetReaction() const;
 	protected:
 		const Settings& settings;
 		MenuNodeStyle headerStyle;
@@ -68,6 +83,12 @@ namespace SnakeGame
 		MenuNodeStyle normalStyle;
 		std::shared_ptr<MenuNode> rootNode;
 		std::shared_ptr<MenuNode> currentNode;
+		std::unordered_map<MenuNodePtr, MenuNodeActivateReaction> activateReactions;
+		virtual MenuNodePtr InitializeNode(const MenuNodePtr parent, const std::wstring& newName, MenuNodeStyle* nodeStyle,
+			MenuNodeActivateReaction reaction, MenuStyle* newSubMenuStyle = nullptr);
+		void ConfigureateNode(MenuNodePtr node, const MenuNodePtr parent, const std::wstring& newName,
+			MenuNodeStyle* nodeStyle, MenuNodeActivateReaction reaction, MenuStyle* newSubMenuStyle = nullptr);
+		MenuStyle subMenuStyle;
 	};
 }
 

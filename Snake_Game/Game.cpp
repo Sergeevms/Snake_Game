@@ -16,9 +16,9 @@ namespace SnakeGame
 #else// _DEBUG
 		backGroundMusic.openFromFile(settings.soundPath + "Clinthammer__Background_Music.wav");
 #endif
-		loadSound(SoundType::OnKeyHit, "Theevilsocks__menu-hover.wav");
+		loadSound(SoundType::OnKeyHit, "Owlstorm__Snake_hit.wav");
 		loadSound(SoundType::OnLose, "Maodin204__Lose.wav");
-		loadSound(SoundType::OnSnakeHit, "Owlstorm__Snake_hit.wav");
+		loadSound(SoundType::OnSnakeHit, "Theevilsocks__menu-hover.wav");
 		loadSound(SoundType::OnSessionStart, "Timgormly__Enter.wav");
 	}
 
@@ -95,6 +95,16 @@ namespace SnakeGame
 		{
 			sounds.at(sound).play();
 		}
+	}
+
+	void Game::setLastSessionScore(const int score)
+	{
+		lastSessionScore = score;
+	}
+
+	int Game::getLastSessionScore()
+	{
+		return lastSessionScore;
 	}
 
 	void Game::loadSound(const SoundType type, std::string fileName)

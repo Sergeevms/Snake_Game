@@ -4,11 +4,14 @@
 
 namespace SnakeGame
 {
-	void MenuNode::Init(const MenuNodePtr parent, const std::u16string & newName, MenuStyle* newSubMenuStyle)
+	void MenuNode::Init(const MenuNodePtr parent, const std::wstring & newName, MenuStyle* newSubMenuStyle)
 	{
 		parentNode = parent;
-		subMenuStyle = newSubMenuStyle;
-		text.setString(sf::String::fromUtf16(newName.begin(), newName.end()));
+		text.setString(newName);
+		if (newSubMenuStyle)
+		{
+			subMenuStyle = newSubMenuStyle;
+		}		
 	}
 	
 	void MenuNode::Draw(sf::RenderWindow& window, const sf::Vector2f& position, const Orientation orientation, const Alignment alignment)
@@ -211,5 +214,45 @@ namespace SnakeGame
 		color = newColor;
 		textStyle = newTextStyle;
 		characterSize = newSize;
+	}
+
+	MenuNodeActivateReaction GeneralMenu::GetReaction() const
+	{
+		if (activateReactions.contains(currentNode->GetCurrentlySelectedChild()))
+		{
+			return activateReactions.at(currentNode->GetCurrentlySelectedChild());
+		}
+		else
+		{
+			return MenuNodeActivateReaction::None;
+		}
+	}
+
+	MenuNodePtr GeneralMenu::InitializeNode(const MenuNodePtr parent, const std::wstring& newName, MenuNodeStyle* nodeStyle, MenuNodeActivateReaction reaction, MenuStyle* newSubMenuStyle)
+	{
+		MenuNodePtr newNode = std::make_shared<MenuNode>();
+		ConfigureateNode(newNode, parent, newName, nodeStyle, reaction, newSubMenuStyle);
+		return newNode;
+	}
+	void GeneralMenu::ConfigureateNode(MenuNodePtr node, const MenuNodePtr parent, const std::wstring& newName, MenuNodeStyle* nodeStyle,
+		MenuNodeActivateReaction reaction, MenuStyle* newSubMenuStyle)
+	{
+		node->Init(parent, newName, newSubMenuStyle);
+		if (nodeStyle)
+		{
+			node->SetStyle(nodeStyle);
+		}
+		else
+		{
+			node->SetStyle(&normalStyle);
+		}
+		if (parent)
+		{
+			parent->AddChild(node);
+		}
+		if (reaction != MenuNodeActivateReaction::None)
+		{
+			activateReactions[node] = reaction;
+		}
 	}
 }

@@ -14,7 +14,7 @@ namespace SnakeGame
 		menu.Draw(window, sf::Vector2f(settings.screenWidth / 2.f, 10.f));
 	}
 
-	void MainMenuState::Update(float deltaTime)
+	void MainMenuState::Update(const float deltaTime)
 	{
 
 	}

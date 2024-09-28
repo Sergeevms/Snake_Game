@@ -7,7 +7,7 @@ namespace SnakeGame
 	{
 		screenWidth = 800;
 		screenHeight = 600;
-		gameName = u"Змейка";
+		gameName = L"Змейка";
 		resourcesPath = "Resources\\";
 		levelPath = resourcesPath + "Levels\\";
 		soundPath = resourcesPath + "Sounds\\";
@@ -38,6 +38,10 @@ namespace SnakeGame
 		keyMap[sf::Keyboard::B] = ActionsTypesOnInput::Back;
 		keyMap[sf::Keyboard::P] = ActionsTypesOnInput::Pause;
 		keyMap[sf::Keyboard::Enter] = ActionsTypesOnInput::Forward;
+
+		recordsFileName = "Records.dat";
+		smallRecordsSize = 5;
+		bigRecordsSize = 10;
 	}
 
 	void Settings::LoadFromFile(const std::string& fileName)

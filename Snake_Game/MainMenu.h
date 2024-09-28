@@ -3,28 +3,18 @@
 
 namespace SnakeGame
 {
-	enum class ActivateReactionMainMenu
-	{
-		None, 
-		Play, 
-		Records,
-		SwitchMusic,
-		SwitchSound,
-		SwitchDifficulty,
-		Exit
-	};
+	class CheckBoxMenuNode;
 
 	class MainMenu : public GeneralMenu
 	{
 	public:
 		MainMenu(Settings& currentSettings);
 		virtual ~MainMenu() = default;
-		ActivateReactionMainMenu GetReaction() const;
 		void UpdateChecked(const bool checked);
 		int GetSelectedDifficulty();
 	private:
-		MenuStyle subMenuStyle;
-		std::unordered_map<MenuNodePtr, ActivateReactionMainMenu> activateReactions;
+		std::shared_ptr<CheckBoxMenuNode> InitializeCheckBoxNode(const MenuNodePtr parent, const std::wstring& newName, bool checked, float spacing, MenuNodeStyle* nodeStyle = nullptr,
+			MenuNodeActivateReaction reaction = MenuNodeActivateReaction::None, MenuStyle* newSubMenuStyle = nullptr);
 		std::unordered_map<MenuNodePtr, int> nodeToDifficultyLevel;
 	};
 

@@ -99,6 +99,24 @@
     <ClCompile Include="PauseStateInputHandler.cpp">
       <Filter>Source Files\InputHandlers</Filter>
     </ClCompile>
+    <ClCompile Include="RecordsState.cpp">
+      <Filter>Source Files\GameStates</Filter>
+    </ClCompile>
+    <ClCompile Include="RecordTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="INotPlayingWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RecordsStateInputHandlers.cpp">
+      <Filter>Source Files\InputHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="RecordsStateMenus.cpp">
+      <Filter>Source Files\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseMenuInputHandler.cpp">
+      <Filter>Source Files\InputHandlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainLoop.h">
@@ -159,6 +177,24 @@
       <Filter>Header Files\Menu</Filter>
     </ClInclude>
     <ClInclude Include="PauseStateInputHandler.h">
+      <Filter>Header Files\InputHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="RecordsState.h">
+      <Filter>Header Files\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="RecordTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="INotPlayingWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RecordsStateInputHandlers.h">
+      <Filter>Header Files\InputHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="RecordsStateMenus.h">
+      <Filter>Header Files\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseMenuInputHandler.h">
       <Filter>Header Files\InputHandlers</Filter>
     </ClInclude>
   </ItemGroup>

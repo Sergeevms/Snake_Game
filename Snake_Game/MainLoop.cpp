@@ -8,7 +8,7 @@ namespace SnakeGame
 {
 	MainLoop::MainLoop()
 	{
-		window = std::make_unique<sf::RenderWindow>(sf::VideoMode(settings.screenWidth, settings.screenHeight), sf::String::fromUtf16(settings.gameName.begin(), settings.gameName.end()));
+		window = std::make_unique<sf::RenderWindow>(sf::VideoMode(settings.screenWidth, settings.screenHeight), settings.gameName);
 		game = std::make_unique<Game>(settings);
 	}
 
