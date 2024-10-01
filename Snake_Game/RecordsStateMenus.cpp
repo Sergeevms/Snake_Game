@@ -2,11 +2,11 @@
 
 namespace SnakeGame
 {
-	RecordsStateNameMenu::RecordsStateNameMenu(const Settings& currentSettings) : GeneralMenu(currentSettings)
+	RecordsStateNameMenu::RecordsStateNameMenu() : GeneralMenu()
 	{
-		headerStyle.Init("Roboto-Regular.ttf", settings, sf::Color::White, sf::Text::Style(sf::Text::Style::Bold));
-		normalStyle.Init("Roboto-Regular.ttf", settings);
-		selectedStyle.Init("Roboto-Regular.ttf", settings, sf::Color::Green);
+		headerStyle.Init("Roboto-Regular.ttf", sf::Color::White, sf::Text::Style(sf::Text::Style::Bold));
+		normalStyle.Init("Roboto-Regular.ttf");
+		selectedStyle.Init("Roboto-Regular.ttf", sf::Color::Green);
 
 		rootNode = InitializeNode({ nullptr }, L"Ввести имя", &headerStyle, MenuNodeActivateReaction::None, &subMenuStyle);
 		currentNode = rootNode;
@@ -15,11 +15,11 @@ namespace SnakeGame
 		InitializeNode(rootNode, L"Да", &normalStyle, MenuNodeActivateReaction::EnterName);
 	}
 
-	RecordsStateMenu::RecordsStateMenu(const Settings& currentSettings) : GeneralMenu(currentSettings)
+	RecordsStateMenu::RecordsStateMenu() : GeneralMenu()
 	{
-		headerStyle.Init("Roboto-Regular.ttf", settings);
-		normalStyle.Init("Roboto-Regular.ttf", settings);
-		selectedStyle.Init("Roboto-Regular.ttf", settings, sf::Color::Green);
+		headerStyle.Init("Roboto-Regular.ttf");
+		normalStyle.Init("Roboto-Regular.ttf");
+		selectedStyle.Init("Roboto-Regular.ttf", sf::Color::Green);
 
 		rootNode = InitializeNode({ nullptr }, L"", &headerStyle, MenuNodeActivateReaction::None);
 		currentNode = rootNode;

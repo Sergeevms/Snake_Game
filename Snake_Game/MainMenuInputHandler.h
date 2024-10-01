@@ -12,7 +12,7 @@ namespace SnakeGame
     class MainMenuInputHandler : public BaseMenuInputHandler
     {
     public:
-        MainMenuInputHandler(Game* currentGame, Settings & currentSettings, MainMenu* currentMenu);
+        MainMenuInputHandler(MainMenu* currentMenu);
         void ExitGame();
         void StartPlaying();
         void SwitchMusic();

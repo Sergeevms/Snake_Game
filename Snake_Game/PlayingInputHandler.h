@@ -14,7 +14,7 @@ namespace SnakeGame
 	class PlayingInputHandler : public BaseInputHandler
 	{
 	public:
-		PlayingInputHandler(Game* currentGame, Settings & currentSettings, Snake* currentSnake, PlayingState* currentState);
+		PlayingInputHandler(Snake* currentSnake, PlayingState* currentState);
 		void TurnSnakeUp();
 		void TurnSnakeRight();
 		void TurnSnakeDown();

@@ -8,13 +8,16 @@
 
 namespace SnakeGame
 {
-	Game::Game(Settings& currentSettings) : settings(currentSettings)
-	{		
-		stateStack.push_back(std::make_shared<MainMenuState>(this, settings));
+	Game* Game::game = nullptr;
+
+	Game::Game()
+	{	
+		Settings* settings = Settings::GetSettings();
+		stateStack.push_back(std::make_shared<MainMenuState>());
 #ifdef _DEBUG
-		assert(backGroundMusic.openFromFile(settings.soundPath + "Clinthammer__Background_Music.wav"));
+		assert(backGroundMusic.openFromFile(settings->soundPath + "Clinthammer__Background_Music.wav"));
 #else// _DEBUG
-		backGroundMusic.openFromFile(settings.soundPath + "Clinthammer__Background_Music.wav");
+		backGroundMusic.openFromFile(settings->soundPath + "Clinthammer__Background_Music.wav");
 #endif
 		loadSound(SoundType::OnKeyHit, "Owlstorm__Snake_hit.wav");
 		loadSound(SoundType::OnLose, "Maodin204__Lose.wav");
@@ -48,7 +51,7 @@ namespace SnakeGame
 		case GameState::MainMenu:
 		{
 			stateStack.clear();
-			stateStack.push_back(std::make_shared<MainMenuState>(this, settings));
+			stateStack.push_back(std::make_shared<MainMenuState>());
 			break;
 		}
 		case GameState::Playing:
@@ -60,13 +63,13 @@ namespace SnakeGame
 			else
 			{
 				stateStack.clear();
-				stateStack.push_back(std::make_shared<PlayingState>(this, settings));
+				stateStack.push_back(std::make_shared<PlayingState>());
 			}
 			break;
 		}
 		case GameState::Pause:
 		{
-			stateStack.push_back(std::make_shared<PauseState>(this, settings));
+			stateStack.push_back(std::make_shared<PauseState>());
 			break;
 		}
 		}
@@ -79,7 +82,8 @@ namespace SnakeGame
 
 	void Game::SwitchMusicPlaying(bool playing)
 	{
-		if (playing && settings.musicOn)
+		Settings* settings = Settings::GetSettings();
+		if (playing && settings->musicOn)
 		{
 			backGroundMusic.play();
 		}
@@ -91,29 +95,31 @@ namespace SnakeGame
 
 	void Game::PlaySound(const SoundType sound)
 	{
-		if (sounds.contains(sound) && settings.soundOn)
+		Settings* settings = Settings::GetSettings();
+		if (sounds.contains(sound) && settings->soundOn)
 		{
 			sounds.at(sound).play();
 		}
 	}
 
-	void Game::setLastSessionScore(const int score)
+	void Game::SetLastSessionScore(const int score)
 	{
 		lastSessionScore = score;
 	}
 
-	int Game::getLastSessionScore()
+	int Game::GetLastSessionScore()
 	{
 		return lastSessionScore;
 	}
 
 	void Game::loadSound(const SoundType type, std::string fileName)
 	{
+		Settings* settings = Settings::GetSettings();
 		soundBuffers.push_back(std::make_unique<sf::SoundBuffer>());
 #ifdef _DEBUG
-		assert((*soundBuffers.back()).loadFromFile(settings.soundPath + fileName));
+		assert((*soundBuffers.back()).loadFromFile(settings->soundPath + fileName));
 #else
-		newBuffer.loadFromFile(settings.soundPath + fileName);
+		newBuffer.loadFromFile(settings->soundPath + fileName);
 #endif // _DEBUG
 		sounds[type] = sf::Sound(*soundBuffers.back());
 	}

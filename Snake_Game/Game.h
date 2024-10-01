@@ -14,14 +14,23 @@ namespace SnakeGame
 		OnSessionStart
 	};
 
-	struct Settings;
 	class BaseState;
 	enum class GameState;
 
 	class Game
 	{
 	public:
-		Game(Settings& currentSettings);
+		static Game* GetGame()
+		{
+			if (game == nullptr)
+			{
+				game = new Game();
+			}
+			return game;
+		};
+
+		Game(Game&) = delete;
+
 		bool IsGameShuttingDown() const;
 		void Update(const float deltaTime, const std::vector<sf::Event>& inputEvents);
 		void Draw(sf::RenderWindow&) const;
@@ -29,13 +38,14 @@ namespace SnakeGame
 		void ShutDown();
 		void SwitchMusicPlaying(bool playing);
 		void PlaySound(const SoundType sound);
-		void setLastSessionScore(const int score);
-		int getLastSessionScore();
+		void SetLastSessionScore(const int score);
+		int GetLastSessionScore();
 
 	private:
+		Game();
+		static Game* game;
 		bool isShuttingDown{ false };
 		int lastSessionScore{ 0 };
-		Settings& settings;
 		sf::Music backGroundMusic;
 		std::vector<std::shared_ptr<BaseState>> stateStack;
 		std::vector<std::unique_ptr<sf::SoundBuffer>> soundBuffers;

@@ -8,10 +8,17 @@ namespace SnakeGame
 
 	struct Settings
 	{
-		Settings();
 		void LoadFromFile(const std::string& fileName);
 		void SaveToFile(const std::string& fileName);
 		void UpdateDifficulty(const int newDiffculty);
+		static Settings* GetSettings() 
+		{
+			if (settings == nullptr)
+			{
+				settings = new Settings();
+			}
+			return settings;
+		};
 
 		//General settings
 		int screenWidth;
@@ -42,5 +49,8 @@ namespace SnakeGame
 		std::unordered_map<sf::Keyboard::Key, ActionsTypesOnInput> keyMap;
 		std::unordered_map<int, float> difficultyToTimeOnCell;
 		std::unordered_map<int, int> difficultyToScore;
+	private:
+		Settings();
+		static Settings* settings;
 	};
 };

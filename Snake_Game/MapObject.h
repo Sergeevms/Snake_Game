@@ -35,12 +35,10 @@ namespace SnakeGame
 		{Direction::Left, 270.f} 
 	};
 
-	struct Settings;
-
 	class MapObject
 	{
 	public:
-		MapObject(const sf::Vector2i& mapCell, const sf::Texture& texture, const Settings& settings);
+		MapObject(const sf::Vector2i& mapCell, const sf::Texture& texture);
 		virtual ~MapObject() = default;
 		virtual MapObjectType GetObjectType() const = 0;
 		virtual void Draw(sf::RenderWindow&) const;
@@ -49,6 +47,5 @@ namespace SnakeGame
 		sf::Vector2i mapCoordinates;
 		sf::Vector2f screenCoordinates;
 		sf::Sprite sprite;
-		const Settings& currentSettings;
 	};
 }

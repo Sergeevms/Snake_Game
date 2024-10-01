@@ -18,13 +18,10 @@ namespace SnakeGame
 	class BaseState
 	{
 	public:
-		BaseState(Game* currentGame, Settings& currentSettings) : game(currentGame), settings{ currentSettings } { };
+		BaseState() {};
 		virtual ~BaseState() = default;
 		virtual void Draw(sf::RenderWindow&) const = 0;
 		virtual void Update(const float) = 0;
 		virtual void HandleInput(const std::vector<sf::Event>&) = 0;
-	protected:
-		Settings& settings;
-		Game* game;
 	};
 }

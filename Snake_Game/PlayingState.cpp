@@ -7,32 +7,33 @@
 
 namespace SnakeGame
 {
-	PlayingState::PlayingState(Game* game, Settings& settings) : BaseState(game, settings), map(settings), snake(settings, this, &map),
-		inputHandler(game, settings, &snake, this), delayBeforeMoving(settings.movingDelayOnStart)
-	{		
-		map.LoadFromFile(settings.selectedLevel);
+	PlayingState::PlayingState() : BaseState(), map(), snake(this, &map),
+		inputHandler(&snake, this), delayBeforeMoving(Settings::GetSettings()->movingDelayOnStart)
+	{
+		Settings* settings = Settings::GetSettings();
+		map.LoadFromFile(settings->selectedLevel);
 		map.CreateSavedLvl();
 
 		snake.LoadFromCharMap(map.GetcharMap(), map.GetSnakeHeadPosition());
 
 #ifdef _DEBUG
-		assert(font.loadFromFile(settings.fontPath +  "Roboto-Regular.ttf"));
+		assert(font.loadFromFile(settings->fontPath +  "Roboto-Regular.ttf"));
 #elif
-		font.loadFromFile(FONT_PATH + "Roboto-Regular.ttf");
+		font.loadFromFile(settings->fontPath + "Roboto-Regular.ttf");
 #endif // DEBUG
 		gameOver.setFont(font);
 		gameOver.setString("GAME OVER");
 		gameOver.setFillColor(sf::Color::Red);
 		gameOver.setCharacterSize(80);
 		SetOriginByRelative(gameOver, relativePositions.at(RelativePosition::Center));
-		gameOver.setPosition({ settings.screenWidth / 2.f, settings.screenHeight / 2.f});
+		gameOver.setPosition({ settings->screenWidth / 2.f, settings->screenHeight / 2.f});
 
 		gameWinned.setFont(font);
 		gameWinned.setString("GAME WINNED");
 		gameWinned.setFillColor(sf::Color::Green);
 		gameWinned.setCharacterSize(80);
 		SetOriginByRelative(gameWinned, relativePositions.at(RelativePosition::Center));
-		gameWinned.setPosition({ settings.screenWidth / 2.f, settings.screenHeight / 2.f});
+		gameWinned.setPosition({ settings->screenWidth / 2.f, settings->screenHeight / 2.f});
 
 
 		scoreText.setFont(font);
@@ -42,9 +43,9 @@ namespace SnakeGame
 		std::wstring currentScore(L"Очки:\n");
 		scoreText.setString(currentScore + std::to_wstring(scoreCount));
 		SetOriginByRelative(scoreText, relativePositions.at(RelativePosition::TopRight));
-		scoreText.setPosition({ settings.screenWidth - 1.f, 0.f });
+		scoreText.setPosition({ settings->screenWidth - 1.f, 0.f });
 
-		game->SwitchMusicPlaying(true);
+		Game::GetGame()->SwitchMusicPlaying(true);
 
 		keepSnakeMoveingTime = 0.f;
 	}
@@ -71,9 +72,11 @@ namespace SnakeGame
 	void PlayingState::Update(const float deltaTime)
 	{
 		keepSnakeMoveingTime -= deltaTime;
+		Settings* settings = Settings::GetSettings();
 		if (!isGameOvered)
 		{
-			if (delayBeforeMoving <= settings.epsilon)
+			Game* game = Game::GetGame();
+			if (delayBeforeMoving <= settings->epsilon)
 			{
 				snake.Update(deltaTime);
 				if (!sessionStarted)
@@ -92,12 +95,12 @@ namespace SnakeGame
 			if (!map.HaveEmptyCells())
 			{
 				isGameOvered = true;
-				game->setLastSessionScore(scoreCount);
+				game->SetLastSessionScore(scoreCount);
 			}
 		}
 		else
 		{
-			if (keepSnakeMoveingTime > settings.epsilon)
+			if (keepSnakeMoveingTime > settings->epsilon)
 			{
 				snake.Update(deltaTime);				
 			}
@@ -111,13 +114,16 @@ namespace SnakeGame
 
 	void PlayingState::resetMovingDelay()
 	{
-		delayBeforeMoving = settings.movingDelayOnStart;
+		delayBeforeMoving = Settings::GetSettings()->movingDelayOnStart;
 		sessionStarted = false;
 	}
 
 	CollisionResult PlayingState::CheckColition(sf::Vector2i& cell)
 	{
 		CollisionResult collitionResult = collitionResults.at(map.GetObjectType(cell));
+		Game* game = Game::GetGame();
+		Settings* settings = Settings::GetSettings();
+
 		switch (collitionResult)
 		{
 		case CollisionResult::AppleEaten:
@@ -125,8 +131,8 @@ namespace SnakeGame
 			game->PlaySound(SoundType::OnSnakeHit);
 			snake.AddNewBody();
 			map.EmplaceNewApple();
-			scoreCount += settings.difficultyToScore[settings.currentDifficulty];
-			keepSnakeMoveingTime = settings.timeOnCell;
+			scoreCount += settings->difficultyToScore[settings->currentDifficulty];
+			keepSnakeMoveingTime = settings->timeOnCell;
 			map.RemoveMapObject(cell);
 			break;
 		}
@@ -134,7 +140,7 @@ namespace SnakeGame
 		{
 			isGameOvered = true;
 			game->PlaySound(SoundType::OnLose);
-			game->setLastSessionScore(scoreCount);
+			game->SetLastSessionScore(scoreCount);
 			break;
 		}
 		case CollisionResult::None:

@@ -11,7 +11,7 @@ namespace SnakeGame
         public MapObject
     {
     public:
-        Wall(const sf::Vector2i& mapCell, const sf::Texture& texture, const Settings& settings, const Direction direction);
+        Wall(const sf::Vector2i& mapCell, const sf::Texture& texture, const Direction direction);
         virtual MapObjectType GetObjectType() const override { return MapObjectType::Wall; };
     };
 }

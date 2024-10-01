@@ -8,7 +8,7 @@ namespace SnakeGame
 	class MainMenuState : public BaseState
 	{
 	public:
-		MainMenuState(Game* currentGame, Settings& settings);
+		MainMenuState();
 		virtual ~MainMenuState() = default;
 		virtual void Draw(sf::RenderWindow& window) const override;
 		virtual void Update(const float deltaTime) override;

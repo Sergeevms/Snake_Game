@@ -14,7 +14,8 @@ namespace SnakeGame
 		Left,
 		Back,
 		Forward,
-		Pause
+		Pause,
+		BackSpace
 	};
 
 	class Game;
@@ -25,12 +26,10 @@ namespace SnakeGame
 	class BaseInputHandler
 	{
 	public:
-		BaseInputHandler(Game* currentGame, Settings& currentSettings) : game(currentGame), settings(currentSettings) {};
+		BaseInputHandler() {};
 		virtual void HandleInputEvents(const std::vector<sf::Event>& input);
 		virtual ~BaseInputHandler() = default;
 	protected:
-		Game* game;
-		Settings& settings;
 		std::unordered_map<ActionsTypesOnInput, HandlerAction> actionMapping;
 	};
 }

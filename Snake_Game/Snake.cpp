@@ -5,8 +5,8 @@
 namespace SnakeGame
 {
 
-	SnakeNode::SnakeNode(const sf::Vector2i& mapCell, const sf::Texture& texture, const Settings& settings, const Direction direction, const bool isMovingEnabled) :
-		MapObject(mapCell, texture, settings), currentDirection(direction), isMoving(isMovingEnabled)
+	SnakeNode::SnakeNode(const sf::Vector2i& mapCell, const sf::Texture& texture, const Direction direction, const bool isMovingEnabled) :
+		MapObject(mapCell, texture), currentDirection(direction), isMoving(isMovingEnabled)
 	{
 
 	}
@@ -15,7 +15,7 @@ namespace SnakeGame
 	{
 		if (isMoving)
 		{
-			const float movementDistance = deltaTime * currentSettings.movementSpeed;
+			const float movementDistance = deltaTime * Settings::GetSettings()->movementSpeed;
 			sf::Vector2f movement = multiplyVectorByScalar(directionVectors.at(currentDirection), movementDistance);
 			screenCoordinates.x += movement.x;
 			screenCoordinates.y += movement.y;
@@ -40,8 +40,9 @@ namespace SnakeGame
 
 	void SnakeNode::UpdateScreenPositionByCell()
 	{
-		screenCoordinates.x = currentSettings.tileSize * mapCoordinates.x + currentSettings.tileSize / 2.f;
-		screenCoordinates.y = currentSettings.tileSize * mapCoordinates.y + currentSettings.tileSize / 2.f;
+		Settings* settings = Settings::GetSettings();
+		screenCoordinates.x = settings->tileSize * mapCoordinates.x + settings->tileSize / 2.f;
+		screenCoordinates.y = settings->tileSize * mapCoordinates.y + settings->tileSize / 2.f;
 		sprite.setPosition(screenCoordinates.x, screenCoordinates.y);
 	}
 
@@ -55,17 +56,19 @@ namespace SnakeGame
 		return currentDirection;
 	}
 
-	Snake::Snake(Settings const& currentSettings, PlayingState* currentState, Map* currentMap): settings(currentSettings), playingState(currentState),
+	Snake::Snake(PlayingState* currentState, Map* currentMap): playingState(currentState),
 		newDirection(Direction::None), map(currentMap)
 	{
-		LoadTexture(settings.texturePath + "SnakeHead.png", headTexture);
-		LoadTexture(settings.texturePath + "SnakeBody.png", bodyTexture);
+		Settings* settings = Settings::GetSettings();
+		LoadTexture(settings->texturePath + "SnakeHead.png", headTexture);
+		LoadTexture(settings->texturePath + "SnakeBody.png", bodyTexture);
 	}
 
 	void Snake::Update(const float deltaTime)
 	{		
 		timeTillNextCell -= deltaTime;
-		if (timeTillNextCell > settings.epsilon)
+		Settings* settings = Settings::GetSettings();
+		if (timeTillNextCell > settings->epsilon)
 		{
 			for (auto& node : nodes)
 			{
@@ -74,7 +77,7 @@ namespace SnakeGame
 		}
 		else
 		{
-			timeTillNextCell = settings.timeOnCell;
+			timeTillNextCell = settings->timeOnCell;
 			nodes.back()->SetMovingEnabledState(true);
 			std::shared_ptr<SnakeNode> head = nodes.front();
 			sf::Vector2i cellToCheck{ head->GetCellPosition().x + static_cast<int>(directionVectors.at(newDirection).x),
@@ -129,7 +132,7 @@ namespace SnakeGame
 			addedToSnake.push_back(std::vector<bool>(row.size(), false));
 		}
 		addedToSnake[currentCell.y][currentCell.x] = true;
-		nodes.push_back(std::make_shared<SnakeNode>(currentCell, headTexture, settings, Direction::None));
+		nodes.push_back(std::make_shared<SnakeNode>(currentCell, headTexture, Direction::None));
 		while (AddNextBodyFromMap(addedToSnake, charMap, currentCell))
 		{
 			currentCell = nodes.back()->GetCellPosition();
@@ -162,7 +165,7 @@ namespace SnakeGame
 	void Snake::AddNewBody()
 	{
 		std::shared_ptr<SnakeNode> lastNode = nodes.back();
-		nodes.push_back(std::make_shared<SnakeNode>(lastNode->GetCellPosition(), bodyTexture, settings, lastNode->GetDirection(), false));
+		nodes.push_back(std::make_shared<SnakeNode>(lastNode->GetCellPosition(), bodyTexture, lastNode->GetDirection(), false));
 	}
 
 	bool Snake::AddNextBodyFromMap(std::vector<std::vector<bool>>& addedCells, const std::vector<std::string>& charMap, const sf::Vector2i& currentCell)
@@ -176,7 +179,7 @@ namespace SnakeGame
 				charMap[checkingCell.y][checkingCell.x] == 'B' &&
 				addedCells[checkingCell.y][checkingCell.x] == false)
 			{				
-				nodes.push_back(std::make_shared<SnakeNode>(checkingCell, bodyTexture, settings, OpossiteDirection(curDir.first)));
+				nodes.push_back(std::make_shared<SnakeNode>(checkingCell, bodyTexture, OpossiteDirection(curDir.first)));
 				addedCells[checkingCell.y][checkingCell.x] = true;
 				return true;
 			}

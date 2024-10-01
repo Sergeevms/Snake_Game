@@ -6,7 +6,7 @@ namespace SnakeGame
 	class PauseMenu : public GeneralMenu
 	{
 	public:
-		PauseMenu(const Settings& currentSettings);
+		PauseMenu();
 		virtual ~PauseMenu() = default;
 	};
 }

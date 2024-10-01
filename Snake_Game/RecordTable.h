@@ -11,13 +11,12 @@ namespace SnakeGame
 	class RecordTable
 	{
 	public:
-		RecordTable(const Settings& currentSettings);
+		RecordTable();
 		void AddRecord(std::wstring name, int score);
 		std::vector<std::wstring> GetRecords(int count) const;
 		bool Serialize() const;
 		void Deserialize();
 	private:
-		const Settings& settings;
 		std::unordered_multimap<std::wstring, int> recordTable;
 		std::multimap<int, std::wstring> GetOrderedTable() const;
 	};

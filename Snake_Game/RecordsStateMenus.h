@@ -5,14 +5,14 @@ namespace SnakeGame
 	class RecordsStateNameMenu : public GeneralMenu
 	{
 	public:
-		RecordsStateNameMenu(const Settings& currentSettings);
+		RecordsStateNameMenu();
 		virtual ~RecordsStateNameMenu() = default;
 	};
 
 	class RecordsStateMenu : public GeneralMenu
 	{
 	public:
-		RecordsStateMenu(const Settings& currentSettings);
+		RecordsStateMenu();
 		virtual ~RecordsStateMenu() = default;
 	};
 }

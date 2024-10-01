@@ -7,12 +7,11 @@
 
 namespace SnakeGame
 {
-	PlayingInputHandler::PlayingInputHandler(Game* currentGame, Settings& currentSettings, Snake* currentSnake, PlayingState* currentState)
-		: BaseInputHandler(currentGame, currentSettings), snake(currentSnake), state(currentState)
+	PlayingInputHandler::PlayingInputHandler(Snake* currentSnake, PlayingState* currentState)
+		: BaseInputHandler(), snake(currentSnake), state(currentState)
 	{
 		actionMapping[ActionsTypesOnInput::Up] = [this](BaseInputHandler* handler)
-			{if (auto currentHandler = dynamic_cast<PlayingInputHandler*>(this)) { currentHandler->TurnSnakeUp(); }};
-		
+			{if (auto currentHandler = dynamic_cast<PlayingInputHandler*>(this)) { currentHandler->TurnSnakeUp(); }};		
 		actionMapping[ActionsTypesOnInput::Down] = [this](BaseInputHandler* handler)
 			{if (auto currentHandler = dynamic_cast<PlayingInputHandler*>(this)) { currentHandler->TurnSnakeDown(); }}; 
 		actionMapping[ActionsTypesOnInput::Left] = [this](BaseInputHandler* handler)
@@ -46,6 +45,6 @@ namespace SnakeGame
 	void PlayingInputHandler::PauseGame()
 	{
 		state->resetMovingDelay();
-		game->SwitchToState(GameState::Pause);
+		Game::GetGame()->SwitchToState(GameState::Pause);
 	}
 }

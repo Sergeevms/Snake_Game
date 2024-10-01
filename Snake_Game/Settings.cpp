@@ -3,6 +3,8 @@
 
 namespace SnakeGame
 {
+	Settings* Settings::settings = nullptr;
+
 	Settings::Settings()
 	{
 		screenWidth = 800;

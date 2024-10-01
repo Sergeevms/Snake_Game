@@ -6,8 +6,8 @@
 
 namespace SnakeGame
 {
-	PauseStateInputHandler::PauseStateInputHandler(Game* currentGame, Settings& currentSettings, PauseMenu* currentMenu) :
-		BaseMenuInputHandler(currentGame, currentSettings, currentMenu)
+	PauseStateInputHandler::PauseStateInputHandler(PauseMenu* currentMenu) :
+		BaseMenuInputHandler(currentMenu)
 	{	actionMapping[ActionsTypesOnInput::Back] = [this](BaseInputHandler* handler)
 		{if (auto currentHandler = dynamic_cast<PauseStateInputHandler*>(this)) { currentHandler->returnToGame(); }};
 
@@ -19,11 +19,11 @@ namespace SnakeGame
 
 	void PauseStateInputHandler::returnToGame()
 	{
-		game->SwitchToState(GameState::Playing);
+		Game::GetGame()->SwitchToState(GameState::Playing);
 	}
 
 	void PauseStateInputHandler::returnToMenu()
 	{
-		game->SwitchToState(GameState::MainMenu);
+		Game::GetGame()->SwitchToState(GameState::MainMenu);
 	}
 }

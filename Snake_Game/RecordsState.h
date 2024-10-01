@@ -17,12 +17,12 @@ namespace SnakeGame
 	class RecordsState : public BaseState
 	{
 	public:
-		RecordsState(Game* currentGame, Settings& currentSettings, const bool fromGame);
+		RecordsState(const bool fromGame);
 		virtual ~RecordsState() = default;
 		virtual void Draw(sf::RenderWindow& window) const override;
 		virtual void Update(const float deltaTime) override;
 		virtual void HandleInput(std::vector<sf::Event> const&) override;
-		void switchToWindow(RecordStateWindowType windowType);
+		void SwitchToWindow(RecordStateWindowType windowType);
 	private:
 		std::unique_ptr<RecordTable> table;
 		std::vector<std::unique_ptr<INotPlayingWindow>> windows;
@@ -35,11 +35,26 @@ namespace SnakeGame
 	class EnterNameDialog : public INotPlayingWindow
 	{
 	public:
+		EnterNameDialog();
 		virtual void Draw(sf::RenderWindow& window, const RelativePosition position) override;
 		virtual void HandleInput(const std::vector<sf::Event>& input) override;
 	private:
 		sf::RectangleShape background;
 		std::unique_ptr<RecordsStateNameMenu> menu;
 		std::unique_ptr<RecordsStateNameDialogInputHandler> inputHandler;
+	};
+
+	class RecordsStateNameEnteringInputHandler;
+
+	class NameEnteringWindow : public INotPlayingWindow
+	{
+	public:
+		NameEnteringWindow();
+		virtual void Draw(sf::RenderWindow& window, const RelativePosition position) override;
+		virtual void HandleInput(const std::vector<sf::Event>& input) override;
+	private:
+		std::unique_ptr<RecordsStateNameEnteringInputHandler> inputHandler;
+		sf::RectangleShape background;
+		sf::Text name;
 	};
 }

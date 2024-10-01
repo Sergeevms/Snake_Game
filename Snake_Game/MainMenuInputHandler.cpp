@@ -6,7 +6,7 @@
 
 namespace SnakeGame
 {
-	MainMenuInputHandler::MainMenuInputHandler(Game* currentGame, Settings & currentSettings, MainMenu* currentMenu) : BaseMenuInputHandler(currentGame, currentSettings, currentMenu), menu(currentMenu)
+	MainMenuInputHandler::MainMenuInputHandler(MainMenu* currentMenu) : BaseMenuInputHandler(currentMenu), menu(currentMenu)
 	{
 		activateMapping[MenuNodeActivateReaction::Exit] = [this](BaseInputHandler* handler)
 			{if (auto currentHandler = dynamic_cast<MainMenuInputHandler*>(this)) { currentHandler->ExitGame(); }};
@@ -22,29 +22,32 @@ namespace SnakeGame
 
 	void MainMenuInputHandler::ExitGame()
 	{
-		game->ShutDown();
+		Game::GetGame()->ShutDown();
 	}
 
 	void MainMenuInputHandler::StartPlaying()
 	{
-		game->SwitchToState(GameState::Playing);
+		Game::GetGame()->SwitchToState(GameState::Playing);
 	}
 
 	void MainMenuInputHandler::SwitchMusic()
 	{
-		settings.musicOn = !settings.musicOn;
-		menu->UpdateChecked(settings.musicOn);
+		Settings* settings = Settings::GetSettings();
+		settings->musicOn = !settings->musicOn;
+		menu->UpdateChecked(settings->musicOn);
 	}
 
 	void MainMenuInputHandler::SwitchSound()
 	{
-		settings.soundOn = !settings.soundOn;
-		menu->UpdateChecked(settings.soundOn);
+		Settings* settings = Settings::GetSettings();
+		settings->soundOn = !settings->soundOn;
+		menu->UpdateChecked(settings->soundOn);
 	}
 
 	void MainMenuInputHandler::SwitchDifficulty()
 	{
-		settings.UpdateDifficulty(menu->GetSelectedDifficulty());
+		Settings* settings = Settings::GetSettings();
+		settings->UpdateDifficulty(menu->GetSelectedDifficulty());
 		menu->UpdateChecked(true);
 	}
 }

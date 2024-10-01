@@ -8,7 +8,7 @@ namespace SnakeGame
     class BaseMenuInputHandler : public BaseInputHandler
     {
     public:
-        BaseMenuInputHandler(Game* currentGame, Settings& currentSettings, GeneralMenu* currentMenu);
+        BaseMenuInputHandler(GeneralMenu* currentMenu);
         virtual ~BaseMenuInputHandler() = default;
         virtual void SelectNext();
         virtual void SelectPrevious();

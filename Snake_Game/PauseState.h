@@ -8,7 +8,7 @@ namespace  SnakeGame
 	class PauseState : public BaseState
 	{
 	public:
-		PauseState(Game* currentGame, Settings& settings);
+		PauseState();
 		virtual ~PauseState() = default;
 		virtual void Draw(sf::RenderWindow& window) const  override;
 		virtual void Update(const float deltaTime)  override;

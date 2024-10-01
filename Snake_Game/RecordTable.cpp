@@ -6,7 +6,7 @@
 
 namespace SnakeGame
 {
-	RecordTable::RecordTable(const Settings& currentSettings) : settings(currentSettings)
+	RecordTable::RecordTable()
 	{
 	}
 
@@ -22,8 +22,8 @@ namespace SnakeGame
 		const std::multimap<int, std::wstring> orderedTable = GetOrderedTable();
 		int index = 1;
 		std::multimap<int, std::wstring>::const_iterator current = orderedTable.begin();
-		
-		while (current != orderedTable.end() && index <= settings.bigRecordsSize)
+		Settings* settings = Settings::GetSettings();
+		while (current != orderedTable.end() && index <= settings->bigRecordsSize)
 		{
 			std::wostringstream currentString;
 			currentString << index << L". " << current->second << L" ";
@@ -34,13 +34,14 @@ namespace SnakeGame
 
 	bool RecordTable::Serialize() const
 	{
-		std::wofstream output(settings.recordsFileName);
+		Settings* settings = Settings::GetSettings();
+		std::wofstream output(settings->recordsFileName);
 		if (output.is_open())
 		{
 			const std::multimap<int, std::wstring> orderedTable = GetOrderedTable();
 			int index = 0;
 			std::multimap<int, std::wstring>::const_iterator current = orderedTable.begin();
-			while (current != orderedTable.end() && index < settings.bigRecordsSize)
+			while (current != orderedTable.end() && index < settings->bigRecordsSize)
 			{
 				output << current->second << L" " << current->first;
 				++index;
@@ -57,9 +58,10 @@ namespace SnakeGame
 
 	void RecordTable::Deserialize()
 	{
+		Settings* settings = Settings::GetSettings();
 		recordTable.clear();
-		recordTable.reserve(settings.bigRecordsSize);
-		std::wifstream input(settings.recordsFileName);
+		recordTable.reserve(settings->bigRecordsSize);
+		std::wifstream input(settings->recordsFileName);
 		if (input.is_open())
 		{
 			std::wstring name;
@@ -72,9 +74,9 @@ namespace SnakeGame
 		}
 		else
 		{
-			for (int i = 1; i <= settings.bigRecordsSize; ++i)
+			for (int i = 1; i <= settings->bigRecordsSize; ++i)
 			{
-				recordTable.insert({ L"XYZ", i * settings.difficultyToScore.at(settings.difficultyLevelCount - 1) });
+				recordTable.insert({ L"XYZ", i * settings->difficultyToScore.at(settings->difficultyLevelCount - 1) });
 			}
 		}
 	}

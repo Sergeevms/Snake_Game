@@ -30,7 +30,7 @@ namespace SnakeGame
 		sf::Color color{ sf::Color::White };
 		sf::Text::Style textStyle{ sf::Text::Style::Regular };
 		unsigned int characterSize{ 20 };
-		void Init(const std::string fontName, const Settings& settings, const sf::Color newColor = sf::Color::White, const sf::Text::Style newTextStyle = sf::Text::Style::Regular, const unsigned int newSize = 20);
+		void Init(const std::string fontName, const sf::Color newColor = sf::Color::White, const sf::Text::Style newTextStyle = sf::Text::Style::Regular, const unsigned int newSize = 20);
 	};
 
 	struct MenuStyle
@@ -68,7 +68,7 @@ namespace SnakeGame
 	class GeneralMenu
 	{
 	public:
-		GeneralMenu(const Settings& currentSettings);
+		GeneralMenu() {};
 		virtual ~GeneralMenu() {};
 		virtual void Draw(sf::RenderWindow& window, const sf::Vector2f position) const;
 		virtual bool ExpandSelected();
@@ -77,7 +77,6 @@ namespace SnakeGame
 		virtual void SelectPrevious() const;
 		MenuNodeActivateReaction GetReaction() const;
 	protected:
-		const Settings& settings;
 		MenuNodeStyle headerStyle;
 		MenuNodeStyle selectedStyle;
 		MenuNodeStyle normalStyle;

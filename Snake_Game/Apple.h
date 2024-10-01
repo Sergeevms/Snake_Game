@@ -7,7 +7,7 @@ namespace SnakeGame
         public MapObject
     {
     public:
-        Apple(sf::Vector2i const& mapCell, sf::Texture const& texture, Settings const& settings) : MapObject{ mapCell, texture, settings } {};
+        Apple(sf::Vector2i const& mapCell, sf::Texture const& texture) : MapObject{ mapCell, texture} {};
         virtual MapObjectType GetObjectType() const override { return MapObjectType::Apple; } ;
     };
 }

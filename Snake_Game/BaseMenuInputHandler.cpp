@@ -3,8 +3,8 @@
 
 namespace SnakeGame
 {
-	BaseMenuInputHandler::BaseMenuInputHandler(Game* currentGame, Settings& currentSettings, GeneralMenu* currentMenu) : 
-		BaseInputHandler(currentGame, currentSettings), menu(currentMenu)
+	BaseMenuInputHandler::BaseMenuInputHandler(GeneralMenu* currentMenu) : 
+		BaseInputHandler(), menu(currentMenu)
 	{
 		actionMapping[ActionsTypesOnInput::Up] = [this](BaseInputHandler* handler)
 			{if (auto currentHandler = dynamic_cast<BaseMenuInputHandler*>(this)) { currentHandler->SelectPrevious(); }};

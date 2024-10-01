@@ -10,7 +10,7 @@ namespace SnakeGame
         public BaseState
     {
     public:
-        PlayingState(Game* game, Settings& settings);
+        PlayingState();
         virtual ~PlayingState() = default;
         virtual void Draw(sf::RenderWindow& window) const override;
         virtual void Update(const float deltaTime) override;

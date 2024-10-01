@@ -9,7 +9,7 @@ namespace SnakeGame
 	class SnakeNode: public MapObject
 	{
 	public:
-		SnakeNode(const sf::Vector2i& mapCell, const sf::Texture& texture, const Settings& settings, const Direction direction, const bool isMovingEnabled = true);
+		SnakeNode(const sf::Vector2i& mapCell, const sf::Texture& texture, const Direction direction, const bool isMovingEnabled = true);
 		void Update(const float deltaTime);
 		void SetDirection(Direction newDirection);
 		void SetCellPositionIfMoving(const sf::Vector2i& newCell);
@@ -29,7 +29,7 @@ namespace SnakeGame
 	class Snake
 	{
 	public:
-		Snake(const Settings& currentSettings, PlayingState* currentState, Map* currentMap);
+		Snake(PlayingState* currentState, Map* currentMap);
 		void Update(const float deltaTime);
 		void SetNewDirection(Direction direction);
 		void Draw(sf::RenderWindow& window) const;
@@ -40,7 +40,6 @@ namespace SnakeGame
 		Map* map;
 		std::list<std::shared_ptr<SnakeNode>> nodes;
 		Direction newDirection;
-		const Settings& settings;
 		sf::Texture headTexture;
 		sf::Texture bodyTexture;
 		float timeTillNextCell{ 0.f };

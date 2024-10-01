@@ -94,11 +94,6 @@ namespace SnakeGame
 		}
 	}
 
-	GeneralMenu::GeneralMenu(const Settings& currentSettings) : settings(currentSettings)
-	{
-		
-	}
-
 	void GeneralMenu::Draw(sf::RenderWindow& window, const sf::Vector2f position) const
 	{
 
@@ -204,12 +199,13 @@ namespace SnakeGame
 		currentNode->GetCurrentlySelectedChild()->SetStyle(&selectedStyle);
 	}
 
-	void MenuNodeStyle::Init(const std::string fontName, const Settings& settings, const sf::Color newColor, const sf::Text::Style newTextStyle, const unsigned int newSize)
+	void MenuNodeStyle::Init(const std::string fontName, const sf::Color newColor, const sf::Text::Style newTextStyle, const unsigned int newSize)
 	{
+		Settings* settings = Settings::GetSettings();
 #ifdef _DEBUG
-		assert(font.loadFromFile(settings.fontPath + fontName));
+		assert(font.loadFromFile(settings->fontPath + fontName));
 #elif
-		font.loadFromFile(settings.FONT_PATH + fontName);
+		font.loadFromFile(settings->FONT_PATH + fontName);
 #endif // DEBUG
 		color = newColor;
 		textStyle = newTextStyle;

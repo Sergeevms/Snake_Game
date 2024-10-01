@@ -11,10 +11,8 @@ namespace SnakeGame
 		MainLoop();
 		~MainLoop() = default;
 		void Run();
-	private:		
-		Settings settings;
+	private:
 		std::unique_ptr<sf::RenderWindow> window;
-		std::unique_ptr<Game> game;
 	};
 
 }

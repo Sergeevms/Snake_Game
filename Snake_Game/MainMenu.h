@@ -8,7 +8,7 @@ namespace SnakeGame
 	class MainMenu : public GeneralMenu
 	{
 	public:
-		MainMenu(Settings& currentSettings);
+		MainMenu();
 		virtual ~MainMenu() = default;
 		void UpdateChecked(const bool checked);
 		int GetSelectedDifficulty();

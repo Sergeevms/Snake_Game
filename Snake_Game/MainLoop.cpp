@@ -8,14 +8,15 @@ namespace SnakeGame
 {
 	MainLoop::MainLoop()
 	{
-		window = std::make_unique<sf::RenderWindow>(sf::VideoMode(settings.screenWidth, settings.screenHeight), settings.gameName);
-		game = std::make_unique<Game>(settings);
+		Settings* settings = Settings::GetSettings();
+		window = std::make_unique<sf::RenderWindow>(sf::VideoMode(settings->screenWidth, settings->screenHeight), settings->gameName);
 	}
 
 	void MainLoop::Run()
 	{
 		sf::Clock clock;
 		float lastTime = clock.getElapsedTime().asSeconds();
+		Game* game = Game::GetGame();
 
 		while (window->isOpen())
 		{		
@@ -27,7 +28,7 @@ namespace SnakeGame
 				{
 					window->close();
 				}
-				if (event.type == sf::Event::KeyPressed)
+				if (event.type == sf::Event::KeyPressed || event.type == sf::Event::TextEntered)
 				{
 					inputEvents.push_back(event);
 				}

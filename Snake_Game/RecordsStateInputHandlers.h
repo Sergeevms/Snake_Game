@@ -15,11 +15,32 @@ namespace SnakeGame
 	class RecordsStateNameDialogInputHandler : public BaseMenuInputHandler
 	{
 	public:
-		RecordsStateNameDialogInputHandler(Game* currentGame, Settings& currentSettings, RecordsStateNameMenu* currentMenu, RecordsState* currentState);
+		RecordsStateNameDialogInputHandler(RecordsStateNameMenu* currentMenu, RecordsState* currentState);
 	private:
 		RecordsState* state;
 		void ToNameTyping();
 		void ToRecordTable();
+	};
+
+	class RecordsStateTableDialogInputHandler : public BaseMenuInputHandler
+	{
+	public:
+		RecordsStateTableDialogInputHandler(RecordsStateNameMenu* currentMenu, RecordsState* currentState);
+		void RestartGame();
+		void ToMainMenu();
+	};
+
+	class RecordsStateNameEnteringInputHandler : public BaseInputHandler
+	{
+	public:
+		RecordsStateNameEnteringInputHandler(RecordsState* currentState, sf::Text& nameText);
+		virtual void HandleInputEvents(const std::vector<sf::Event>& input) override;
+		void ToRecordTable();
+		void RemoveSymbol();
+	private:
+		RecordsState* state;
+		sf::Text& name;
+		sf::String newSymbol;
 	};
 }
 

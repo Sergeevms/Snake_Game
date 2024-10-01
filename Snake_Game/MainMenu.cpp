@@ -3,11 +3,11 @@
 
 namespace SnakeGame
 {
-	MainMenu::MainMenu(Settings& currentSettings) : GeneralMenu(currentSettings)
+	MainMenu::MainMenu() : GeneralMenu()
 	{
-		headerStyle.Init("Roboto-Regular.ttf", settings, sf::Color::Green, sf::Text::Style(sf::Text::Style::Bold | sf::Text::Style::Underlined), 60);
-		normalStyle.Init("Roboto-Regular.ttf", settings);
-		selectedStyle.Init("Roboto-Regular.ttf", settings, sf::Color::Green);
+		headerStyle.Init("Roboto-Regular.ttf", sf::Color::Green, sf::Text::Style(sf::Text::Style::Bold | sf::Text::Style::Underlined), 60);
+		normalStyle.Init("Roboto-Regular.ttf");
+		selectedStyle.Init("Roboto-Regular.ttf", sf::Color::Green);
 
 		rootNode = InitializeNode({ nullptr }, L"Змейка", &headerStyle, MenuNodeActivateReaction::None, &subMenuStyle);
 		currentNode = rootNode;
@@ -17,13 +17,15 @@ namespace SnakeGame
 		MenuNodePtr settingsNode = InitializeNode(rootNode, L"Настройки", &normalStyle, MenuNodeActivateReaction::None, &subMenuStyle);
 		InitializeNode(rootNode, L"Выход", &normalStyle, MenuNodeActivateReaction::Exit);
 		
-		InitializeCheckBoxNode(settingsNode, L"Звук", settings.soundOn, 30.f, &selectedStyle, MenuNodeActivateReaction::SwitchSound);
-		InitializeCheckBoxNode(settingsNode, L"Музыка", settings.musicOn, 30.f, &normalStyle, MenuNodeActivateReaction::SwitchMusic);
+		Settings* settings = Settings::GetSettings();
+
+		InitializeCheckBoxNode(settingsNode, L"Звук", settings->soundOn, 30.f, &selectedStyle, MenuNodeActivateReaction::SwitchSound);
+		InitializeCheckBoxNode(settingsNode, L"Музыка", settings->musicOn, 30.f, &normalStyle, MenuNodeActivateReaction::SwitchMusic);
 
 		std::vector<std::wstring> difficultyNames{ L"Простой", L"Тяжелее простого", L"Средний", L"Легче тяжелого", L"Тяжелый" };
-		for (int i = 0; i < settings.difficultyLevelCount; ++i)
+		for (int i = 0; i < settings->difficultyLevelCount; ++i)
 		{
-			bool IsCurrentDifficultyLevel = i == settings.currentDifficulty ? true : false;
+			bool IsCurrentDifficultyLevel = i == settings->currentDifficulty ? true : false;
 			std::shared_ptr<CheckBoxMenuNode> difficultySubNode = InitializeCheckBoxNode(difficultyNode, difficultyNames[i], IsCurrentDifficultyLevel, 30.f,
 				IsCurrentDifficultyLevel ? &selectedStyle : &normalStyle, MenuNodeActivateReaction::SwitchDifficulty);
 			if (IsCurrentDifficultyLevel)

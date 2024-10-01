@@ -7,13 +7,12 @@ namespace SnakeGame
 {
 	enum class Direction;
 	enum class MapObjectType;
-	struct Settings;
 	class MapObject;
 
 	class Map
 	{
 	public:
-		Map(const Settings& currentSettings);
+		Map();
 		void LoadFromFile(const std::string& fileName);
 		void CreateSavedLvl();
 		void Draw(sf::RenderWindow& window) const;
@@ -32,7 +31,6 @@ namespace SnakeGame
 		std::unordered_map<char, sf::Texture> spritesCharToTexture;
 		std::vector <std::string> charMap;
 		sf::Vector2i loadedSnakeHeadPosition{ -1, -1 };
-		const Settings & settings;
 		int CellToMapIndex(const sf::Vector2i& cell) const;
 		int width{ 0 };
 		int height{ 0 };

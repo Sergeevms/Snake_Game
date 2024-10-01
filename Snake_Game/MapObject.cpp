@@ -4,11 +4,12 @@
 namespace SnakeGame
 {
 
-	MapObject::MapObject(const sf::Vector2i& mapCell, const sf::Texture& texture, const Settings& settings): 
-		sprite(texture), mapCoordinates(mapCell), currentSettings(settings)
+	MapObject::MapObject(const sf::Vector2i& mapCell, const sf::Texture& texture): 
+		sprite(texture), mapCoordinates(mapCell)
 	{
 		SetOriginByRelative(sprite, relativePositions.at(RelativePosition::Center));
-		float tileSize = (float)settings.tileSize;
+
+		float tileSize = (float)Settings::GetSettings()->tileSize;
 		SetScaleBySize(sprite, { tileSize, tileSize });
 		screenCoordinates.x = tileSize * mapCell.x + tileSize / 2.f;
 		screenCoordinates.y = tileSize * mapCell.y + tileSize / 2.f;
