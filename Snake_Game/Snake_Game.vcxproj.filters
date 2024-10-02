@@ -117,6 +117,9 @@
     <ClCompile Include="BaseMenuInputHandler.cpp">
       <Filter>Source Files\InputHandlers</Filter>
     </ClCompile>
+    <ClCompile Include="IListDrawable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainLoop.h">
@@ -196,6 +199,9 @@
     </ClInclude>
     <ClInclude Include="BaseMenuInputHandler.h">
       <Filter>Header Files\InputHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="IListDrawable.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
