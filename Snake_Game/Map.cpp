@@ -192,7 +192,7 @@ namespace SnakeGame
 	{
 		sf::Texture currentTexture;
 		Settings* settings = Settings::GetSettings();
-		LoadTexture(settings->texturePath + fileName, currentTexture);
+		LoadTexture(fileName, currentTexture);
 		spritesCharToTexture[type] = currentTexture;
 	}
 

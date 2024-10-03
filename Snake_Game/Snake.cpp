@@ -60,8 +60,8 @@ namespace SnakeGame
 		newDirection(Direction::None), map(currentMap)
 	{
 		Settings* settings = Settings::GetSettings();
-		LoadTexture(settings->texturePath + "SnakeHead.png", headTexture);
-		LoadTexture(settings->texturePath + "SnakeBody.png", bodyTexture);
+		LoadTexture("SnakeHead.png", headTexture);
+		LoadTexture("SnakeBody.png", bodyTexture);
 	}
 
 	void Snake::Update(const float deltaTime)

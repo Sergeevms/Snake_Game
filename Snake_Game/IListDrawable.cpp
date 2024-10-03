@@ -40,11 +40,11 @@ namespace SnakeGame
 		return totalRect;
 	}
 
-	void DrawList(sf::RenderWindow window, const std::vector<IListDrawable*> itemList, const sf::Vector2f position,
+	void DrawList(sf::RenderWindow& window, const std::vector<IListDrawable*> itemList, const sf::Vector2f position,
 		const RelativePosition origin, const Orientation orientation, const Alignment alignment, const float spacing = 0.f)
 	{
 		sf::FloatRect totalRect = GetListRect(itemList, position, origin, orientation, alignment, spacing);
-		sf::Vector2f relativeOrigin = RelativePositionByOrientationAndAlignment(orientation, alignment);
+		sf::Vector2f relativeOrigin = relativePositions.at(RelativePositionByOrientationAndAlignment(orientation, alignment));
 		sf::Vector2f currentPosition;
 		currentPosition.x = totalRect.left + (orientation == Orientation::Vertical ? totalRect.width * relativeOrigin.x : 0.f);
 		currentPosition.y = totalRect.top + (orientation == Orientation::Vertical ? 0.f : totalRect.height * relativeOrigin.y);
@@ -62,5 +62,24 @@ namespace SnakeGame
 				currentPosition.x += currentRect.width + spacing;
 			}
 		}
+	}
+
+	sf::FloatRect ListDrawableText::GetRect() const
+	{
+		sf::FloatRect rect = getLocalBounds();
+		rect.width += rect.left;
+		rect.height += rect.top;
+		rect.left = 0.f;
+		rect.top = 0.f;
+		return rect;
+	}
+
+	void ListDrawableText::Draw(sf::RenderWindow& window, const sf::Vector2f& position, const Orientation orientation, const Alignment alignment)
+	{
+		sf::FloatRect textRect = getLocalBounds();
+		sf::Vector2f correctPosition{ position.x - textRect.left, position.y - textRect.top };
+		SetOriginByRelative(*this, relativePositions.at(RelativePositionByOrientationAndAlignment(orientation, alignment)));
+		setPosition(correctPosition);
+		window.draw(*this);
 	}
 }

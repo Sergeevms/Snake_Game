@@ -93,12 +93,5 @@ namespace SnakeGame
 		return begin <= valueToCheck and valueToCheck < end;
 	}
 
-	/**/
-	template<typename T>
-	void DrawObjects()
-	{
-
-	}
-
-	sf::Vector2f RelativePositionByOrientationAndAlignment(const Orientation orientation, const Alignment alignment);
+	RelativePosition RelativePositionByOrientationAndAlignment(const Orientation orientation, const Alignment alignment);
 }

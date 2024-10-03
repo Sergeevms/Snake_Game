@@ -35,19 +35,19 @@ namespace SnakeGame
         }
         default:
             return Direction::None;
-        }        
+        }
     }
 
     void LoadTexture(std::string const& fileName, sf::Texture& texture)
     {
 #ifndef NDEBUG
-        assert(texture.loadFromFile(fileName));
+        assert(texture.loadFromFile(Settings::GetSettings()->texturePath + fileName));
 #else 
-        texture.loadFromFile(fileName);
+        texture.loadFromFile(Settings::GetSettings()->texturePath + fileName);
 #endif
     }
 
-    sf::Vector2f RelativePositionByOrientationAndAlignment(const Orientation orientation, const Alignment alignment)
+    RelativePosition RelativePositionByOrientationAndAlignment(const Orientation orientation, const Alignment alignment)
     {
         RelativePosition relativeOrigin;
         switch (alignment)
@@ -68,6 +68,6 @@ namespace SnakeGame
             break;
         }
         }
-        return relativePositions.at(relativeOrigin);
+        return relativeOrigin;
     }
 }
