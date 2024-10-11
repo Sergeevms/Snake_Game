@@ -60,8 +60,8 @@ namespace SnakeGame
 		newDirection(Direction::None), map(currentMap)
 	{
 		Settings* settings = Settings::GetSettings();
-		LoadTexture(settings->texturePath + "SnakeHead.png", headTexture);
-		LoadTexture(settings->texturePath + "SnakeBody.png", bodyTexture);
+		LoadTexture("SnakeHead.png", headTexture);
+		LoadTexture("SnakeBody.png", bodyTexture);
 	}
 
 	void Snake::Update(const float deltaTime)
@@ -91,7 +91,8 @@ namespace SnakeGame
 					sf::Vector2i currentCell = (*node)->GetCellPosition();
 					Direction currentDirection = (*node)->GetDirection();
 					(*node)->UpdateScreenPositionByCell();
-					(*node)->SetCellPositionIfMoving({ currentCell.x + static_cast<int>(directionVectors.at(nextNodeDirection).x), currentCell.y + static_cast<int>(directionVectors.at(nextNodeDirection).y) });
+					(*node)->SetCellPositionIfMoving({ currentCell.x + static_cast<int>(directionVectors.at(nextNodeDirection).x),
+						currentCell.y + static_cast<int>(directionVectors.at(nextNodeDirection).y) });
 					(*node)->SetDirection(nextNodeDirection);
 					nextNodeDirection = currentDirection;
 					map->EmplaceMapObject((*node));

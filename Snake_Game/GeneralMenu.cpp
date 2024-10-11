@@ -4,10 +4,10 @@
 
 namespace SnakeGame
 {
-	void MenuNode::Init(const MenuNodePtr parent, const std::wstring & newName, MenuStyle* newSubMenuStyle)
+	void MenuNode::Init(MenuNode * parent, const std::wstring & newName, MenuStyle* newSubMenuStyle)
 	{
 		parentNode = parent;
-		text.setString(newName);
+		text->setString(newName);
 		if (newSubMenuStyle)
 		{
 			subMenuStyle = newSubMenuStyle;
@@ -16,39 +16,34 @@ namespace SnakeGame
 	
 	void MenuNode::Draw(sf::RenderWindow& window, const sf::Vector2f& position, const Orientation orientation, const Alignment alignment)
 	{		
-		SetOriginByRelative(text, RelativePositionByOrientationAndAlignment(orientation, alignment));
-		text.setPosition(position);
-		window.draw(text);
+		text->Draw(window, position, orientation, alignment);
 	}
 
-	sf::FloatRect MenuNode::GetRect()
+	sf::FloatRect MenuNode::GetRect() const
 	{
-		return text.getLocalBounds();
+		return text->GetRect();
 	}
 
-	void MenuNode::SetStyle(const MenuNodeStyle* newStyle)
+	void MenuNode::SetStyle(const TextStyle* newStyle)
 	{
-		text.setFont(newStyle->font);
-		text.setCharacterSize(newStyle->characterSize);
-		text.setStyle(newStyle->textStyle);
-		text.setFillColor(newStyle->color);
+		text->SetStyle(newStyle);
 	}
 
-	MenuNodePtr MenuNode::GetCurrentlySelectedChild() const
+	MenuNode* MenuNode::GetCurrentlySelectedChild() const
 	{
 		if (selectedChildID == -1)
 		{
-			return MenuNodePtr(nullptr);
+			return nullptr;
 		}
 		else
 		{
-			return childNodes[selectedChildID];
+			return childNodes[selectedChildID].get();
 		}
 	}
 
-	MenuNodePtr MenuNode::GetParent() const
+	MenuNode* MenuNode::GetParent() const
 	{
-		return parentNode.lock();
+		return parentNode;
 	}
 
 	MenuStyle* MenuNode::GetMenuStyle() const
@@ -56,9 +51,9 @@ namespace SnakeGame
 		return subMenuStyle;
 	}
 
-	void MenuNode::AddChild(const MenuNodePtr child)
+	void MenuNode::AddChild(std::unique_ptr<MenuNode> child)
 	{
-		childNodes.push_back(child);
+		childNodes.emplace_back(std::move(child));
 		if (selectedChildID == -1)
 		{
 			selectedChildID = 0;
@@ -81,9 +76,14 @@ namespace SnakeGame
 		}
 	}
 
-	std::vector<MenuNodePtr>* MenuNode::GetChilds()
+	std::vector<MenuNode*> MenuNode::GetChilds()
 	{
-		return &childNodes;
+		std::vector<MenuNode*> childList;
+		for (auto& child : childNodes)
+		{
+			childList.push_back(child.get());
+		}
+		return childList;
 	}
 
 	void MenuNode::setSelectedChildID(int id)
@@ -94,73 +94,42 @@ namespace SnakeGame
 		}
 	}
 
-	void GeneralMenu::Draw(sf::RenderWindow& window, const sf::Vector2f position) const
+	void GeneralMenu::Draw(sf::RenderWindow& window, const sf::Vector2f& position, RelativePosition origin) const
 	{
-
 		MenuStyle* style = currentNode->GetMenuStyle();
 
-		sf::FloatRect totalRect;
-		sf::FloatRect currentRect = currentNode->GetRect();
+		std::vector<IListDrawable*> itemList;
+		itemList.push_back(currentNode);
 
-		float maxNodeSize = 0;
-
-		std::vector<MenuNodePtr>* childNodes = currentNode->GetChilds();
-
-		for (auto& currentChild : *childNodes)
+		DrawableList subList(style->orientation, style->alignment, style->spacing);
+		std::vector<MenuNode*> childNodes = currentNode->GetChilds();
+		for (auto& currentChild : childNodes)
 		{
-			currentRect = currentChild->GetRect();
-			if (style->orientation == Orientation::Vertical)
-			{
-				totalRect.width = std::max(totalRect.width, currentRect.width + currentRect.left);
-				maxNodeSize = std::max(maxNodeSize, currentRect.height + currentRect.top);
-			}
-			else
-			{
-				totalRect.height = std::max(totalRect.height, currentRect.height + currentRect.top);
-				maxNodeSize = std::max(maxNodeSize, currentRect.width + currentRect.left);
-			}
+			subList.AddItem(currentChild);
 		}
+		itemList.push_back(&subList);
 
-		if (style->orientation == Orientation::Vertical)
-		{
-			totalRect.height = maxNodeSize * childNodes->size() + (style->spacing * childNodes->size() - 1);
-		}
-		else
-		{
-			totalRect.width = maxNodeSize * childNodes->size() + (style->spacing * childNodes->size() - 1);
-		}
+		sf::FloatRect rect = GetListRect(itemList, position, RelativePositionByOrientationAndAlignment(style->orientation, style->alignment), 
+			style->orientation, style->alignment, style->spacing * 3.f);
+		sf::Vector2f correctedPosition;
+		correctedPosition.x = position.x - rect.width * (relativePositions.at(origin).x - 
+			relativePositions.at(RelativePositionByOrientationAndAlignment(style->orientation, style->alignment)).x);
+		correctedPosition.y = position.y - rect.height * (relativePositions.at(origin).y - 
+			relativePositions.at(RelativePositionByOrientationAndAlignment(style->orientation, style->alignment)).y);
 
-		currentNode->Draw(window, position, style->orientation, style->alignment);
+		DrawList(window, itemList, correctedPosition, 
+			RelativePositionByOrientationAndAlignment(style->orientation, style->alignment), style->orientation, style->alignment, style->spacing * 3.f);
+	}
 
-		sf::Vector2f relativeOrigin = RelativePositionByOrientationAndAlignment(style->orientation, style->alignment);
-		currentRect = currentNode->GetRect();
-		totalRect.left = position.x - totalRect.width * relativeOrigin.x + 
-			(style->orientation == Orientation::Vertical ? 0.f : currentRect.width + currentRect.left + style->spacing * 2.f);
-		totalRect.top = position.y - totalRect.height * relativeOrigin.y +
-			(style->orientation == Orientation::Vertical ? currentRect.height + currentRect.top + style->spacing * 2.f : 0.f);
-
-		sf::Vector2f currentPosition;
-		currentPosition.x = totalRect.left + (style->orientation == Orientation::Vertical ? totalRect.width * relativeOrigin.x : 0.f);
-		currentPosition.y = totalRect.top + (style->orientation == Orientation::Vertical ? 0.f : totalRect.height * relativeOrigin.y);		
-
-		for (auto &currentChild : *childNodes)
-		{
-			currentRect = currentChild->GetRect();
-			currentChild->Draw(window, currentPosition, style->orientation, style->alignment);
-			if (style->orientation == Orientation::Vertical)
-			{
-				currentPosition.y += currentRect.height + style->spacing;
-			}
-			else
-			{
-				currentPosition.x += currentRect.width + style->spacing;
-			}
-		}
+	void GeneralMenu::Draw(sf::RenderWindow& window, const sf::Vector2f& position, const Orientation orientation, const Alignment alignment)
+	{
+		RelativePosition origin = RelativePositionByOrientationAndAlignment(orientation, alignment);
+		Draw(window, position, origin);
 	}
 
 	bool GeneralMenu::ExpandSelected()
 	{		
-		MenuNodePtr newNode = currentNode->GetCurrentlySelectedChild();
+		MenuNode* newNode = currentNode->GetCurrentlySelectedChild();
 		if (newNode->GetCurrentlySelectedChild())
 		{			
 			currentNode = newNode;
@@ -176,7 +145,7 @@ namespace SnakeGame
 
 	void GeneralMenu::ReturnToPrevious()
 	{
-		MenuNodePtr newNode = currentNode->GetParent();
+		MenuNode* newNode = currentNode->GetParent();
 		if (newNode)
 		{
 			currentNode->SetStyle(&selectedStyle);
@@ -199,18 +168,25 @@ namespace SnakeGame
 		currentNode->GetCurrentlySelectedChild()->SetStyle(&selectedStyle);
 	}
 
-	void MenuNodeStyle::Init(const std::string fontName, const sf::Color newColor, const sf::Text::Style newTextStyle, const unsigned int newSize)
+	sf::FloatRect GeneralMenu::GetRect() const
 	{
-		Settings* settings = Settings::GetSettings();
-#ifdef _DEBUG
-		assert(font.loadFromFile(settings->fontPath + fontName));
-#elif
-		font.loadFromFile(settings->FONT_PATH + fontName);
-#endif // DEBUG
-		color = newColor;
-		textStyle = newTextStyle;
-		characterSize = newSize;
+		MenuStyle* style = currentNode->GetMenuStyle();
+
+		std::vector<IListDrawable*> itemList;
+		itemList.push_back(currentNode);
+
+		DrawableList subList(style->orientation, style->alignment, style->spacing);
+		std::vector<MenuNode*> childNodes = currentNode->GetChilds();
+		for (auto& currentChild : childNodes)
+		{
+			subList.AddItem(currentChild);
+		}
+		itemList.push_back(&subList);
+		return GetListRect(itemList, {0.f, 0.f}, RelativePositionByOrientationAndAlignment(style->orientation, style->alignment),
+			style->orientation, style->alignment, style->spacing * 3.f);
+		
 	}
+
 
 	MenuNodeActivateReaction GeneralMenu::GetReaction() const
 	{
@@ -224,14 +200,29 @@ namespace SnakeGame
 		}
 	}
 
-	MenuNodePtr GeneralMenu::InitializeNode(const MenuNodePtr parent, const std::wstring& newName, MenuNodeStyle* nodeStyle, MenuNodeActivateReaction reaction, MenuStyle* newSubMenuStyle)
+	MenuNode* GeneralMenu::InitializeRootNode(const std::wstring& newName, TextStyle* nodeStyle, MenuNodeActivateReaction reaction, MenuStyle* newSubMenuStyle)
 	{
-		MenuNodePtr newNode = std::make_shared<MenuNode>();
-		ConfigureateNode(newNode, parent, newName, nodeStyle, reaction, newSubMenuStyle);
-		return newNode;
+		rootNode = std::make_unique<MenuNode>();
+		ConfigurateNode(rootNode.get(), nullptr, newName, nodeStyle, reaction, newSubMenuStyle);
+		return rootNode.get();
 	}
-	void GeneralMenu::ConfigureateNode(MenuNodePtr node, const MenuNodePtr parent, const std::wstring& newName, MenuNodeStyle* nodeStyle,
-		MenuNodeActivateReaction reaction, MenuStyle* newSubMenuStyle)
+
+	MenuNode* GeneralMenu::InitializeNode(MenuNode* parent, const std::wstring& newName, TextStyle* nodeStyle, MenuNodeActivateReaction reaction, MenuStyle* newSubMenuStyle)
+	{
+		if (parent)
+		{
+			parent->AddChild(std::make_unique<MenuNode>());
+			MenuNode* newNode = parent->GetChilds().back();
+			ConfigurateNode(newNode, parent, newName, nodeStyle, reaction, newSubMenuStyle);
+			return newNode;
+		}
+		else
+		{
+			return nullptr;
+		}
+	}
+	void GeneralMenu::ConfigurateNode(MenuNode* node, MenuNode* parent, const std::wstring& newName,
+		TextStyle* nodeStyle, MenuNodeActivateReaction reaction, MenuStyle* newSubMenuStyle)
 	{
 		node->Init(parent, newName, newSubMenuStyle);
 		if (nodeStyle)
@@ -241,10 +232,6 @@ namespace SnakeGame
 		else
 		{
 			node->SetStyle(&normalStyle);
-		}
-		if (parent)
-		{
-			parent->AddChild(node);
 		}
 		if (reaction != MenuNodeActivateReaction::None)
 		{

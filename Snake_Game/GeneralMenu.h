@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "Utility.h"
+#include "IListDrawable.h"
 
 namespace SnakeGame
 {
@@ -19,20 +20,6 @@ namespace SnakeGame
 		SkipName
 	};
 
-	class MenuNode;
-	typedef std::shared_ptr<MenuNode> MenuNodePtr;
-	typedef std::weak_ptr<MenuNode> MenuNodePtrW;
-	struct Settings;
-
-	struct MenuNodeStyle
-	{
-		sf::Font font;
-		sf::Color color{ sf::Color::White };
-		sf::Text::Style textStyle{ sf::Text::Style::Regular };
-		unsigned int characterSize{ 20 };
-		void Init(const std::string fontName, const sf::Color newColor = sf::Color::White, const sf::Text::Style newTextStyle = sf::Text::Style::Regular, const unsigned int newSize = 20);
-	};
-
 	struct MenuStyle
 	{
 		Orientation orientation{ Orientation::Vertical };
@@ -40,54 +27,59 @@ namespace SnakeGame
 		float spacing{ 5 };
 	};
 
-	class MenuNode
+	class ListDrawableText;
+
+	class MenuNode : public IListDrawable
 	{
 	public:
 		virtual ~MenuNode() = default;
-		virtual void Init(const MenuNodePtr parent, const std::wstring& newName, MenuStyle* newSubMenuStyle = nullptr);
-		virtual void Draw(sf::RenderWindow& window, const sf::Vector2f& position, const Orientation orientation, const Alignment alignment);
-		virtual sf::FloatRect GetRect();
-		virtual void SetStyle(const MenuNodeStyle* newStyle);
-		virtual MenuNodePtr GetCurrentlySelectedChild() const;
-		MenuNodePtr GetParent() const;
+		virtual void Init(MenuNode * parent, const std::wstring& newName, MenuStyle* newSubMenuStyle = nullptr);
+		virtual void Draw(sf::RenderWindow& window, const sf::Vector2f& position, const Orientation orientation, const Alignment alignment) override;
+		virtual sf::FloatRect GetRect() const override;
+		virtual void SetStyle(const TextStyle* newStyle);
+		virtual MenuNode* GetCurrentlySelectedChild() const;
+		MenuNode* GetParent() const;
 		MenuStyle* GetMenuStyle() const;
-		virtual void AddChild(const MenuNodePtr child);
+		virtual void AddChild(std::unique_ptr<MenuNode> child);
 		virtual void SelectNextChild();
 		virtual void SelectPreviousChild();
-		virtual std::vector<MenuNodePtr>* GetChilds();
+		virtual std::vector<MenuNode*> GetChilds();
 		virtual void setSelectedChildID(int id);
 	protected:
-		sf::Text text;
+		std::unique_ptr<ListDrawableText> text = std::make_unique<ListDrawableText>();
 	private:
 		int selectedChildID{ -1 };
 		MenuStyle* subMenuStyle{ nullptr };
-		MenuNodePtrW parentNode{};
-		std::vector<MenuNodePtr> childNodes;
+		MenuNode* parentNode{};
+		std::vector<std::unique_ptr<MenuNode>> childNodes;
 	};	
 
-	class GeneralMenu
+	class GeneralMenu : public IListDrawable
 	{
 	public:
-		GeneralMenu() {};
 		virtual ~GeneralMenu() {};
-		virtual void Draw(sf::RenderWindow& window, const sf::Vector2f position) const;
+		virtual void Draw(sf::RenderWindow& window, const sf::Vector2f& position, RelativePosition origin = RelativePosition::TopMiddle) const;
+		virtual void Draw(sf::RenderWindow& window, const sf::Vector2f& position, const Orientation orientation, const Alignment alignment) override;
 		virtual bool ExpandSelected();
 		virtual void ReturnToPrevious();
 		virtual void SelectNext() const;
 		virtual void SelectPrevious() const;
+		virtual sf::FloatRect GetRect() const override;
 		MenuNodeActivateReaction GetReaction() const;
 	protected:
-		MenuNodeStyle headerStyle;
-		MenuNodeStyle selectedStyle;
-		MenuNodeStyle normalStyle;
-		std::shared_ptr<MenuNode> rootNode;
-		std::shared_ptr<MenuNode> currentNode;
-		std::unordered_map<MenuNodePtr, MenuNodeActivateReaction> activateReactions;
-		virtual MenuNodePtr InitializeNode(const MenuNodePtr parent, const std::wstring& newName, MenuNodeStyle* nodeStyle,
-			MenuNodeActivateReaction reaction, MenuStyle* newSubMenuStyle = nullptr);
-		void ConfigureateNode(MenuNodePtr node, const MenuNodePtr parent, const std::wstring& newName,
-			MenuNodeStyle* nodeStyle, MenuNodeActivateReaction reaction, MenuStyle* newSubMenuStyle = nullptr);
+		TextStyle headerStyle;
+		TextStyle selectedStyle;
+		TextStyle normalStyle;
+		std::unique_ptr<MenuNode> rootNode;
+		MenuNode* currentNode{ nullptr };
 		MenuStyle subMenuStyle;
+		std::unordered_map<MenuNode*, MenuNodeActivateReaction> activateReactions;
+		virtual MenuNode* InitializeRootNode(const std::wstring& newName, TextStyle* nodeStyle,
+			MenuNodeActivateReaction reaction, MenuStyle* newSubMenuStyle = nullptr);
+		virtual MenuNode* InitializeNode(MenuNode* parent, const std::wstring& newName, TextStyle* nodeStyle,
+			MenuNodeActivateReaction reaction, MenuStyle* newSubMenuStyle = nullptr);
+		void ConfigurateNode(MenuNode* node, MenuNode* parent,
+			const std::wstring& newName, TextStyle* nodeStyle, MenuNodeActivateReaction reaction, MenuStyle* newSubMenuStyle = nullptr);
 	};
 }
 

@@ -23,6 +23,8 @@ namespace SnakeGame
 		//General settings
 		int screenWidth;
 		int screenHeight;
+		sf::Vector2f ScreenCenter();
+		sf::Vector2f ScreenSize();
 		int tileSize;
 		float epsilon;
 		float baseTimeOnCell;
@@ -36,9 +38,12 @@ namespace SnakeGame
 		int bigRecordsSize;
 		float movementSpeed;
 		float movingDelayOnStart;
+		float popUpSpacing;
+		float popUpBorder;
 		bool musicOn;
-		bool soundOn;
+		bool soundOn;		
 		std::wstring gameName;
+		std::wstring defaultPlayerName;
 		std::string resourcesPath;
 		std::string levelPath;
 		std::string soundPath;

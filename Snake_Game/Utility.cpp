@@ -4,6 +4,19 @@
 
 namespace SnakeGame
 {
+    void TextStyle::Init(const std::string fontName, const sf::Color newColor, const sf::Text::Style newTextStyle, const unsigned int newSize)
+    {
+        Settings* settings = Settings::GetSettings();
+#ifdef _DEBUG
+        assert(font.loadFromFile(settings->fontPath + fontName));
+#elif
+        font.loadFromFile(settings->fontPath + fontName);
+#endif // DEBUG
+        color = newColor;
+        textStyle = newTextStyle;
+        characterSize = newSize;
+    }
+
     sf::Vector2f multiplyVectorByScalar(sf::Vector2f const& vector, float scalar)
     {
         return sf::Vector2f(vector.x * scalar, vector.y * scalar);
@@ -35,21 +48,21 @@ namespace SnakeGame
         }
         default:
             return Direction::None;
-        }        
+        }
     }
 
     void LoadTexture(std::string const& fileName, sf::Texture& texture)
     {
 #ifndef NDEBUG
-        assert(texture.loadFromFile(fileName));
+        assert(texture.loadFromFile(Settings::GetSettings()->texturePath + fileName));
 #else 
-        texture.loadFromFile(fileName);
+        texture.loadFromFile(Settings::GetSettings()->texturePath + fileName);
 #endif
     }
 
-    sf::Vector2f RelativePositionByOrientationAndAlignment(const Orientation orientation, const Alignment alignment)
+    RelativePosition RelativePositionByOrientationAndAlignment(const Orientation orientation, const Alignment alignment)
     {
-        RelativePosition relativeOrigin;
+        RelativePosition relativeOrigin = RelativePosition::TopLeft;
         switch (alignment)
         {
         case Alignment::Min:
@@ -68,6 +81,6 @@ namespace SnakeGame
             break;
         }
         }
-        return relativePositions.at(relativeOrigin);
+        return relativeOrigin;
     }
 }

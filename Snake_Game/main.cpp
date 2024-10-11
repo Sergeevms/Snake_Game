@@ -3,7 +3,7 @@
 
 int main()
 {
-	const unsigned seed = (unsigned int)time(nullptr);
+	const unsigned seed = static_cast<unsigned int>(time(nullptr));
 	srand(seed);
 	SnakeGame::MainLoop mainLoop;
 	mainLoop.Run();

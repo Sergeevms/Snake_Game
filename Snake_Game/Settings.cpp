@@ -15,6 +15,7 @@ namespace SnakeGame
 		soundPath = resourcesPath + "Sounds\\";
 		fontPath = resourcesPath + "Fonts\\";
 		texturePath = resourcesPath + "Textures\\";
+		defaultPlayerName = L"XYZ";
 		epsilon = 1e-7f;
 		defaultSnakeSize = 4;
 		selectedLevel = "micro.lvl";
@@ -22,6 +23,8 @@ namespace SnakeGame
 		baseTimeOnCell = 0.75f;
 		difficultyLevelCount = 5;		
 		scoreOnDifficultyStep = 2;
+		popUpSpacing = 100.f;
+		popUpBorder = 5.f;
 		timeOnCellDifficultyStep = baseTimeOnCell / (static_cast<float>(difficultyLevelCount + 1));
 		for (int i = 0; i < difficultyLevelCount; ++i)
 		{
@@ -40,6 +43,7 @@ namespace SnakeGame
 		keyMap[sf::Keyboard::B] = ActionsTypesOnInput::Back;
 		keyMap[sf::Keyboard::P] = ActionsTypesOnInput::Pause;
 		keyMap[sf::Keyboard::Enter] = ActionsTypesOnInput::Forward;
+		keyMap[sf::Keyboard::BackSpace] = ActionsTypesOnInput::BackSpace;
 
 		recordsFileName = "Records.dat";
 		smallRecordsSize = 5;
@@ -61,5 +65,15 @@ namespace SnakeGame
 		currentDifficulty = newDiffculty;
 		timeOnCell = difficultyToTimeOnCell[currentDifficulty];
 		movementSpeed = (float)tileSize / timeOnCell;
+	}
+
+	sf::Vector2f Settings::ScreenCenter()
+	{
+		return sf::Vector2f({screenWidth / 2.f, screenHeight / 2.f});
+	}
+
+	sf::Vector2f Settings::ScreenSize()
+	{
+		return sf::Vector2f({static_cast<float>(screenWidth), static_cast<float>(screenHeight)});
 	}
 }

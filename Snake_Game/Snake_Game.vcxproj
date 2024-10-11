@@ -142,8 +142,9 @@
     <ClCompile Include="Apple.cpp" />
     <ClCompile Include="BaseInputHandler.cpp" />
     <ClCompile Include="BaseMenuInputHandler.cpp" />
+    <ClCompile Include="BaseState.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="INotPlayingWindow.cpp" />
+    <ClCompile Include="IListDrawable.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainLoop.cpp" />
     <ClCompile Include="MainMenu.cpp" />
@@ -152,6 +153,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapObject.cpp" />
     <ClCompile Include="GeneralMenu.cpp" />
+    <ClCompile Include="NotPlayingWindow.cpp" />
     <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="PauseState.cpp" />
     <ClCompile Include="PauseStateInputHandler.cpp" />
@@ -172,7 +174,8 @@
     <ClInclude Include="BaseMenuInputHandler.h" />
     <ClInclude Include="BaseState.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="INotPlayingWindow.h" />
+    <ClInclude Include="IListDrawable.h" />
+    <ClInclude Include="NotPlayingWindow.h" />
     <ClInclude Include="MainLoop.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MainMenuInputHandler.h" />
