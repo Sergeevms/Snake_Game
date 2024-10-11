@@ -13,7 +13,6 @@ namespace SnakeGame
 	Map::Map()
 	{
 		addSpriteTexture('W', "Wall.png");
-		addSpriteTexture('A', "Apple.png");
 	}
 
 	void Map::LoadFromFile(const std::string& fileName)
@@ -63,8 +62,7 @@ namespace SnakeGame
 				}
 				case 'A':
 				{
-					currentObject = std::make_shared<Apple>(currentCell, spritesCharToTexture['A']);
-					applePlaced = true;
+					loadedApplePosition = currentCell;
 					break;
 				}
 				case 'H':
@@ -80,11 +78,6 @@ namespace SnakeGame
 					--emptyCellCount;
 				}
 			}
-		}
-
-		if (!applePlaced)
-		{
-			EmplaceNewApple();
 		}
 	}
 
@@ -110,13 +103,9 @@ namespace SnakeGame
 		}
 	}
 
-	void Map::EmplaceNewApple()
+	int Map::GetEmptyCellCount() const
 	{
-		if (emptyCellCount > 1)
-		{
-			sf::Vector2i newAppleCell = GetRandomEmptyCell();
-			map[CellToMapIndex(newAppleCell)] = std::make_shared<Apple>(newAppleCell, spritesCharToTexture['A']);
-		}
+		return emptyCellCount;
 	}
 
 	void Map::RemoveMapObject(std::shared_ptr<MapObject> object)
@@ -163,9 +152,14 @@ namespace SnakeGame
 		return checkingCell;
 	}
 
-	const sf::Vector2i& Map::GetSnakeHeadPosition() const
+	const sf::Vector2i& Map::GetLoadedSnakeHeadPosition() const
 	{
 		return loadedSnakeHeadPosition;
+	}
+
+	const sf::Vector2i& Map::GetLoadedApplePosition() const
+	{
+		return loadedApplePosition;
 	}
 
 	sf::Vector2i Map::GetMapSize() const
@@ -181,6 +175,11 @@ namespace SnakeGame
 	bool Map::HaveEmptyCells() const
 	{
 		return emptyCellCount > 0;
+	}
+
+	bool Map::ValidCell(const sf::Vector2i& cell) const
+	{
+		return InRightOpenInterval(0, width, cell.x) && InRightOpenInterval(0, height, cell.y);
 	}
 
 	int Map::CellToMapIndex(const sf::Vector2i& cell) const

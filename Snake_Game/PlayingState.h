@@ -5,6 +5,8 @@
 
 namespace SnakeGame
 {
+    class Apple;
+    class AppleFactory;
     class PlayingState :
         public BaseState
     {
@@ -23,6 +25,8 @@ namespace SnakeGame
         float keepSnakeMoveingTime;
         Map map;
         Snake snake;
+        std::shared_ptr<Apple> currentApple;
+        std::unique_ptr<AppleFactory> appleFactory;
         sf::Font font;
         sf::Text scoreText;
     };

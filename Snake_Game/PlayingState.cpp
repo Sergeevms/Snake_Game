@@ -11,12 +11,23 @@ namespace SnakeGame
 	PlayingState::PlayingState() : BaseState(), map(), snake(this, &map),
 		delayBeforeMoving(Settings::GetSettings()->movingDelayOnStart)
 	{
+		appleFactory = std::make_unique<AppleFactory>();
 		inputHandler = std::make_unique<PlayingInputHandler>(&snake, this);
 		Settings* settings = Settings::GetSettings();
 		map.LoadFromFile(settings->selectedLevel);
 		map.CreateSavedLvl();
 
-		snake.LoadFromCharMap(map.GetcharMap(), map.GetSnakeHeadPosition());
+		if (map.ValidCell(map.GetLoadedApplePosition()))
+		{
+			currentApple = appleFactory.get()->GenerateNewApple(&map, map.GetLoadedApplePosition());
+		}
+		else
+		{
+			currentApple = appleFactory.get()->GenerateNewApple(&map);
+		}
+		map.EmplaceMapObject(currentApple);
+
+		snake.LoadFromCharMap(map.GetcharMap(), map.GetLoadedSnakeHeadPosition());
 
 #ifdef _DEBUG
 		assert(font.loadFromFile(settings->fontPath +  "Roboto-Regular.ttf"));
@@ -102,7 +113,11 @@ namespace SnakeGame
 		{			
 			game->PlaySound(SoundType::OnSnakeHit);
 			snake.AddNewBody();
-			map.EmplaceNewApple();
+			if (map.GetEmptyCellCount() > 1)
+			{
+				currentApple = appleFactory.get()->GenerateNewApple(&map);
+				map.EmplaceMapObject(currentApple);
+			}
 			scoreCount += settings->difficultyToScore[settings->currentDifficulty];
 			keepSnakeMoveingTime = settings->timeOnCell;
 			map.RemoveMapObject(cell);

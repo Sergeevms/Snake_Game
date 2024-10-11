@@ -1,5 +1,6 @@
 #include "Settings.h"
 #include "BaseInputHandler.h"
+#include "Utility.h"
 
 namespace SnakeGame
 {
@@ -18,7 +19,7 @@ namespace SnakeGame
 		defaultPlayerName = L"XYZ";
 		epsilon = 1e-7f;
 		defaultSnakeSize = 4;
-		selectedLevel = "micro.lvl";
+		selectedLevel = "level1.lvl";
 		tileSize = 30;
 		baseTimeOnCell = 0.75f;
 		difficultyLevelCount = 5;		
@@ -69,7 +70,7 @@ namespace SnakeGame
 
 	sf::Vector2f Settings::ScreenCenter()
 	{
-		return sf::Vector2f({screenWidth / 2.f, screenHeight / 2.f});
+		return sf::Vector2f(multiplyVectorByScalar(ScreenSize(), 0.5f));
 	}
 
 	sf::Vector2f Settings::ScreenSize()
