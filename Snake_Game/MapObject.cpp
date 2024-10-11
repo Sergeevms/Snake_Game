@@ -9,7 +9,7 @@ namespace SnakeGame
 	{
 		SetOriginByRelative(sprite, relativePositions.at(RelativePosition::Center));
 
-		float tileSize = (float)Settings::GetSettings()->tileSize;
+		float tileSize = static_cast<float>(Settings::GetSettings()->tileSize);
 		SetScaleBySize(sprite, { tileSize, tileSize });
 		screenCoordinates.x = tileSize * mapCell.x + tileSize / 2.f;
 		screenCoordinates.y = tileSize * mapCell.y + tileSize / 2.f;

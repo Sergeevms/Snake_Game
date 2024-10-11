@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include "BaseInputHandler.h"
 
 namespace SnakeGame
 {
@@ -9,19 +10,18 @@ namespace SnakeGame
 		None,
 		MainMenu,
 		Playing,
+		Records,
 		Pause
-	}; 
-
-	class Game;
-	struct Settings;
+	};
 
 	class BaseState
 	{
 	public:
-		BaseState() {};
 		virtual ~BaseState() = default;
 		virtual void Draw(sf::RenderWindow&) const = 0;
-		virtual void Update(const float) = 0;
-		virtual void HandleInput(const std::vector<sf::Event>&) = 0;
+		virtual void Update(const float deltaTime) {};
+		virtual void HandleInput(const std::vector<sf::Event>&);
+	protected:
+		std::unique_ptr<BaseInputHandler> inputHandler;
 	};
 }

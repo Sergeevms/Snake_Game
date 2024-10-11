@@ -25,7 +25,7 @@ namespace SnakeGame
 		state->SwitchToWindow(RecordStateWindowType::RecordTable);
 	}
 
-	RecordsStateTableDialogInputHandler::RecordsStateTableDialogInputHandler(RecordsStateNameMenu* currentMenu, RecordsState* currentState) :
+	RecordsStateTableDialogInputHandler::RecordsStateTableDialogInputHandler(RecordsStateMenu* currentMenu, RecordsState* currentState) :
 		BaseMenuInputHandler(currentMenu)
 	{
 		activateMapping[MenuNodeActivateReaction::MainMenu] = [this](BaseInputHandler* handler)
@@ -44,7 +44,7 @@ namespace SnakeGame
 		Game::GetGame()->SwitchToState(GameState::MainMenu);
 	}
 
-	RecordsStateNameEnteringInputHandler::RecordsStateNameEnteringInputHandler(RecordsState* currentState, sf::Text& nameText) :
+	RecordsStateNameEnteringInputHandler::RecordsStateNameEnteringInputHandler(RecordsState* currentState, sf::Text* nameText) :
 		BaseInputHandler(), state(currentState), name(nameText)
 	{
 		actionMapping[ActionsTypesOnInput::BackSpace] = [this](BaseInputHandler* handler)
@@ -61,7 +61,10 @@ namespace SnakeGame
 			{
 			case (sf::Event::TextEntered):
 			{
-				name.setString(name.getString() + newSymbol);
+				if (inputEvent.text.unicode >= 0x20)
+				{			
+					name->setString(name->getString() + sf::String(inputEvent.text.unicode));
+				}
 				break;
 			}
 			case (sf::Event::KeyPressed):
@@ -87,12 +90,23 @@ namespace SnakeGame
 	}
 
 	void RecordsStateNameEnteringInputHandler::RemoveSymbol()
-	{
-		sf::String newName = name.getString();
+	{		
+		sf::String newName = name->getString();
 		if (newName.getSize() > 0)
 		{
 			newName.erase(newName.getSize() - 1, 1);
 		}
-		name.setString(newName);
+		name->setString(newName);
+	}
+
+	RecordsStateMenuInputHandler::RecordsStateMenuInputHandler()
+	{
+		actionMapping[ActionsTypesOnInput::Back] = [this](BaseInputHandler* handler)
+			{if (auto currentHandler = dynamic_cast<RecordsStateMenuInputHandler*>(this)) { currentHandler->ToMainMenu(); }};
+	}
+
+	void RecordsStateMenuInputHandler::ToMainMenu()
+	{
+		Game::GetGame()->SwitchToState(GameState::MainMenu);
 	}
 }

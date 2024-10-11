@@ -105,9 +105,6 @@
     <ClCompile Include="RecordTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="INotPlayingWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="RecordsStateInputHandlers.cpp">
       <Filter>Source Files\InputHandlers</Filter>
     </ClCompile>
@@ -119,6 +116,12 @@
     </ClCompile>
     <ClCompile Include="IListDrawable.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NotPlayingWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseState.cpp">
+      <Filter>Source Files\GameStates</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -188,7 +191,7 @@
     <ClInclude Include="RecordTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="INotPlayingWindow.h">
+    <ClInclude Include="NotPlayingWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RecordsStateInputHandlers.h">

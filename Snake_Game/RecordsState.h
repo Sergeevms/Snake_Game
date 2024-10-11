@@ -1,10 +1,12 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "BaseState.h"
-#include "INotPlayingWindow.h"
+#include "NotPlayingWindow.h"
+#include "IListDrawable.h"
+#include "Utility.h"
 
 namespace SnakeGame
-{	
+{
 	enum class RecordStateWindowType
 	{
 		NameDialog,
@@ -20,41 +22,74 @@ namespace SnakeGame
 		RecordsState(const bool fromGame);
 		virtual ~RecordsState() = default;
 		virtual void Draw(sf::RenderWindow& window) const override;
-		virtual void Update(const float deltaTime) override;
-		virtual void HandleInput(std::vector<sf::Event> const&) override;
+		virtual void HandleInput(const std::vector<sf::Event>&) override;
 		void SwitchToWindow(RecordStateWindowType windowType);
 	private:
 		std::unique_ptr<RecordTable> table;
-		std::vector<std::unique_ptr<INotPlayingWindow>> windows;
-		sf::RectangleShape background;
+		std::vector<std::unique_ptr<NotPlayingWindow>> windows;
 	};
 
 	class RecordsStateNameMenu;
-	class RecordsStateNameDialogInputHandler;
 
-	class EnterNameDialog : public INotPlayingWindow
+	class RecordsStateEnterNameDialog : public NotPlayingWindow
 	{
 	public:
-		EnterNameDialog();
-		virtual void Draw(sf::RenderWindow& window, const RelativePosition position) override;
-		virtual void HandleInput(const std::vector<sf::Event>& input) override;
+		RecordsStateEnterNameDialog(RecordsState* state);
+		virtual ~RecordsStateEnterNameDialog() = default;
+		virtual void Draw(sf::RenderWindow& window) override;
 	private:
 		sf::RectangleShape background;
 		std::unique_ptr<RecordsStateNameMenu> menu;
-		std::unique_ptr<RecordsStateNameDialogInputHandler> inputHandler;
 	};
 
-	class RecordsStateNameEnteringInputHandler;
+	struct TextStyle;
 
-	class NameEnteringWindow : public INotPlayingWindow
+	class NameEnteringWindow : public NotPlayingWindow
 	{
 	public:
-		NameEnteringWindow();
-		virtual void Draw(sf::RenderWindow& window, const RelativePosition position) override;
-		virtual void HandleInput(const std::vector<sf::Event>& input) override;
+		NameEnteringWindow(RecordsState* state);
+		virtual ~NameEnteringWindow() = default;
+		virtual void Draw(sf::RenderWindow& window) override;
+		std::wstring GetName() const;
 	private:
-		std::unique_ptr<RecordsStateNameEnteringInputHandler> inputHandler;
 		sf::RectangleShape background;
-		sf::Text name;
+		ListDrawableText name;
+		ListDrawableText header;
+		TextStyle textStyle;
+	};
+
+	class RecordStateMenuWindow : public NotPlayingWindow
+	{
+	public:
+		RecordStateMenuWindow() = delete;
+		RecordStateMenuWindow(RecordTable* records);
+		virtual ~RecordStateMenuWindow() = default;
+		virtual void Draw(sf::RenderWindow& window) override;
+	private:
+		RecordTable* table;
+		TextStyle headerTextStyle;
+		TextStyle rowTextStyle;
+		ListDrawableText header;
+		std::vector<ListDrawableText> textRows;
+		sf::RectangleShape background;
+	};
+
+	class RecordsStateMenu;
+
+	class RecordStateGameWindow : public NotPlayingWindow
+	{
+	public:
+		RecordStateGameWindow(RecordTable* records, RecordsState* state);
+		virtual ~RecordStateGameWindow() = default;
+		virtual void Draw(sf::RenderWindow& window) override;
+	private:
+		RecordTable* table;
+		TextStyle headerTextStyle;
+		TextStyle rowTextStyle;
+		std::vector<ListDrawableText> headerTexts;
+		std::vector<ListDrawableText> textRows;
+		sf::RectangleShape background;
+		sf::RectangleShape overAllBackground;
+		std::unique_ptr<RecordsStateMenu> menu;
 	};
 }

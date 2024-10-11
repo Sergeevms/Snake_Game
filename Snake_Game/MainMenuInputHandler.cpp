@@ -18,6 +18,8 @@ namespace SnakeGame
 			{ if (auto currentHandler = dynamic_cast<MainMenuInputHandler*>(this)) { currentHandler->SwitchSound(); }};
 		activateMapping[MenuNodeActivateReaction::SwitchDifficulty] = [this](BaseInputHandler* handler)
 			{ if (auto currentHandler = dynamic_cast<MainMenuInputHandler*>(this)) { currentHandler->SwitchDifficulty(); }};
+		activateMapping[MenuNodeActivateReaction::Records] = [this](BaseInputHandler* handler)
+			{ if (auto currentHandler = dynamic_cast<MainMenuInputHandler*>(this)) { currentHandler->ShowRecords(); } }; 
 	}
 
 	void MainMenuInputHandler::ExitGame()
@@ -28,6 +30,11 @@ namespace SnakeGame
 	void MainMenuInputHandler::StartPlaying()
 	{
 		Game::GetGame()->SwitchToState(GameState::Playing);
+	}
+
+	void MainMenuInputHandler::ShowRecords()
+	{
+		Game::GetGame()->SwitchToState(GameState::Records);
 	}
 
 	void MainMenuInputHandler::SwitchMusic()

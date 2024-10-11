@@ -11,11 +11,14 @@ namespace SnakeGame
 	struct Settings; 
 	enum class RecordStateWindowType;
 	class RecordsStateNameMenu;
+	class RecordsStateMenu;
 
 	class RecordsStateNameDialogInputHandler : public BaseMenuInputHandler
 	{
 	public:
+		RecordsStateNameDialogInputHandler() = delete;
 		RecordsStateNameDialogInputHandler(RecordsStateNameMenu* currentMenu, RecordsState* currentState);
+		virtual ~RecordsStateNameDialogInputHandler() = default;
 	private:
 		RecordsState* state;
 		void ToNameTyping();
@@ -25,7 +28,9 @@ namespace SnakeGame
 	class RecordsStateTableDialogInputHandler : public BaseMenuInputHandler
 	{
 	public:
-		RecordsStateTableDialogInputHandler(RecordsStateNameMenu* currentMenu, RecordsState* currentState);
+		RecordsStateTableDialogInputHandler() = delete;
+		RecordsStateTableDialogInputHandler(RecordsStateMenu* currentMenu, RecordsState* currentState);
+		virtual ~RecordsStateTableDialogInputHandler() = default;
 		void RestartGame();
 		void ToMainMenu();
 	};
@@ -33,14 +38,23 @@ namespace SnakeGame
 	class RecordsStateNameEnteringInputHandler : public BaseInputHandler
 	{
 	public:
-		RecordsStateNameEnteringInputHandler(RecordsState* currentState, sf::Text& nameText);
+		RecordsStateNameEnteringInputHandler() = delete;
+		RecordsStateNameEnteringInputHandler(RecordsState* currentState, sf::Text* nameText);
+		virtual ~RecordsStateNameEnteringInputHandler() = default;
 		virtual void HandleInputEvents(const std::vector<sf::Event>& input) override;
 		void ToRecordTable();
 		void RemoveSymbol();
 	private:
 		RecordsState* state;
-		sf::Text& name;
-		sf::String newSymbol;
+		sf::Text* name;
+	};
+
+	class RecordsStateMenuInputHandler : public BaseInputHandler
+	{
+	public:
+		RecordsStateMenuInputHandler();
+		virtual ~RecordsStateMenuInputHandler() = default;
+		void ToMainMenu();
 	};
 }
 

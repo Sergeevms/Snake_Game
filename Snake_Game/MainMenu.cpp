@@ -64,7 +64,8 @@ namespace SnakeGame
 		}
 	}
 
-	CheckBoxMenuNode* MainMenu::InitializeCheckBoxNode(MenuNode* parent, const std::wstring& newName, bool checked, float spacing, const sf::Texture& checkTexture, MenuNodeStyle* nodeStyle, MenuNodeActivateReaction reaction, MenuStyle* newSubMenuStyle)
+	CheckBoxMenuNode* MainMenu::InitializeCheckBoxNode(MenuNode* parent, const std::wstring& newName, bool checked,
+		float spacing, const sf::Texture& checkTexture, TextStyle* nodeStyle, MenuNodeActivateReaction reaction, MenuStyle* newSubMenuStyle)
 	{
 		if (parent)
 		{	
@@ -96,7 +97,7 @@ namespace SnakeGame
 		checkBox->SetChecked(checked);
 	}
 
-	void CheckBoxMenuNode::SetStyle(const MenuNodeStyle* newStyle)
+	void CheckBoxMenuNode::SetStyle(const TextStyle* newStyle)
 	{
 		MenuNode::SetStyle(newStyle);
 		checkBox->SetStyle(newStyle->color, static_cast<float>(newStyle->characterSize));

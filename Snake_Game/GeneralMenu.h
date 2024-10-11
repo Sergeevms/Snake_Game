@@ -20,17 +20,6 @@ namespace SnakeGame
 		SkipName
 	};
 
-	struct Settings;
-
-	struct MenuNodeStyle
-	{
-		sf::Font font;
-		sf::Color color{ sf::Color::White };
-		sf::Text::Style textStyle{ sf::Text::Style::Regular };
-		unsigned int characterSize{ 20 };
-		void Init(const std::string fontName, const sf::Color newColor = sf::Color::White, const sf::Text::Style newTextStyle = sf::Text::Style::Regular, const unsigned int newSize = 20);
-	};
-
 	struct MenuStyle
 	{
 		Orientation orientation{ Orientation::Vertical };
@@ -47,7 +36,7 @@ namespace SnakeGame
 		virtual void Init(MenuNode * parent, const std::wstring& newName, MenuStyle* newSubMenuStyle = nullptr);
 		virtual void Draw(sf::RenderWindow& window, const sf::Vector2f& position, const Orientation orientation, const Alignment alignment) override;
 		virtual sf::FloatRect GetRect() const override;
-		virtual void SetStyle(const MenuNodeStyle* newStyle);
+		virtual void SetStyle(const TextStyle* newStyle);
 		virtual MenuNode* GetCurrentlySelectedChild() const;
 		MenuNode* GetParent() const;
 		MenuStyle* GetMenuStyle() const;
@@ -65,30 +54,32 @@ namespace SnakeGame
 		std::vector<std::unique_ptr<MenuNode>> childNodes;
 	};	
 
-	class GeneralMenu
+	class GeneralMenu : public IListDrawable
 	{
 	public:
 		virtual ~GeneralMenu() {};
-		virtual void Draw(sf::RenderWindow& window, const sf::Vector2f position) const;
+		virtual void Draw(sf::RenderWindow& window, const sf::Vector2f& position, RelativePosition origin = RelativePosition::TopMiddle) const;
+		virtual void Draw(sf::RenderWindow& window, const sf::Vector2f& position, const Orientation orientation, const Alignment alignment) override;
 		virtual bool ExpandSelected();
 		virtual void ReturnToPrevious();
 		virtual void SelectNext() const;
 		virtual void SelectPrevious() const;
+		virtual sf::FloatRect GetRect() const override;
 		MenuNodeActivateReaction GetReaction() const;
 	protected:
-		MenuNodeStyle headerStyle;
-		MenuNodeStyle selectedStyle;
-		MenuNodeStyle normalStyle;
+		TextStyle headerStyle;
+		TextStyle selectedStyle;
+		TextStyle normalStyle;
 		std::unique_ptr<MenuNode> rootNode;
 		MenuNode* currentNode{ nullptr };
+		MenuStyle subMenuStyle;
 		std::unordered_map<MenuNode*, MenuNodeActivateReaction> activateReactions;
-		virtual MenuNode* InitializeRootNode(const std::wstring& newName, MenuNodeStyle* nodeStyle,
+		virtual MenuNode* InitializeRootNode(const std::wstring& newName, TextStyle* nodeStyle,
 			MenuNodeActivateReaction reaction, MenuStyle* newSubMenuStyle = nullptr);
-		virtual MenuNode* InitializeNode(MenuNode* parent, const std::wstring& newName, MenuNodeStyle* nodeStyle,
+		virtual MenuNode* InitializeNode(MenuNode* parent, const std::wstring& newName, TextStyle* nodeStyle,
 			MenuNodeActivateReaction reaction, MenuStyle* newSubMenuStyle = nullptr);
 		void ConfigurateNode(MenuNode* node, MenuNode* parent,
-			const std::wstring& newName, MenuNodeStyle* nodeStyle, MenuNodeActivateReaction reaction, MenuStyle* newSubMenuStyle = nullptr);
-		MenuStyle subMenuStyle;
+			const std::wstring& newName, TextStyle* nodeStyle, MenuNodeActivateReaction reaction, MenuStyle* newSubMenuStyle = nullptr);
 	};
 }
 

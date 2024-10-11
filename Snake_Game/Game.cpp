@@ -4,6 +4,7 @@
 #include "BaseState.h"
 #include "PlayingState.h"
 #include "MainMenuState.h"
+#include "RecordsState.h"
 #include "PauseState.h"
 
 namespace SnakeGame
@@ -13,7 +14,7 @@ namespace SnakeGame
 	Game::Game()
 	{	
 		Settings* settings = Settings::GetSettings();
-		stateStack.push_back(std::make_shared<MainMenuState>());
+		stateStack.emplace_back(std::make_unique<MainMenuState>());
 #ifdef _DEBUG
 		assert(backGroundMusic.openFromFile(settings->soundPath + "Clinthammer__Background_Music.wav"));
 #else// _DEBUG
@@ -32,8 +33,11 @@ namespace SnakeGame
 
 	void Game::Update(const float deltaTime, const std::vector<sf::Event>& inputEvents)
 	{
-		(*stateStack.rbegin())->HandleInput(inputEvents);
-		(*stateStack.rbegin())->Update(deltaTime);
+		stateStack.rbegin()->get()->HandleInput(inputEvents);
+		for (auto& state : stateStack)
+		{
+			state.get()->Update(deltaTime);
+		}
 	}
 
 	void Game::Draw(sf::RenderWindow& window) const
@@ -49,27 +53,39 @@ namespace SnakeGame
 		switch (newState)
 		{
 		case GameState::MainMenu:
-		{
+		{			
 			stateStack.clear();
-			stateStack.push_back(std::make_shared<MainMenuState>());
+			stateStack.emplace_back(std::make_unique<MainMenuState>());
 			break;
 		}
 		case GameState::Playing:
 		{
-			if (std::dynamic_pointer_cast<PauseState>(stateStack.back()))
+			if (dynamic_cast<PauseState*>(stateStack.back().get()))
 			{
 				stateStack.pop_back();
 			}
 			else
 			{
 				stateStack.clear();
-				stateStack.push_back(std::make_shared<PlayingState>());
+				stateStack.emplace_back(std::make_unique<PlayingState>());
+			}
+			break;
+		}
+		case GameState::Records:
+		{
+			if (dynamic_cast<PlayingState*>(stateStack.back().get()))
+			{
+				stateStack.emplace_back(std::make_unique<RecordsState>(true));
+			}
+			else
+			{
+				stateStack.emplace_back(std::make_unique<RecordsState>(false));
 			}
 			break;
 		}
 		case GameState::Pause:
 		{
-			stateStack.push_back(std::make_shared<PauseState>());
+			stateStack.emplace_back(std::make_unique<PauseState>());
 			break;
 		}
 		}

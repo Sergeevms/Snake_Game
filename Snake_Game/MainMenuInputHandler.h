@@ -15,6 +15,7 @@ namespace SnakeGame
         MainMenuInputHandler(MainMenu* currentMenu);
         void ExitGame();
         void StartPlaying();
+        void ShowRecords();
         void SwitchMusic();
         void SwitchSound();
         void SwitchDifficulty();

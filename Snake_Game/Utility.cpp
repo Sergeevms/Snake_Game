@@ -4,6 +4,19 @@
 
 namespace SnakeGame
 {
+    void TextStyle::Init(const std::string fontName, const sf::Color newColor, const sf::Text::Style newTextStyle, const unsigned int newSize)
+    {
+        Settings* settings = Settings::GetSettings();
+#ifdef _DEBUG
+        assert(font.loadFromFile(settings->fontPath + fontName));
+#elif
+        font.loadFromFile(settings->fontPath + fontName);
+#endif // DEBUG
+        color = newColor;
+        textStyle = newTextStyle;
+        characterSize = newSize;
+    }
+
     sf::Vector2f multiplyVectorByScalar(sf::Vector2f const& vector, float scalar)
     {
         return sf::Vector2f(vector.x * scalar, vector.y * scalar);
@@ -49,7 +62,7 @@ namespace SnakeGame
 
     RelativePosition RelativePositionByOrientationAndAlignment(const Orientation orientation, const Alignment alignment)
     {
-        RelativePosition relativeOrigin;
+        RelativePosition relativeOrigin = RelativePosition::TopLeft;
         switch (alignment)
         {
         case Alignment::Min:

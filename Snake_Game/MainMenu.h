@@ -15,7 +15,7 @@ namespace SnakeGame
 		int GetSelectedDifficulty();
 	private:
 		CheckBoxMenuNode* InitializeCheckBoxNode(MenuNode* parent, const std::wstring& newName, bool checked, float spacing, const sf::Texture& checkTexture,
-			MenuNodeStyle* nodeStyle = nullptr, MenuNodeActivateReaction reaction = MenuNodeActivateReaction::None, MenuStyle* newSubMenuStyle = nullptr);
+			TextStyle* nodeStyle = nullptr, MenuNodeActivateReaction reaction = MenuNodeActivateReaction::None, MenuStyle* newSubMenuStyle = nullptr);
 		std::unordered_map<MenuNode*, int> nodeToDifficultyLevel;
 		sf::Texture checkTexture;
 	};
@@ -45,7 +45,7 @@ namespace SnakeGame
 		void virtual Draw(sf::RenderWindow& window, const sf::Vector2f& position, const Orientation orientation, const Alignment alignment) override;
 		virtual sf::FloatRect GetRect() const override;
 		void SetChecked(const bool checked);
-		virtual void SetStyle(const MenuNodeStyle* newStyle) override;
+		virtual void SetStyle(const TextStyle* newStyle) override;
 		void SetSpacing(const float newSpacing);
 	private:
 		std::unique_ptr<CheckBox> checkBox;

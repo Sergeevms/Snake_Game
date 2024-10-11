@@ -14,6 +14,7 @@ namespace SnakeGame
 	public:
 		RecordsStateMenu();
 		virtual ~RecordsStateMenu() = default;
+		void Draw(sf::RenderWindow& window, const sf::Vector2f& position, RelativePosition origin) const override;
 	};
 }
 

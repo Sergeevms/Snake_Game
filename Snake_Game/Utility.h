@@ -46,6 +46,15 @@ namespace SnakeGame
 		Min, Middle, Max
 	};
 
+	struct TextStyle
+	{
+		sf::Font font;
+		sf::Color color{ sf::Color::White };
+		sf::Text::Style textStyle{ sf::Text::Style::Regular };
+		unsigned int characterSize{ 20 };
+		void Init(const std::string fontName, const sf::Color newColor = sf::Color::White, const sf::Text::Style newTextStyle = sf::Text::Style::Regular, const unsigned int newSize = 20);
+	};
+
 	/*Concept for function to set origin by RelativeOrigin*/
 	template<typename T>
 	concept haveMethodsForRelativeOriginSetGet = requires(T & a, float x)

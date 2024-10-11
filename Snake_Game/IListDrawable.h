@@ -7,6 +7,7 @@ namespace SnakeGame
 	enum class Orientation;
 	enum class Alignment;
 	enum class RelativePosition;
+	struct TextStyle;
 
 	class IListDrawable
 	{
@@ -26,6 +27,23 @@ namespace SnakeGame
 	public:
 		virtual sf::FloatRect GetRect() const override;
 		virtual void Draw(sf::RenderWindow&, const sf::Vector2f&, const Orientation, const Alignment) override;
+		virtual void SetStyle(const TextStyle* newStyle);
 	};
+
+	class DrawableList : public IListDrawable
+	{
+	public:
+		DrawableList(const Orientation orientation, const Alignment alignment, const float spacing);
+		virtual sf::FloatRect GetRect() const override;
+		virtual void Draw(sf::RenderWindow&, const sf::Vector2f&, const Orientation, const Alignment) override;
+		void AddItem(IListDrawable* item);
+	private:
+		std::vector<IListDrawable*> itemList;
+		float spacing;
+		Orientation orientation;
+		Alignment alignment;
+	};
+
+	void CreateListDrawableTextInVector(std::vector<ListDrawableText>& texts, const TextStyle* newStyle, std::wstring text = L"");
 }
 

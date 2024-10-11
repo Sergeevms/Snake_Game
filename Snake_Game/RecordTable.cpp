@@ -21,12 +21,14 @@ namespace SnakeGame
 		records.reserve(count);
 		const std::multimap<int, std::wstring> orderedTable = GetOrderedTable();
 		int index = 1;
-		std::multimap<int, std::wstring>::const_iterator current = orderedTable.begin();
+		std::multimap<int, std::wstring>::const_reverse_iterator current = orderedTable.rbegin();
 		Settings* settings = Settings::GetSettings();
-		while (current != orderedTable.end() && index <= settings->bigRecordsSize)
+		while (current != orderedTable.rend() && index <= count)
 		{
 			std::wostringstream currentString;
-			currentString << index << L". " << current->second << L" ";
+			currentString << index << L". " << current->second << L" " << current->first;
+			++index;
+			++current;
 			records.push_back(currentString.str());
 		}
 		return records;
@@ -40,10 +42,10 @@ namespace SnakeGame
 		{
 			const std::multimap<int, std::wstring> orderedTable = GetOrderedTable();
 			int index = 0;
-			std::multimap<int, std::wstring>::const_iterator current = orderedTable.begin();
-			while (current != orderedTable.end() && index < settings->bigRecordsSize)
+			std::multimap<int, std::wstring>::const_reverse_iterator current = orderedTable.rbegin();
+			while (current != orderedTable.rend() && index < settings->bigRecordsSize)
 			{
-				output << current->second << L" " << current->first;
+				output << current->first << L" " << current->second << std::endl;
 				++index;
 				++current;
 			}
@@ -66,8 +68,9 @@ namespace SnakeGame
 		{
 			std::wstring name;
 			int score = 0;
-			while (input >> name >> score)
+			while (input >> score)
 			{
+				std::getline(input, name);
 				recordTable.insert({ name, score });
 			}
 			input.close();
@@ -76,7 +79,7 @@ namespace SnakeGame
 		{
 			for (int i = 1; i <= settings->bigRecordsSize; ++i)
 			{
-				recordTable.insert({ L"XYZ", i * settings->difficultyToScore.at(settings->difficultyLevelCount - 1) });
+				recordTable.insert({ settings->defaultPlayerName, i * settings->difficultyToScore.at(settings->difficultyLevelCount - 1)});
 			}
 		}
 	}
