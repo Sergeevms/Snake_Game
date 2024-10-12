@@ -11,15 +11,10 @@ namespace SnakeGame
 		screenWidth = 800;
 		screenHeight = 600;
 		gameName = L"Змейка";
-		resourcesPath = "Resources\\";
-		levelPath = resourcesPath + "Levels\\";
-		soundPath = resourcesPath + "Sounds\\";
-		fontPath = resourcesPath + "Fonts\\";
-		texturePath = resourcesPath + "Textures\\";
 		defaultPlayerName = L"XYZ";
 		epsilon = 1e-7f;
 		defaultSnakeSize = 4;
-		selectedLevel = "level1.lvl";
+		selectedLevel = "micro.lvl";
 		tileSize = 30;
 		baseTimeOnCell = 0.75f;
 		difficultyLevelCount = 5;		
@@ -32,11 +27,23 @@ namespace SnakeGame
 			difficultyToTimeOnCell[i] = baseTimeOnCell - timeOnCellDifficultyStep * i;
 			difficultyToScore[i] = scoreOnDifficultyStep * (i + 1);
 		}
-		UpdateDifficulty(2);
+		UpdateDifficulty(3);
 		movementSpeed = static_cast<float>(tileSize) / timeOnCell;
+
+		SpesialAppleSpawnChance = 75;
+		DisorientAppleOn = true;
+		GoldenAppleOn = false;
+		PoisionedAppleOn = false;
+		DisorientationTime = 10.f;
+		GoldenAppleLifeTime = 10.f;
+		PoisnedTime = 10.f;
+		PoisnedSpeedModifire = 1.5f;
+
 		movingDelayOnStart = 3.f;
+
 		musicOn = true;
 		soundOn = true;
+
 		keyMap[sf::Keyboard::W] = ActionsTypesOnInput::Up;
 		keyMap[sf::Keyboard::D] = ActionsTypesOnInput::Right;
 		keyMap[sf::Keyboard::S] = ActionsTypesOnInput::Down;
@@ -49,6 +56,12 @@ namespace SnakeGame
 		recordsFileName = "Records.dat";
 		smallRecordsSize = 5;
 		bigRecordsSize = 10;
+
+		resourcesPath = "Resources\\";
+		levelPath = resourcesPath + "Levels\\";
+		soundPath = resourcesPath + "Sounds\\";
+		fontPath = resourcesPath + "Fonts\\";
+		texturePath = resourcesPath + "Textures\\";
 	}
 
 	void Settings::LoadFromFile(const std::string& fileName)

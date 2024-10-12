@@ -8,10 +8,7 @@ namespace SnakeGame
 
 	struct Settings
 	{
-		void LoadFromFile(const std::string& fileName);
-		void SaveToFile(const std::string& fileName);
-		void UpdateDifficulty(const int newDiffculty);
-		static Settings* GetSettings() 
+		static Settings* GetSettings()
 		{
 			if (settings == nullptr)
 			{
@@ -20,40 +17,67 @@ namespace SnakeGame
 			return settings;
 		};
 
+		void LoadFromFile(const std::string& fileName);
+		void SaveToFile(const std::string& fileName);
+		void UpdateDifficulty(const int newDiffculty);
+		sf::Vector2f ScreenCenter();
+		sf::Vector2f ScreenSize();
+
 		//General settings
 		int screenWidth;
 		int screenHeight;
-		sf::Vector2f ScreenCenter();
-		sf::Vector2f ScreenSize();
 		int tileSize;
-		float epsilon;
-		float baseTimeOnCell;
-		int difficultyLevelCount;
-		float timeOnCellDifficultyStep;
-		int scoreOnDifficultyStep;
-		float timeOnCell;
-		int defaultSnakeSize;
-		int currentDifficulty;
-		int smallRecordsSize;
-		int bigRecordsSize;
-		float movementSpeed;
-		float movingDelayOnStart;
-		float popUpSpacing;
-		float popUpBorder;
-		bool musicOn;
-		bool soundOn;		
 		std::wstring gameName;
 		std::wstring defaultPlayerName;
+		float epsilon;
+		float popUpSpacing;
+		float popUpBorder;
+		int defaultSnakeSize;
+		int smallRecordsSize;
+		int bigRecordsSize;
+
+		//Difficulty settings
+
+		std::unordered_map<int, float> difficultyToTimeOnCell;
+		std::unordered_map<int, int> difficultyToScore;
+		int difficultyLevelCount;
+		int currentDifficulty;
+		int scoreOnDifficultyStep;
+		float movementSpeed;
+		float movingDelayOnStart;
+		float baseTimeOnCell;
+		float timeOnCellDifficultyStep;
+		float timeOnCell;
+
+		//Special apples settings
+		int SpesialAppleSpawnChance;
+		bool DisorientAppleOn;
+		bool GoldenAppleOn;
+		bool PoisionedAppleOn;
+		float DisorientationTime;
+		float GoldenAppleLifeTime;
+		float PoisnedTime;
+		float PoisnedSpeedModifire;
+
+		//Sound settings
+
+		bool musicOn;
+		bool soundOn;		
+				
+		//Paths to files
+
 		std::string resourcesPath;
 		std::string levelPath;
 		std::string soundPath;
 		std::string fontPath;
 		std::string texturePath;
+
+
 		std::string selectedLevel;
 		std::string recordsFileName;
+		
+		//Control settings
 		std::unordered_map<sf::Keyboard::Key, ActionsTypesOnInput> keyMap;
-		std::unordered_map<int, float> difficultyToTimeOnCell;
-		std::unordered_map<int, int> difficultyToScore;
 	private:
 		Settings();
 		static Settings* settings;

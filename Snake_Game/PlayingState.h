@@ -15,8 +15,10 @@ namespace SnakeGame
         virtual ~PlayingState() = default;
         virtual void Draw(sf::RenderWindow& window) const override;
         virtual void Update(const float deltaTime) override;
+        /*Resets moving delay timer*/
         void resetMovingDelay();
-        CollisionResult CheckColition(sf::Vector2i& cell);
+        /*Returns true if game can be continued after collisition, false otherwise*/
+        bool CheckColition(sf::Vector2i& cell);
     private:
         bool isGameOvered{ false };
         bool sessionStarted{ false };

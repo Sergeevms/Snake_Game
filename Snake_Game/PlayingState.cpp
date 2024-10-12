@@ -5,6 +5,8 @@
 #include "Apple.h"
 #include "Game.h"
 #include "PlayingInputHandler.h"
+#include "Snake.h"
+#include "Wall.h"
 
 namespace SnakeGame
 {
@@ -101,16 +103,15 @@ namespace SnakeGame
 		sessionStarted = false;
 	}
 
-	CollisionResult PlayingState::CheckColition(sf::Vector2i& cell)
+	bool PlayingState::CheckColition(sf::Vector2i& cell)
 	{
-		CollisionResult collitionResult = collitionResults.at(map.GetObjectType(cell));
 		Game* game = Game::GetGame();
 		Settings* settings = Settings::GetSettings();
 
-		switch (collitionResult)
+		MapObject* collisionObject = map.GetObject(cell);
+
+		if (dynamic_cast<Apple*>(collisionObject))
 		{
-		case CollisionResult::AppleEaten:
-		{			
 			game->PlaySound(SoundType::OnSnakeHit);
 			snake.AddNewBody();
 			if (map.GetEmptyCellCount() > 1)
@@ -121,21 +122,19 @@ namespace SnakeGame
 			scoreCount += settings->difficultyToScore[settings->currentDifficulty];
 			keepSnakeMoveingTime = settings->timeOnCell;
 			map.RemoveMapObject(cell);
-			break;
+			return true;
 		}
-		case CollisionResult::GameOver:
+		else if (dynamic_cast<Wall*>(collisionObject) != nullptr || dynamic_cast<SnakeNode*>(collisionObject) != nullptr)
 		{
 			isGameOvered = true;
 			game->PlaySound(SoundType::OnLose);
 			game->SetLastSessionScore(scoreCount);
 			game->SwitchToState(GameState::Records);
-			break;
+			return false;
 		}
-		case CollisionResult::None:
+		else
 		{
-			break;
+			return true;
 		}
-		}
-		return collitionResult;
 	}
 }

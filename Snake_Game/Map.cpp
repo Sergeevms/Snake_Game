@@ -6,6 +6,7 @@
 #include "Utility.h"
 #include "Wall.h"
 #include "Apple.h"
+#include "Snake.h"
 #include "Settings.h"
 
 namespace SnakeGame
@@ -97,7 +98,7 @@ namespace SnakeGame
 		sf::Vector2i objectCell = object->GetCellPosition();
 		map[CellToMapIndex(objectCell)] = object;
 
-		if (collitionResults.at(map[CellToMapIndex(objectCell)]->GetObjectType()) == CollisionResult::GameOver)
+		if (dynamic_cast<Wall*>(object.get()) != nullptr || (dynamic_cast<SnakeNode*>(object.get()) != nullptr))
 		{
 			--emptyCellCount;
 		}
@@ -116,31 +117,18 @@ namespace SnakeGame
 
 	void Map::RemoveMapObject(const sf::Vector2i& cell)
 	{
-		if (map[CellToMapIndex(cell)] && collitionResults.at(map[CellToMapIndex(cell)]->GetObjectType()) == CollisionResult::GameOver)
+		if (map[CellToMapIndex(cell)] &&
+			(dynamic_cast<Wall*>(map[CellToMapIndex(cell)].get()) != nullptr || (dynamic_cast<SnakeNode*>(map[CellToMapIndex(cell)].get()) != nullptr)))
 		{
 			++emptyCellCount;
 		}
 		map[CellToMapIndex(cell)] = nullptr;
 	}
 
-	MapObjectType Map::GetObjectType(const sf::Vector2i& cell) const
+	MapObject* Map::GetObject(const sf::Vector2i& cell)
 	{
-		if (InRightOpenInterval(0, width, cell.x) and InRightOpenInterval(0, height, cell.y))
-		{
-			if (map[CellToMapIndex(cell)])
-			{
-				return map[CellToMapIndex(cell)]->GetObjectType();
-			}
-			else
-			{
-				return MapObjectType::None;
-			}
-		}
-		else
-		{
-			return MapObjectType::Wall;
-		}
-	}
+		return map[CellToMapIndex(cell)].get();
+	}	
 
 	sf::Vector2i Map::GetRandomEmptyCell() const
 	{

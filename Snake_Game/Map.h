@@ -21,7 +21,7 @@ namespace SnakeGame
 		int GetEmptyCellCount() const;
 		void RemoveMapObject(std::shared_ptr<MapObject> object);
 		void RemoveMapObject(const sf::Vector2i& cell);
-		MapObjectType GetObjectType(const sf::Vector2i& cell) const;
+		MapObject* GetObject(const sf::Vector2i& cell);
 		/*Returns coordinates of non-occupied cell*/
 		sf::Vector2i GetRandomEmptyCell() const;
 		const sf::Vector2i& GetLoadedSnakeHeadPosition() const;
@@ -29,6 +29,7 @@ namespace SnakeGame
 		sf::Vector2i GetMapSize() const;
 		const std::vector<std::string>& GetcharMap() const;
 		bool HaveEmptyCells() const;
+		/*Check that cell in borders of loaded map*/
 		bool ValidCell(const sf::Vector2i& cell) const;
 	private:
 		std::vector <std::shared_ptr<MapObject>> map;

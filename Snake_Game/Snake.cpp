@@ -82,7 +82,7 @@ namespace SnakeGame
 			std::shared_ptr<SnakeNode> head = nodes.front();
 			sf::Vector2i cellToCheck{ head->GetCellPosition().x + static_cast<int>(directionVectors.at(newDirection).x),
 				head->GetCellPosition().y + static_cast<int>(directionVectors.at(newDirection).y) };
-			if (playingState->CheckColition(cellToCheck) != CollisionResult::GameOver)
+			if (playingState->CheckColition(cellToCheck))
 			{
 				Direction nextNodeDirection = newDirection;
 				for (auto node = nodes.begin(); node != nodes.end(); ++node)
