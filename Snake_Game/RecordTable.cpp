@@ -65,12 +65,13 @@ namespace SnakeGame
 		recordTable.reserve(settings->bigRecordsSize);
 		std::wifstream input(settings->recordsFileName);
 		if (input.is_open())
-		{
+		{	
 			std::wstring name;
 			int score = 0;
 			while (input >> score)
 			{
 				std::getline(input, name);
+				name = name.substr(1, name.size() - 1);
 				recordTable.insert({ name, score });
 			}
 			input.close();
