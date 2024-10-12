@@ -41,6 +41,7 @@ namespace SnakeGame
 		MapObject(const sf::Vector2i& mapCell, const sf::Texture& texture);
 		virtual ~MapObject() = default;
 		virtual MapObjectType GetObjectType() const = 0;
+		virtual void SetColor(sf::Color newColor);
 		virtual void Draw(sf::RenderWindow&) const;
 		sf::Vector2i GetCellPosition() const;
 	protected:

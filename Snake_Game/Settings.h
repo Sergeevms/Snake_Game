@@ -58,7 +58,8 @@ namespace SnakeGame
 		float GoldenAppleLifeTime;
 		float PoisnedTime;
 		float PoisnedSpeedModifire;
-
+		sf::Color DisorientAppleColor;
+		
 		//Sound settings
 
 		bool musicOn;

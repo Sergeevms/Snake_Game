@@ -121,6 +121,10 @@ namespace SnakeGame
 			}
 			scoreCount += settings->difficultyToScore[settings->currentDifficulty];
 			keepSnakeMoveingTime = settings->timeOnCell;
+			if (dynamic_cast<DisorientApple*>(collisionObject))
+			{
+				snake.GetDisoriented();
+			}
 			map.RemoveMapObject(cell);
 			return true;
 		}

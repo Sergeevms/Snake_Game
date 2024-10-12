@@ -35,7 +35,10 @@ namespace SnakeGame
 		void Draw(sf::RenderWindow& window) const;
 		void LoadFromCharMap(const std::vector<std::string>& charMap, const sf::Vector2i& headPosition);
 		void AddNewBody();
+		void GetDisoriented();
 	private:
+		bool AddNextBodyFromMap(std::vector<std::vector<bool>>& addedCells, const std::vector<std::string>& charMap, const sf::Vector2i& currentCell);
+
 		PlayingState* playingState;
 		Map* map;
 		std::list<std::shared_ptr<SnakeNode>> nodes;
@@ -43,6 +46,6 @@ namespace SnakeGame
 		sf::Texture headTexture;
 		sf::Texture bodyTexture;
 		float timeTillNextCell{ 0.f };
-		bool AddNextBodyFromMap(std::vector<std::vector<bool>>& addedCells, const std::vector<std::string>& charMap, const sf::Vector2i& currentCell);
+		float timeTillDisorientedFallse{ 0.f };
 	};
 }

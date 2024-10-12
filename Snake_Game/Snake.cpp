@@ -68,6 +68,22 @@ namespace SnakeGame
 	{		
 		timeTillNextCell -= deltaTime;
 		Settings* settings = Settings::GetSettings();
+
+		for (auto& node : nodes)
+		{
+			node.get()->SetColor(sf::Color::White);
+		}
+
+		//handle special states
+		if (timeTillDisorientedFallse > settings->epsilon)
+		{
+			timeTillDisorientedFallse -= deltaTime;
+			for (auto& node : nodes)
+			{
+				node.get()->SetColor(settings->DisorientAppleColor);
+			}
+		}
+
 		if (timeTillNextCell > settings->epsilon)
 		{
 			for (auto& node : nodes)
@@ -108,9 +124,10 @@ namespace SnakeGame
 
 	void Snake::SetNewDirection(Direction direction)
 	{
-		if (direction != OpossiteDirection(nodes.front()->GetDirection()))
+		Direction possibleDirection = timeTillDisorientedFallse > Settings::GetSettings()->epsilon ? OpossiteDirection(direction) : direction;
+		if (possibleDirection != OpossiteDirection(nodes.front()->GetDirection()))
 		{
-			newDirection = direction;
+			newDirection = possibleDirection;
 		}
 	}
 
@@ -167,6 +184,11 @@ namespace SnakeGame
 	{
 		std::shared_ptr<SnakeNode> lastNode = nodes.back();
 		nodes.push_back(std::make_shared<SnakeNode>(lastNode->GetCellPosition(), bodyTexture, lastNode->GetDirection(), false));
+	}
+
+	void Snake::GetDisoriented()
+	{
+		timeTillDisorientedFallse = Settings::GetSettings()->DisorientationTime;
 	}
 
 	bool Snake::AddNextBodyFromMap(std::vector<std::vector<bool>>& addedCells, const std::vector<std::string>& charMap, const sf::Vector2i& currentCell)

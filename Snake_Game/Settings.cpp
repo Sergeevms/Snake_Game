@@ -14,7 +14,7 @@ namespace SnakeGame
 		defaultPlayerName = L"XYZ";
 		epsilon = 1e-7f;
 		defaultSnakeSize = 4;
-		selectedLevel = "micro.lvl";
+		selectedLevel = "level1.lvl";
 		tileSize = 30;
 		baseTimeOnCell = 0.75f;
 		difficultyLevelCount = 5;		
@@ -38,6 +38,7 @@ namespace SnakeGame
 		GoldenAppleLifeTime = 10.f;
 		PoisnedTime = 10.f;
 		PoisnedSpeedModifire = 1.5f;
+		DisorientAppleColor = sf::Color(51, 178, 18, 255);
 
 		movingDelayOnStart = 3.f;
 
