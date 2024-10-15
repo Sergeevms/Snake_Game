@@ -25,6 +25,8 @@ namespace SnakeGame
         int scoreCount{ 0 };
         float delayBeforeMoving;
         float keepSnakeMoveingTime;
+        float timeTillGoldenAppleDisapear{ 0 };
+        void GenerateApple();
         Map map;
         Snake snake;
         std::shared_ptr<Apple> currentApple;

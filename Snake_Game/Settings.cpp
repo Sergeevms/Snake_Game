@@ -22,23 +22,27 @@ namespace SnakeGame
 		popUpSpacing = 100.f;
 		popUpBorder = 5.f;
 		timeOnCellDifficultyStep = baseTimeOnCell / (static_cast<float>(difficultyLevelCount + 1));
+
 		for (int i = 0; i < difficultyLevelCount; ++i)
 		{
 			difficultyToTimeOnCell[i] = baseTimeOnCell - timeOnCellDifficultyStep * i;
 			difficultyToScore[i] = scoreOnDifficultyStep * (i + 1);
 		}
+		
 		UpdateDifficulty(3);
-		movementSpeed = static_cast<float>(tileSize) / timeOnCell;
 
-		SpesialAppleSpawnChance = 75;
-		DisorientAppleOn = true;
-		GoldenAppleOn = false;
-		PoisionedAppleOn = false;
-		DisorientationTime = 10.f;
-		GoldenAppleLifeTime = 10.f;
-		PoisnedTime = 10.f;
-		PoisnedSpeedModifire = 1.5f;
-		DisorientAppleColor = sf::Color(51, 178, 18, 255);
+		spesialAppleSpawnChance = 75;
+		disorientAppleOn = true;
+		goldenAppleOn = true;
+		poisionedAppleOn = true;
+		disorientationTime = 10.f;
+		goldenAppleLifeTime = 10.f;
+		goldenAppleScoreModifier = 1.5f;
+		poisonedCellCount = 50;
+		poisonedSpeedModifire = 1.5f;
+		disorientAppleColor = sf::Color(219, 143, 255, 255);
+		poisionedAppleColor = sf::Color(146, 255, 204, 255);
+		goldenAppleColor = sf::Color(235, 189, 43, 255);
 
 		movingDelayOnStart = 3.f;
 
@@ -79,7 +83,22 @@ namespace SnakeGame
 	{
 		currentDifficulty = newDiffculty;
 		timeOnCell = difficultyToTimeOnCell[currentDifficulty];
-		movementSpeed = (float)tileSize / timeOnCell;
+		movementSpeed = static_cast<float>(tileSize) / timeOnCell;
+	}
+
+	int Settings::GetCurrentDifficulty() const
+	{
+		return currentDifficulty;
+	}
+
+	float Settings::GetMovementSpeed() const
+	{
+		return movementSpeed;
+	}
+
+	float Settings::GetTimeOnCell() const
+	{
+		return timeOnCell;
 	}
 
 	sf::Vector2f Settings::ScreenCenter()

@@ -26,7 +26,7 @@ namespace SnakeGame
 		std::vector<std::wstring> difficultyNames{ L"Простой", L"Тяжелее простого", L"Средний", L"Легче тяжелого", L"Тяжелый" };
 		for (int i = 0; i < settings->difficultyLevelCount; ++i)
 		{
-			bool IsCurrentDifficultyLevel = i == settings->currentDifficulty ? true : false;
+			bool IsCurrentDifficultyLevel = i == settings->GetCurrentDifficulty() ? true : false;
 			CheckBoxMenuNode* difficultySubNode = InitializeCheckBoxNode(difficultyNode, difficultyNames[i], IsCurrentDifficultyLevel, 30.f, checkTexture, IsCurrentDifficultyLevel ? &selectedStyle : &normalStyle, MenuNodeActivateReaction::SwitchDifficulty);
 			if (IsCurrentDifficultyLevel)
 			{

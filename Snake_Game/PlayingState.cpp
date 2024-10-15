@@ -25,9 +25,15 @@ namespace SnakeGame
 		}
 		else
 		{
-			currentApple = appleFactory.get()->GenerateNewApple(&map);
+			currentApple = appleFactory.get()->GenerateNewApple(&map);		
 		}
+
 		map.EmplaceMapObject(currentApple);
+
+		if (std::dynamic_pointer_cast<GoldenApple>(currentApple))
+		{
+			timeTillGoldenAppleDisapear = Settings::GetSettings()->goldenAppleLifeTime;
+		}
 
 		snake.LoadFromCharMap(map.GetcharMap(), map.GetLoadedSnakeHeadPosition());
 
@@ -74,6 +80,15 @@ namespace SnakeGame
 			Game* game = Game::GetGame();
 			if (delayBeforeMoving <= settings->epsilon)
 			{
+				if (std::dynamic_pointer_cast<GoldenApple>(currentApple))
+				{
+					timeTillGoldenAppleDisapear -= deltaTime;
+					if (timeTillGoldenAppleDisapear < settings->epsilon)
+					{
+						map.RemoveMapObject(currentApple);
+						GenerateApple();
+					}
+				}
 				snake.Update(deltaTime);
 				if (!sessionStarted)
 				{
@@ -114,16 +129,17 @@ namespace SnakeGame
 		{
 			game->PlaySound(SoundType::OnSnakeHit);
 			snake.AddNewBody();
-			if (map.GetEmptyCellCount() > 1)
-			{
-				currentApple = appleFactory.get()->GenerateNewApple(&map);
-				map.EmplaceMapObject(currentApple);
-			}
-			scoreCount += settings->difficultyToScore[settings->currentDifficulty];
-			keepSnakeMoveingTime = settings->timeOnCell;
+			GenerateApple();
+			scoreCount += static_cast<int>((dynamic_cast<GoldenApple*> (collisionObject) ? 
+				settings->goldenAppleScoreModifier : 1.f) * settings->difficultyToScore[settings->GetCurrentDifficulty()]);
+			keepSnakeMoveingTime = settings->GetTimeOnCell();
 			if (dynamic_cast<DisorientApple*>(collisionObject))
 			{
 				snake.GetDisoriented();
+			}
+			if (dynamic_cast<PoisendApple*>(collisionObject))
+			{
+				snake.GetPoisioned();
 			}
 			map.RemoveMapObject(cell);
 			return true;
@@ -139,6 +155,18 @@ namespace SnakeGame
 		else
 		{
 			return true;
+		}
+	}
+	void PlayingState::GenerateApple()
+	{
+		if (map.GetEmptyCellCount() > 1)
+		{
+			currentApple = appleFactory.get()->GenerateNewApple(&map);
+			map.EmplaceMapObject(currentApple);
+			if (std::dynamic_pointer_cast<GoldenApple>(currentApple))
+			{
+				timeTillGoldenAppleDisapear = Settings::GetSettings()->goldenAppleLifeTime;
+			}
 		}
 	}
 }

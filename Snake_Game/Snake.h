@@ -10,7 +10,7 @@ namespace SnakeGame
 	{
 	public:
 		SnakeNode(const sf::Vector2i& mapCell, const sf::Texture& texture, const Direction direction, const bool isMovingEnabled = true);
-		void Update(const float deltaTime);
+		void Update(const float deltaTime, const float speedModifire);
 		void SetDirection(Direction newDirection);
 		void SetCellPositionIfMoving(const sf::Vector2i& newCell);
 		void UpdateScreenPositionByCell();
@@ -36,6 +36,7 @@ namespace SnakeGame
 		void LoadFromCharMap(const std::vector<std::string>& charMap, const sf::Vector2i& headPosition);
 		void AddNewBody();
 		void GetDisoriented();
+		void GetPoisioned();
 	private:
 		bool AddNextBodyFromMap(std::vector<std::vector<bool>>& addedCells, const std::vector<std::string>& charMap, const sf::Vector2i& currentCell);
 
@@ -46,6 +47,7 @@ namespace SnakeGame
 		sf::Texture headTexture;
 		sf::Texture bodyTexture;
 		float timeTillNextCell{ 0.f };
-		float timeTillDisorientedFallse{ 0.f };
+		float timeTillDisorientedFall{ 0.f };
+		float timeTillPoisonedFall{ 0.f };
 	};
 }

@@ -1,9 +1,18 @@
 #pragma once
 #include "MapObject.h"
+#include <vector>
 
 namespace SnakeGame
 {
     class Map;
+
+    enum class AppleType
+    {
+        Default,
+        Disorientating,
+        Poisned,
+        Golden
+    };
 
     class Apple : public MapObject
     {
@@ -22,6 +31,7 @@ namespace SnakeGame
     private:
         sf::Texture appleTexture;
         sf::Texture specialAppleTexture;
+        std::vector<AppleType> availableSpecialType;
     };
 
     class DisorientApple : public Apple
@@ -29,5 +39,19 @@ namespace SnakeGame
     public:
         DisorientApple(sf::Vector2i const& mapCell, sf::Texture const& texture);
         ~DisorientApple() = default;
+    };
+
+    class PoisendApple : public Apple
+    {
+    public:
+        PoisendApple(sf::Vector2i const& mapCell, sf::Texture const& texture);
+        ~PoisendApple() = default;
+    };
+
+    class GoldenApple : public Apple
+    {
+    public:
+        GoldenApple(sf::Vector2i const& mapCell, sf::Texture const& texture);
+        ~GoldenApple() = default;
     };
 }

@@ -11,11 +11,11 @@ namespace SnakeGame
 
 	}
 
-	void SnakeNode::Update(const float deltaTime)
+	void SnakeNode::Update(const float deltaTime, const float speedModifire = 1.f)
 	{
 		if (isMoving)
 		{
-			const float movementDistance = deltaTime * Settings::GetSettings()->movementSpeed;
+			const float movementDistance = deltaTime * Settings::GetSettings()->GetMovementSpeed() * speedModifire;
 			sf::Vector2f movement = multiplyVectorByScalar(directionVectors.at(currentDirection), movementDistance);
 			screenCoordinates.x += movement.x;
 			screenCoordinates.y += movement.y;
@@ -69,31 +69,38 @@ namespace SnakeGame
 		timeTillNextCell -= deltaTime;
 		Settings* settings = Settings::GetSettings();
 
-		for (auto& node : nodes)
-		{
-			node.get()->SetColor(sf::Color::White);
-		}
+		sf::Color snakeColor = sf::Color::White;
 
 		//handle special states
-		if (timeTillDisorientedFallse > settings->epsilon)
+		if (timeTillDisorientedFall > settings->epsilon)
 		{
-			timeTillDisorientedFallse -= deltaTime;
-			for (auto& node : nodes)
-			{
-				node.get()->SetColor(settings->DisorientAppleColor);
-			}
+			timeTillDisorientedFall -= deltaTime;
+			snakeColor *= settings->disorientAppleColor;
+		}
+
+		if (timeTillPoisonedFall > settings->epsilon)
+		{
+			timeTillPoisonedFall -= deltaTime;
+			snakeColor *= settings->poisionedAppleColor;
+		}
+
+		//snakeColor *= sf::Color::White;
+
+		for (auto& node : nodes)
+		{
+			node.get()->SetColor(snakeColor);
 		}
 
 		if (timeTillNextCell > settings->epsilon)
 		{
 			for (auto& node : nodes)
 			{
-				node->Update(deltaTime);
+				node->Update(deltaTime, timeTillPoisonedFall > settings->epsilon ? settings->poisonedSpeedModifire : 1.f);
 			}
 		}
 		else
 		{
-			timeTillNextCell = settings->timeOnCell;
+			timeTillNextCell = settings->GetTimeOnCell() / (timeTillPoisonedFall > settings->epsilon ? settings->poisonedSpeedModifire : 1.f);
 			nodes.back()->SetMovingEnabledState(true);
 			std::shared_ptr<SnakeNode> head = nodes.front();
 			sf::Vector2i cellToCheck{ head->GetCellPosition().x + static_cast<int>(directionVectors.at(newDirection).x),
@@ -112,7 +119,7 @@ namespace SnakeGame
 					(*node)->SetDirection(nextNodeDirection);
 					nextNodeDirection = currentDirection;
 					map->EmplaceMapObject((*node));
-					(*node)->Update(deltaTime);
+					(*node)->Update(deltaTime, timeTillPoisonedFall > settings->epsilon ? settings->poisonedSpeedModifire : 1.f);
 				}
 			}
 			else
@@ -124,7 +131,7 @@ namespace SnakeGame
 
 	void Snake::SetNewDirection(Direction direction)
 	{
-		Direction possibleDirection = timeTillDisorientedFallse > Settings::GetSettings()->epsilon ? OpossiteDirection(direction) : direction;
+		Direction possibleDirection = timeTillDisorientedFall > Settings::GetSettings()->epsilon ? OpossiteDirection(direction) : direction;
 		if (possibleDirection != OpossiteDirection(nodes.front()->GetDirection()))
 		{
 			newDirection = possibleDirection;
@@ -188,7 +195,14 @@ namespace SnakeGame
 
 	void Snake::GetDisoriented()
 	{
-		timeTillDisorientedFallse = Settings::GetSettings()->DisorientationTime;
+		timeTillDisorientedFall = Settings::GetSettings()->disorientationTime;
+	}
+
+	void Snake::GetPoisioned()
+	{
+		Settings* settings = Settings::GetSettings();
+		timeTillPoisonedFall = settings->poisonedCellCount * (settings->GetTimeOnCell() / settings->poisonedSpeedModifire);
+		timeTillNextCell = settings->GetTimeOnCell() / settings->poisonedSpeedModifire;
 	}
 
 	bool Snake::AddNextBodyFromMap(std::vector<std::vector<bool>>& addedCells, const std::vector<std::string>& charMap, const sf::Vector2i& currentCell)

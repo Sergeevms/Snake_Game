@@ -19,11 +19,11 @@ namespace SnakeGame
 
 		void LoadFromFile(const std::string& fileName);
 		void SaveToFile(const std::string& fileName);
-		void UpdateDifficulty(const int newDiffculty);
 		sf::Vector2f ScreenCenter();
 		sf::Vector2f ScreenSize();
 
 		//General settings
+
 		int screenWidth;
 		int screenHeight;
 		int tileSize;
@@ -32,33 +32,44 @@ namespace SnakeGame
 		float epsilon;
 		float popUpSpacing;
 		float popUpBorder;
+		float movingDelayOnStart;
 		int defaultSnakeSize;
 		int smallRecordsSize;
 		int bigRecordsSize;
 
 		//Difficulty settings
-
+		//Updates difficulty level and set new timeOnCell and movementSpeed according to it
+		void UpdateDifficulty(const int newDiffculty);
+		int GetCurrentDifficulty() const;
+		float GetMovementSpeed() const;
+		float GetTimeOnCell() const;
 		std::unordered_map<int, float> difficultyToTimeOnCell;
 		std::unordered_map<int, int> difficultyToScore;
 		int difficultyLevelCount;
-		int currentDifficulty;
 		int scoreOnDifficultyStep;
-		float movementSpeed;
-		float movingDelayOnStart;
 		float baseTimeOnCell;
 		float timeOnCellDifficultyStep;
+	private:
+		int currentDifficulty;
+		float movementSpeed;
 		float timeOnCell;
 
+	public:
+
 		//Special apples settings
-		int SpesialAppleSpawnChance;
-		bool DisorientAppleOn;
-		bool GoldenAppleOn;
-		bool PoisionedAppleOn;
-		float DisorientationTime;
-		float GoldenAppleLifeTime;
-		float PoisnedTime;
-		float PoisnedSpeedModifire;
-		sf::Color DisorientAppleColor;
+		int spesialAppleSpawnChance;
+		bool disorientAppleOn;
+		bool goldenAppleOn;
+		bool poisionedAppleOn;
+		float disorientationTime;
+		float goldenAppleLifeTime;
+		float goldenAppleScoreModifier;
+		//Count of cell before posioned status fades off
+		int poisonedCellCount;
+		float poisonedSpeedModifire;
+		sf::Color disorientAppleColor;
+		sf::Color poisionedAppleColor;
+		sf::Color goldenAppleColor;
 		
 		//Sound settings
 
