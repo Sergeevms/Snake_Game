@@ -20,14 +20,18 @@ namespace SnakeGame
 		
 		Settings* settings = Settings::GetSettings();
 
-		InitializeCheckBoxNode(settingsNode, L"«вук", settings->soundOn, 30.f, checkTexture, &selectedStyle, MenuNodeActivateReaction::SwitchSound);
-		InitializeCheckBoxNode(settingsNode, L"ћузыка", settings->musicOn, 30.f, checkTexture, &normalStyle, MenuNodeActivateReaction::SwitchMusic);
+		InitializeCheckBoxNode(settingsNode, L"«вук", settings->soundOn, 30.f, checkTexture, &selectedStyle, MenuNodeActivateReaction::SwitchOption, &(settings->soundOn));
+		InitializeCheckBoxNode(settingsNode, L"ћузыка", settings->musicOn, 30.f, checkTexture, &normalStyle, MenuNodeActivateReaction::SwitchOption,  &(settings->musicOn));
+
+		InitializeCheckBoxNode(settingsNode, L"«олотое €блоко", settings->goldenAppleOn, 30.f, checkTexture, &normalStyle, MenuNodeActivateReaction::SwitchOption, &(settings->goldenAppleOn));
+		InitializeCheckBoxNode(settingsNode, L"ќтравленное €блоко", settings->poisionedAppleOn, 30.f, checkTexture, &normalStyle, MenuNodeActivateReaction::SwitchOption, &(settings->poisionedAppleOn));
+		InitializeCheckBoxNode(settingsNode, L"ƒизориентирующее €блоко", settings->disorientAppleOn, 30.f, checkTexture, &normalStyle, MenuNodeActivateReaction::SwitchOption, &(settings->disorientAppleOn));
 
 		std::vector<std::wstring> difficultyNames{ L"ѕростой", L"“€желее простого", L"—редний", L"Ћегче т€желого", L"“€желый" };
 		for (int i = 0; i < settings->difficultyLevelCount; ++i)
 		{
 			bool IsCurrentDifficultyLevel = i == settings->GetCurrentDifficulty() ? true : false;
-			CheckBoxMenuNode* difficultySubNode = InitializeCheckBoxNode(difficultyNode, difficultyNames[i], IsCurrentDifficultyLevel, 30.f, checkTexture, IsCurrentDifficultyLevel ? &selectedStyle : &normalStyle, MenuNodeActivateReaction::SwitchDifficulty);
+			CheckBoxMenuNode* difficultySubNode = InitializeCheckBoxNode(difficultyNode, difficultyNames[i], IsCurrentDifficultyLevel, 30.f, checkTexture, IsCurrentDifficultyLevel ? &selectedStyle : &normalStyle, MenuNodeActivateReaction::SwitchOption);
 			if (IsCurrentDifficultyLevel)
 			{
 				difficultyNode->setSelectedChildID(i);
@@ -36,7 +40,7 @@ namespace SnakeGame
 		}
 	}
 
-	void MainMenu::UpdateChecked(const bool checked)
+	void MainMenu::SwitchChecked()
 	{
 		CheckBoxMenuNode* selectedNode;
 		if (selectedNode = dynamic_cast<CheckBoxMenuNode*>(currentNode->GetCurrentlySelectedChild()))
@@ -47,8 +51,14 @@ namespace SnakeGame
 				{
 					dynamic_cast<CheckBoxMenuNode*>(node.first)->SetChecked(false);
 				}
+				selectedNode->SetChecked(true);
+				Settings::GetSettings()->UpdateDifficulty(nodeToDifficultyLevel.at(selectedNode));
 			}
-			selectedNode->SetChecked(checked);
+			else
+			{
+				*(nodeToCorrespodingOption.at(selectedNode)) = !(*(nodeToCorrespodingOption.at(selectedNode)));
+				selectedNode->SetChecked(*(nodeToCorrespodingOption.at(selectedNode)));
+			}
 		}
 	}
 
@@ -65,7 +75,7 @@ namespace SnakeGame
 	}
 
 	CheckBoxMenuNode* MainMenu::InitializeCheckBoxNode(MenuNode* parent, const std::wstring& newName, bool checked,
-		float spacing, const sf::Texture& checkTexture, TextStyle* nodeStyle, MenuNodeActivateReaction reaction, MenuStyle* newSubMenuStyle)
+		float spacing, const sf::Texture& checkTexture, TextStyle* nodeStyle, MenuNodeActivateReaction reaction, bool* correspondingOption, MenuStyle* newSubMenuStyle)
 	{
 		if (parent)
 		{	
@@ -74,6 +84,10 @@ namespace SnakeGame
 			ConfigurateNode(newNode, parent, newName, nodeStyle, reaction, newSubMenuStyle);
 			newNode->SetChecked(checked);
 			newNode->SetSpacing(spacing);
+			if (correspondingOption)
+			{
+				nodeToCorrespodingOption[newNode] = correspondingOption;
+			}
 			return newNode;
 		}
 		else

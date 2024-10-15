@@ -11,12 +11,13 @@ namespace SnakeGame
 	public:
 		MainMenu();
 		virtual ~MainMenu() = default;
-		void UpdateChecked(const bool checked);
+		void SwitchChecked();
 		int GetSelectedDifficulty();
 	private:
 		CheckBoxMenuNode* InitializeCheckBoxNode(MenuNode* parent, const std::wstring& newName, bool checked, float spacing, const sf::Texture& checkTexture,
-			TextStyle* nodeStyle = nullptr, MenuNodeActivateReaction reaction = MenuNodeActivateReaction::None, MenuStyle* newSubMenuStyle = nullptr);
+			TextStyle* nodeStyle = nullptr, MenuNodeActivateReaction reaction = MenuNodeActivateReaction::None, bool* correspondingOption = nullptr, MenuStyle* newSubMenuStyle = nullptr);
 		std::unordered_map<MenuNode*, int> nodeToDifficultyLevel;
+		std::unordered_map<MenuNode*, bool*> nodeToCorrespodingOption;
 		sf::Texture checkTexture;
 	};
 

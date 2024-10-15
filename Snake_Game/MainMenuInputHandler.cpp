@@ -12,12 +12,8 @@ namespace SnakeGame
 			{if (auto currentHandler = dynamic_cast<MainMenuInputHandler*>(this)) { currentHandler->ExitGame(); }};
 		activateMapping[MenuNodeActivateReaction::Play] = [this](BaseInputHandler* handler)
 			{if (auto currentHandler = dynamic_cast<MainMenuInputHandler*>(this)) { currentHandler->StartPlaying(); }};
-		activateMapping[MenuNodeActivateReaction::SwitchMusic] = [this](BaseInputHandler* handler)
-			{ if (auto currentHandler = dynamic_cast<MainMenuInputHandler*>(this)) { currentHandler->SwitchMusic(); }};
-		activateMapping[MenuNodeActivateReaction::SwitchSound] = [this](BaseInputHandler* handler)
-			{ if (auto currentHandler = dynamic_cast<MainMenuInputHandler*>(this)) { currentHandler->SwitchSound(); }};
-		activateMapping[MenuNodeActivateReaction::SwitchDifficulty] = [this](BaseInputHandler* handler)
-			{ if (auto currentHandler = dynamic_cast<MainMenuInputHandler*>(this)) { currentHandler->SwitchDifficulty(); }};
+		activateMapping[MenuNodeActivateReaction::SwitchOption] = [this](BaseInputHandler* handler)
+			{ if (auto currentHandler = dynamic_cast<MainMenuInputHandler*>(this)) { currentHandler->SwitchOption(); }};
 		activateMapping[MenuNodeActivateReaction::Records] = [this](BaseInputHandler* handler)
 			{ if (auto currentHandler = dynamic_cast<MainMenuInputHandler*>(this)) { currentHandler->ShowRecords(); } }; 
 	}
@@ -37,24 +33,8 @@ namespace SnakeGame
 		Game::GetGame()->SwitchToState(GameState::Records);
 	}
 
-	void MainMenuInputHandler::SwitchMusic()
+	void MainMenuInputHandler::SwitchOption()
 	{
-		Settings* settings = Settings::GetSettings();
-		settings->musicOn = !settings->musicOn;
-		menu->UpdateChecked(settings->musicOn);
-	}
-
-	void MainMenuInputHandler::SwitchSound()
-	{
-		Settings* settings = Settings::GetSettings();
-		settings->soundOn = !settings->soundOn;
-		menu->UpdateChecked(settings->soundOn);
-	}
-
-	void MainMenuInputHandler::SwitchDifficulty()
-	{
-		Settings* settings = Settings::GetSettings();
-		settings->UpdateDifficulty(menu->GetSelectedDifficulty());
-		menu->UpdateChecked(true);
+		menu->SwitchChecked();
 	}
 }

@@ -11,13 +11,12 @@ namespace SnakeGame
 		None,
 		Play,
 		Records,
-		SwitchMusic,
-		SwitchSound,
+		SwitchOption,
 		SwitchDifficulty,
 		Exit,
 		MainMenu,
 		EnterName,
-		SkipName
+		SkipName,
 	};
 
 	struct MenuStyle

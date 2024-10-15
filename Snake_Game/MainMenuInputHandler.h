@@ -16,9 +16,7 @@ namespace SnakeGame
         void ExitGame();
         void StartPlaying();
         void ShowRecords();
-        void SwitchMusic();
-        void SwitchSound();
-        void SwitchDifficulty();
+        void SwitchOption();
     private:
         MainMenu* menu;
     };
