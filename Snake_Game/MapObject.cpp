@@ -16,6 +16,11 @@ namespace SnakeGame
 		sprite.setPosition(screenCoordinates.x, screenCoordinates.y);
 	}
 
+	void MapObject::SetColor(sf::Color newColor)
+	{
+		sprite.setColor(newColor);
+	}
+
 	void MapObject::Draw(sf::RenderWindow& window) const
 	{
 		window.draw(sprite);

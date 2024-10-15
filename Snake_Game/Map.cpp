@@ -6,6 +6,7 @@
 #include "Utility.h"
 #include "Wall.h"
 #include "Apple.h"
+#include "Snake.h"
 #include "Settings.h"
 
 namespace SnakeGame
@@ -13,7 +14,6 @@ namespace SnakeGame
 	Map::Map()
 	{
 		addSpriteTexture('W', "Wall.png");
-		addSpriteTexture('A', "Apple.png");
 	}
 
 	void Map::LoadFromFile(const std::string& fileName)
@@ -63,8 +63,7 @@ namespace SnakeGame
 				}
 				case 'A':
 				{
-					currentObject = std::make_shared<Apple>(currentCell, spritesCharToTexture['A']);
-					applePlaced = true;
+					loadedApplePosition = currentCell;
 					break;
 				}
 				case 'H':
@@ -80,11 +79,6 @@ namespace SnakeGame
 					--emptyCellCount;
 				}
 			}
-		}
-
-		if (!applePlaced)
-		{
-			EmplaceNewApple();
 		}
 	}
 
@@ -104,19 +98,15 @@ namespace SnakeGame
 		sf::Vector2i objectCell = object->GetCellPosition();
 		map[CellToMapIndex(objectCell)] = object;
 
-		if (collitionResults.at(map[CellToMapIndex(objectCell)]->GetObjectType()) == CollisionResult::GameOver)
+		if (dynamic_cast<Wall*>(object.get()) != nullptr || (dynamic_cast<SnakeNode*>(object.get()) != nullptr))
 		{
 			--emptyCellCount;
 		}
 	}
 
-	void Map::EmplaceNewApple()
+	int Map::GetEmptyCellCount() const
 	{
-		if (emptyCellCount > 1)
-		{
-			sf::Vector2i newAppleCell = GetRandomEmptyCell();
-			map[CellToMapIndex(newAppleCell)] = std::make_shared<Apple>(newAppleCell, spritesCharToTexture['A']);
-		}
+		return emptyCellCount;
 	}
 
 	void Map::RemoveMapObject(std::shared_ptr<MapObject> object)
@@ -127,31 +117,18 @@ namespace SnakeGame
 
 	void Map::RemoveMapObject(const sf::Vector2i& cell)
 	{
-		if (map[CellToMapIndex(cell)] && collitionResults.at(map[CellToMapIndex(cell)]->GetObjectType()) == CollisionResult::GameOver)
+		if (map[CellToMapIndex(cell)] &&
+			(dynamic_cast<Wall*>(map[CellToMapIndex(cell)].get()) != nullptr || (dynamic_cast<SnakeNode*>(map[CellToMapIndex(cell)].get()) != nullptr)))
 		{
 			++emptyCellCount;
 		}
 		map[CellToMapIndex(cell)] = nullptr;
 	}
 
-	MapObjectType Map::GetObjectType(const sf::Vector2i& cell) const
+	MapObject* Map::GetObject(const sf::Vector2i& cell)
 	{
-		if (InRightOpenInterval(0, width, cell.x) and InRightOpenInterval(0, height, cell.y))
-		{
-			if (map[CellToMapIndex(cell)])
-			{
-				return map[CellToMapIndex(cell)]->GetObjectType();
-			}
-			else
-			{
-				return MapObjectType::None;
-			}
-		}
-		else
-		{
-			return MapObjectType::Wall;
-		}
-	}
+		return map[CellToMapIndex(cell)].get();
+	}	
 
 	sf::Vector2i Map::GetRandomEmptyCell() const
 	{
@@ -163,9 +140,14 @@ namespace SnakeGame
 		return checkingCell;
 	}
 
-	const sf::Vector2i& Map::GetSnakeHeadPosition() const
+	const sf::Vector2i& Map::GetLoadedSnakeHeadPosition() const
 	{
 		return loadedSnakeHeadPosition;
+	}
+
+	const sf::Vector2i& Map::GetLoadedApplePosition() const
+	{
+		return loadedApplePosition;
 	}
 
 	sf::Vector2i Map::GetMapSize() const
@@ -181,6 +163,11 @@ namespace SnakeGame
 	bool Map::HaveEmptyCells() const
 	{
 		return emptyCellCount > 0;
+	}
+
+	bool Map::ValidCell(const sf::Vector2i& cell) const
+	{
+		return InRightOpenInterval(0, width, cell.x) && InRightOpenInterval(0, height, cell.y);
 	}
 
 	int Map::CellToMapIndex(const sf::Vector2i& cell) const

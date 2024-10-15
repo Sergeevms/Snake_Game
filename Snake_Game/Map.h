@@ -17,20 +17,26 @@ namespace SnakeGame
 		void CreateSavedLvl();
 		void Draw(sf::RenderWindow& window) const;
 		void EmplaceMapObject(std::shared_ptr <MapObject> object);
-		void EmplaceNewApple();
+		/*Returns count of cells which colide result woudn't results in Game over*/
+		int GetEmptyCellCount() const;
 		void RemoveMapObject(std::shared_ptr<MapObject> object);
 		void RemoveMapObject(const sf::Vector2i& cell);
-		MapObjectType GetObjectType(const sf::Vector2i& cell) const;
+		MapObject* GetObject(const sf::Vector2i& cell);
+		/*Returns coordinates of non-occupied cell*/
 		sf::Vector2i GetRandomEmptyCell() const;
-		const sf::Vector2i& GetSnakeHeadPosition() const;
+		const sf::Vector2i& GetLoadedSnakeHeadPosition() const;
+		const sf::Vector2i& GetLoadedApplePosition() const;
 		sf::Vector2i GetMapSize() const;
 		const std::vector<std::string>& GetcharMap() const;
 		bool HaveEmptyCells() const;
+		/*Check that cell in borders of loaded map*/
+		bool ValidCell(const sf::Vector2i& cell) const;
 	private:
 		std::vector <std::shared_ptr<MapObject>> map;
 		std::unordered_map<char, sf::Texture> spritesCharToTexture;
 		std::vector <std::string> charMap;
 		sf::Vector2i loadedSnakeHeadPosition{ -1, -1 };
+		sf::Vector2i loadedApplePosition{ -1, -1 };
 		int CellToMapIndex(const sf::Vector2i& cell) const;
 		int width{ 0 };
 		int height{ 0 };

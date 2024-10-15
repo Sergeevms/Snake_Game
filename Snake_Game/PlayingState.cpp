@@ -5,18 +5,37 @@
 #include "Apple.h"
 #include "Game.h"
 #include "PlayingInputHandler.h"
+#include "Snake.h"
+#include "Wall.h"
 
 namespace SnakeGame
 {
 	PlayingState::PlayingState() : BaseState(), map(), snake(this, &map),
 		delayBeforeMoving(Settings::GetSettings()->movingDelayOnStart)
 	{
+		appleFactory = std::make_unique<AppleFactory>();
 		inputHandler = std::make_unique<PlayingInputHandler>(&snake, this);
 		Settings* settings = Settings::GetSettings();
 		map.LoadFromFile(settings->selectedLevel);
 		map.CreateSavedLvl();
 
-		snake.LoadFromCharMap(map.GetcharMap(), map.GetSnakeHeadPosition());
+		if (map.ValidCell(map.GetLoadedApplePosition()))
+		{
+			currentApple = appleFactory.get()->GenerateNewApple(&map, map.GetLoadedApplePosition());
+		}
+		else
+		{
+			currentApple = appleFactory.get()->GenerateNewApple(&map);		
+		}
+
+		map.EmplaceMapObject(currentApple);
+
+		if (std::dynamic_pointer_cast<GoldenApple>(currentApple))
+		{
+			timeTillGoldenAppleDisapear = Settings::GetSettings()->goldenAppleLifeTime;
+		}
+
+		snake.LoadFromCharMap(map.GetcharMap(), map.GetLoadedSnakeHeadPosition());
 
 #ifdef _DEBUG
 		assert(font.loadFromFile(settings->fontPath +  "Roboto-Regular.ttf"));
@@ -61,6 +80,15 @@ namespace SnakeGame
 			Game* game = Game::GetGame();
 			if (delayBeforeMoving <= settings->epsilon)
 			{
+				if (std::dynamic_pointer_cast<GoldenApple>(currentApple))
+				{
+					timeTillGoldenAppleDisapear -= deltaTime;
+					if (timeTillGoldenAppleDisapear < settings->epsilon)
+					{
+						map.RemoveMapObject(currentApple);
+						GenerateApple();
+					}
+				}
 				snake.Update(deltaTime);
 				if (!sessionStarted)
 				{
@@ -90,37 +118,55 @@ namespace SnakeGame
 		sessionStarted = false;
 	}
 
-	CollisionResult PlayingState::CheckColition(sf::Vector2i& cell)
+	bool PlayingState::CheckColition(sf::Vector2i& cell)
 	{
-		CollisionResult collitionResult = collitionResults.at(map.GetObjectType(cell));
 		Game* game = Game::GetGame();
 		Settings* settings = Settings::GetSettings();
 
-		switch (collitionResult)
+		MapObject* collisionObject = map.GetObject(cell);
+
+		if (dynamic_cast<Apple*>(collisionObject))
 		{
-		case CollisionResult::AppleEaten:
-		{			
 			game->PlaySound(SoundType::OnSnakeHit);
 			snake.AddNewBody();
-			map.EmplaceNewApple();
-			scoreCount += settings->difficultyToScore[settings->currentDifficulty];
-			keepSnakeMoveingTime = settings->timeOnCell;
+			GenerateApple();
+			scoreCount += static_cast<int>((dynamic_cast<GoldenApple*> (collisionObject) ? 
+				settings->goldenAppleScoreModifier : 1.f) * settings->difficultyToScore[settings->GetCurrentDifficulty()]);
+			keepSnakeMoveingTime = settings->GetTimeOnCell();
+			if (dynamic_cast<DisorientApple*>(collisionObject))
+			{
+				snake.GetDisoriented();
+			}
+			if (dynamic_cast<PoisendApple*>(collisionObject))
+			{
+				snake.GetPoisioned();
+			}
 			map.RemoveMapObject(cell);
-			break;
+			return true;
 		}
-		case CollisionResult::GameOver:
+		else if (dynamic_cast<Wall*>(collisionObject) != nullptr || dynamic_cast<SnakeNode*>(collisionObject) != nullptr)
 		{
 			isGameOvered = true;
 			game->PlaySound(SoundType::OnLose);
 			game->SetLastSessionScore(scoreCount);
 			game->SwitchToState(GameState::Records);
-			break;
+			return false;
 		}
-		case CollisionResult::None:
+		else
 		{
-			break;
+			return true;
 		}
+	}
+	void PlayingState::GenerateApple()
+	{
+		if (map.GetEmptyCellCount() > 1)
+		{
+			currentApple = appleFactory.get()->GenerateNewApple(&map);
+			map.EmplaceMapObject(currentApple);
+			if (std::dynamic_pointer_cast<GoldenApple>(currentApple))
+			{
+				timeTillGoldenAppleDisapear = Settings::GetSettings()->goldenAppleLifeTime;
+			}
 		}
-		return collitionResult;
 	}
 }
