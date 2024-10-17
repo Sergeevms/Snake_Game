@@ -31,7 +31,7 @@ namespace SnakeGame
 		
 		UpdateDifficulty(3);
 
-		spesialAppleSpawnChance = 75;
+		specialAppleSpawnChance = 75;
 		disorientAppleOn = true;
 		goldenAppleOn = true;
 		poisionedAppleOn = true;
@@ -48,6 +48,9 @@ namespace SnakeGame
 
 		musicOn = true;
 		soundOn = true;
+
+		randomWallsOn = true;
+		randomWallCoefficient = 0.15f;
 
 		keyMap[sf::Keyboard::W] = ActionsTypesOnInput::Up;
 		keyMap[sf::Keyboard::D] = ActionsTypesOnInput::Right;
@@ -103,7 +106,7 @@ namespace SnakeGame
 
 	sf::Vector2f Settings::ScreenCenter()
 	{
-		return sf::Vector2f(multiplyVectorByScalar(ScreenSize(), 0.5f));
+		return ScreenSize() * 0.5f;
 	}
 
 	sf::Vector2f Settings::ScreenSize()

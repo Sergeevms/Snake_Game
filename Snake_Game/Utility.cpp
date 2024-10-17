@@ -17,11 +17,6 @@ namespace SnakeGame
         characterSize = newSize;
     }
 
-    sf::Vector2f multiplyVectorByScalar(sf::Vector2f const& vector, float scalar)
-    {
-        return sf::Vector2f(vector.x * scalar, vector.y * scalar);
-    }
-
     Direction SnakeGame::OpossiteDirection(Direction direction)
     {
         switch (direction)

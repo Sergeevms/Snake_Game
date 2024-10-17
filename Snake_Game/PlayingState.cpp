@@ -32,10 +32,15 @@ namespace SnakeGame
 
 		if (std::dynamic_pointer_cast<GoldenApple>(currentApple))
 		{
-			timeTillGoldenAppleDisapear = Settings::GetSettings()->goldenAppleLifeTime;
+			timeTillGoldenAppleDisapear = settings->goldenAppleLifeTime;
 		}
 
-		snake.LoadFromCharMap(map.GetcharMap(), map.GetLoadedSnakeHeadPosition());
+		snake.LoadFromCharMap(map.GetCharMap(), map.GetLoadedSnakeHeadPosition());
+
+		if (settings->randomWallsOn)
+		{
+			map.GenerateRandomWalls();
+		}
 
 #ifdef _DEBUG
 		assert(font.loadFromFile(settings->fontPath +  "Roboto-Regular.ttf"));

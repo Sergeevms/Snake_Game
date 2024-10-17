@@ -23,9 +23,14 @@ namespace SnakeGame
 		InitializeCheckBoxNode(settingsNode, L"«вук", settings->soundOn, 30.f, checkTexture, &selectedStyle, MenuNodeActivateReaction::SwitchOption, &(settings->soundOn));
 		InitializeCheckBoxNode(settingsNode, L"ћузыка", settings->musicOn, 30.f, checkTexture, &normalStyle, MenuNodeActivateReaction::SwitchOption,  &(settings->musicOn));
 
-		InitializeCheckBoxNode(settingsNode, L"«олотое €блоко", settings->goldenAppleOn, 30.f, checkTexture, &normalStyle, MenuNodeActivateReaction::SwitchOption, &(settings->goldenAppleOn));
-		InitializeCheckBoxNode(settingsNode, L"ќтравленное €блоко", settings->poisionedAppleOn, 30.f, checkTexture, &normalStyle, MenuNodeActivateReaction::SwitchOption, &(settings->poisionedAppleOn));
-		InitializeCheckBoxNode(settingsNode, L"ƒизориентирующее €блоко", settings->disorientAppleOn, 30.f, checkTexture, &normalStyle, MenuNodeActivateReaction::SwitchOption, &(settings->disorientAppleOn));
+		InitializeCheckBoxNode(settingsNode, L"«олотое €блоко", settings->goldenAppleOn, 30.f, checkTexture, &normalStyle,
+			MenuNodeActivateReaction::SwitchOption, &(settings->goldenAppleOn));
+		InitializeCheckBoxNode(settingsNode, L"ќтравленное €блоко", settings->poisionedAppleOn, 30.f, checkTexture, &normalStyle,
+			MenuNodeActivateReaction::SwitchOption, &(settings->poisionedAppleOn));
+		InitializeCheckBoxNode(settingsNode, L"ƒизориентирующее €блоко", settings->disorientAppleOn, 30.f, checkTexture, &normalStyle,
+			MenuNodeActivateReaction::SwitchOption, &(settings->disorientAppleOn));
+		InitializeCheckBoxNode(settingsNode, L"—лучайные стены", settings->randomWallsOn, 30.f, checkTexture, &normalStyle,
+			MenuNodeActivateReaction::SwitchOption, &(settings->randomWallsOn));
 
 		std::vector<std::wstring> difficultyNames{ L"ѕростой", L"“€желее простого", L"—редний", L"Ћегче т€желого", L"“€желый" };
 		for (int i = 0; i < settings->difficultyLevelCount; ++i)

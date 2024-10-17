@@ -27,10 +27,11 @@ namespace SnakeGame
 		const sf::Vector2i& GetLoadedSnakeHeadPosition() const;
 		const sf::Vector2i& GetLoadedApplePosition() const;
 		sf::Vector2i GetMapSize() const;
-		const std::vector<std::string>& GetcharMap() const;
+		const std::vector<std::string>& GetCharMap() const;
 		bool HaveEmptyCells() const;
 		/*Check that cell in borders of loaded map*/
 		bool ValidCell(const sf::Vector2i& cell) const;
+		void GenerateRandomWalls();
 	private:
 		std::vector <std::shared_ptr<MapObject>> map;
 		std::unordered_map<char, sf::Texture> spritesCharToTexture;

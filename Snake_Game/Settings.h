@@ -57,7 +57,8 @@ namespace SnakeGame
 	public:
 
 		//Special apples settings
-		int spesialAppleSpawnChance;
+		//Chance to spawn special apple instead of usual in percents
+		int specialAppleSpawnChance;
 		bool disorientAppleOn;
 		bool goldenAppleOn;
 		bool poisionedAppleOn;
@@ -71,6 +72,13 @@ namespace SnakeGame
 		sf::Color poisionedAppleColor;
 		sf::Color goldenAppleColor;
 		
+		//Special walls settings
+		//True if additional random walls will spawn
+		bool randomWallsOn;
+		//Coefficient of how much empty cells will be occupied with new walls
+		float randomWallCoefficient;
+
+
 		//Sound settings
 
 		bool musicOn;

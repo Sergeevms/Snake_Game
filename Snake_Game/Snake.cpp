@@ -16,9 +16,8 @@ namespace SnakeGame
 		if (isMoving)
 		{
 			const float movementDistance = deltaTime * Settings::GetSettings()->GetMovementSpeed() * speedModifire;
-			sf::Vector2f movement = multiplyVectorByScalar(directionVectors.at(currentDirection), movementDistance);
-			screenCoordinates.x += movement.x;
-			screenCoordinates.y += movement.y;
+			sf::Vector2f movement = directionVectorsF.at(currentDirection) * movementDistance;
+			screenCoordinates += movement;
 			sprite.setPosition(screenCoordinates.x, screenCoordinates.y);
 		}
 	}
@@ -103,8 +102,8 @@ namespace SnakeGame
 			timeTillNextCell = settings->GetTimeOnCell() / (timeTillPoisonedFall > settings->epsilon ? settings->poisonedSpeedModifire : 1.f);
 			nodes.back()->SetMovingEnabledState(true);
 			std::shared_ptr<SnakeNode> head = nodes.front();
-			sf::Vector2i cellToCheck{ head->GetCellPosition().x + static_cast<int>(directionVectors.at(newDirection).x),
-				head->GetCellPosition().y + static_cast<int>(directionVectors.at(newDirection).y) };
+			sf::Vector2i cellToCheck{ head->GetCellPosition().x + static_cast<int>(directionVectorsF.at(newDirection).x),
+				head->GetCellPosition().y + static_cast<int>(directionVectorsF.at(newDirection).y) };
 			if (playingState->CheckColition(cellToCheck))
 			{
 				Direction nextNodeDirection = newDirection;
@@ -114,8 +113,8 @@ namespace SnakeGame
 					sf::Vector2i currentCell = (*node)->GetCellPosition();
 					Direction currentDirection = (*node)->GetDirection();
 					(*node)->UpdateScreenPositionByCell();
-					(*node)->SetCellPositionIfMoving({ currentCell.x + static_cast<int>(directionVectors.at(nextNodeDirection).x),
-						currentCell.y + static_cast<int>(directionVectors.at(nextNodeDirection).y) });
+					(*node)->SetCellPositionIfMoving({ currentCell.x + static_cast<int>(directionVectorsF.at(nextNodeDirection).x),
+						currentCell.y + static_cast<int>(directionVectorsF.at(nextNodeDirection).y) });
 					(*node)->SetDirection(nextNodeDirection);
 					nextNodeDirection = currentDirection;
 					map->EmplaceMapObject((*node));
@@ -163,15 +162,15 @@ namespace SnakeGame
 			currentCell = nodes.back()->GetCellPosition();
 		}
 		Direction possibleDirection = ((++nodes.begin())->get())->GetDirection();
-		if (charMap[headPosition.y + static_cast<int>(directionVectors.at(possibleDirection).y)][headPosition.x + static_cast<int>(directionVectors.at(possibleDirection).x)] == 'E' ||
-			charMap[headPosition.y + static_cast<int>(directionVectors.at(possibleDirection).y)][headPosition.x + static_cast<int>(directionVectors.at(possibleDirection).x)] == 'A')
+		if (charMap[headPosition.y + static_cast<int>(directionVectorsF.at(possibleDirection).y)][headPosition.x + static_cast<int>(directionVectorsF.at(possibleDirection).x)] == 'E' ||
+			charMap[headPosition.y + static_cast<int>(directionVectorsF.at(possibleDirection).y)][headPosition.x + static_cast<int>(directionVectorsF.at(possibleDirection).x)] == 'A')
 		{
 			nodes.front()->SetDirection(possibleDirection);
 			newDirection = possibleDirection;
 		}
 		else
 		{
-			for (auto& curDir : directionVectors)
+			for (auto& curDir : directionVectorsF)
 			{
 				if (charMap[headPosition.y + static_cast<int>(curDir.second.y)][headPosition.x + static_cast<int>(curDir.second.x)] == 'E' ||
 					charMap[headPosition.y + static_cast<int>(curDir.second.y)][headPosition.x + static_cast<int>(curDir.second.x)] == 'A')
@@ -207,7 +206,7 @@ namespace SnakeGame
 
 	bool Snake::AddNextBodyFromMap(std::vector<std::vector<bool>>& addedCells, const std::vector<std::string>& charMap, const sf::Vector2i& currentCell)
 	{
-		for (auto& curDir : directionVectors)
+		for (auto& curDir : directionVectorsF)
 		{
 			sf::Vector2i checkingCell{ currentCell.x + static_cast<int>(curDir.second.x), currentCell.y + static_cast<int>(curDir.second.y) };
 

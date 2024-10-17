@@ -210,7 +210,7 @@
   <ItemGroup>
     <None Include="Resources\Levels\empty.lvl" />
     <None Include="Resources\Levels\level1.lvl" />
-    <None Include="micro.lvl" />
     <None Include="Resources\Levels\micro2.lvl" />
+    <None Include="Resources\Levels\micro.lvl" />
   </ItemGroup>
 </Project>

@@ -10,7 +10,7 @@ namespace SnakeGame
 		None, Left, Up, Rigth, Down
 	};
 
-	const std::unordered_map<Direction, sf::Vector2f> directionVectors
+	const static std::unordered_map<Direction, sf::Vector2f> directionVectorsF
 	{
 		{Direction::Up, {0.f, -1.f}},
 		{Direction::Down, {0.f, 1.f}},
@@ -18,7 +18,14 @@ namespace SnakeGame
 		{Direction::Rigth, {1.f, 0.f}}
 	};
 
-	sf::Vector2f multiplyVectorByScalar(sf::Vector2f const&, float);
+	const static std::unordered_map<Direction, sf::Vector2i> directionVectorsI
+	{
+		{Direction::Up, {0, -1}},
+		{Direction::Down, {0, 1}},
+		{Direction::Left, {-1, 0}},
+		{Direction::Rigth, {1, 0}}
+	};
+	
 	Direction OpossiteDirection(Direction);
 
 	enum class RelativePosition
@@ -26,7 +33,7 @@ namespace SnakeGame
 		TopLeft, TopMiddle, TopRight, MiddleLeft, Center, BottomLeft
 	};
 
-	const std::unordered_map<RelativePosition, sf::Vector2f> relativePositions
+	const static std::unordered_map<RelativePosition, sf::Vector2f> relativePositions
 	{
 		{RelativePosition::TopLeft, { 0.f, 0.f }},
 		{RelativePosition::TopMiddle, { 0.5f, 0.f }},
