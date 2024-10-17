@@ -204,6 +204,11 @@ namespace SnakeGame
 		timeTillNextCell = settings->GetTimeOnCell() / settings->poisonedSpeedModifire;
 	}
 
+	bool Snake::IsPoisioned() const
+	{
+		return timeTillPoisonedFall > Settings::GetSettings()->epsilon;
+	}
+
 	bool Snake::AddNextBodyFromMap(std::vector<std::vector<bool>>& addedCells, const std::vector<std::string>& charMap, const sf::Vector2i& currentCell)
 	{
 		for (auto& curDir : directionVectorsF)

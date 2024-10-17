@@ -37,6 +37,7 @@ namespace SnakeGame
 		void AddNewBody();
 		void GetDisoriented();
 		void GetPoisioned();
+		bool IsPoisioned() const;
 	private:
 		bool AddNextBodyFromMap(std::vector<std::vector<bool>>& addedCells, const std::vector<std::string>& charMap, const sf::Vector2i& currentCell);
 

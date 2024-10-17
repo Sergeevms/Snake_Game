@@ -137,7 +137,7 @@ namespace SnakeGame
 			GenerateApple();
 			scoreCount += static_cast<int>((dynamic_cast<GoldenApple*> (collisionObject) ? 
 				settings->goldenAppleScoreModifier : 1.f) * settings->difficultyToScore[settings->GetCurrentDifficulty()]);
-			keepSnakeMoveingTime = settings->GetTimeOnCell();
+			keepSnakeMoveingTime = settings->GetTimeOnCell() / (snake.IsPoisioned() ? settings->poisonedSpeedModifire : 1.f);
 			if (dynamic_cast<DisorientApple*>(collisionObject))
 			{
 				snake.GetDisoriented();
@@ -162,6 +162,7 @@ namespace SnakeGame
 			return true;
 		}
 	}
+
 	void PlayingState::GenerateApple()
 	{
 		if (map.GetEmptyCellCount() > 1)

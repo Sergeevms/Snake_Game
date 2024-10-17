@@ -173,8 +173,10 @@ namespace SnakeGame
 	void Map::GenerateRandomWalls()
 	{
 		std::vector<int> availableMovingDirectionsFromCells(map.size(), 4);
+		//Number of cells, adding wall to witch would'n block way throug nearby cells
 		int availiableToAddWallCells = map.size();
 
+		//Counting availiableToAddWallCells based on current map
 		for (auto& object : map)
 		{
 			if (std::dynamic_pointer_cast<Wall>(object))
@@ -202,10 +204,12 @@ namespace SnakeGame
 
 		int targetRandomWallsCount = Settings::GetSettings()->randomWallCoefficient * availiableToAddWallCells;
 
+		//Adding walls while target count is reached or availiable cells are gone
 		while (targetRandomWallsCount > 0 && availiableToAddWallCells > 0)
 		{
 			sf::Vector2i newWallCell = GetRandomEmptyCell();
-			bool goodCell = availableMovingDirectionsFromCells[CellToMapIndex(newWallCell)] > 2;
+			bool goodCell = availableMovingDirectionsFromCells[CellToMapIndex(newWallCell)] > 0;
+			//check that emplacing a wall wouldn't block nearby cells
 			for (auto& directionVector : directionVectorsI)
 			{
 				sf::Vector2i nearCell = directionVector.second + newWallCell;
@@ -218,6 +222,7 @@ namespace SnakeGame
 					goodCell = goodCell && false;
 				}
 			}
+			//add wall is cell is acceptable; mark as unacceptable and decrease availiableToAddWallCells otherwise
 			if (goodCell)
 			{
 				--availiableToAddWallCells;
@@ -240,6 +245,7 @@ namespace SnakeGame
 			else
 			{
 				--availiableToAddWallCells;
+				availableMovingDirectionsFromCells[CellToMapIndex(newWallCell)] = 0;
 			}
 		}
 	}
