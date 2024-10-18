@@ -6,8 +6,8 @@
 namespace SnakeGame
 {
 	enum class Direction;
-	enum class MapObjectType;
 	class MapObject;
+	class TemporaryWall;
 
 	class Map
 	{
@@ -34,16 +34,16 @@ namespace SnakeGame
 		void GenerateRandomWalls();
 	private:
 		std::vector <std::shared_ptr<MapObject>> map;
-		std::unordered_map<char, sf::Texture> spritesCharToTexture;
 		std::vector <std::string> charMap;
 		sf::Vector2i loadedSnakeHeadPosition{ -1, -1 };
 		sf::Vector2i loadedApplePosition{ -1, -1 };
+		sf::Texture wallTexture;
 		int CellToMapIndex(const sf::Vector2i& cell) const;
 		int width{ 0 };
 		int height{ 0 };
 		int emptyCellCount{ 0 };
-
-		void addSpriteTexture(const char type, const std::string fileName);
+		float temporaryWallsTimer{ 0.f };
+		std::vector <std::shared_ptr<TemporaryWall>> temporaryWalls;
 		Direction getWallDirection(const sf::Vector2i & cell) const;
 	};
 }

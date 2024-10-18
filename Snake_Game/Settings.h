@@ -26,10 +26,9 @@ namespace SnakeGame
 
 		int screenWidth;
 		int screenHeight;
-		int tileSize;
+		float tileSize;
 		std::wstring gameName;
 		std::wstring defaultPlayerName;
-		float epsilon;
 		float popUpSpacing;
 		float popUpBorder;
 		float movingDelayOnStart;
@@ -75,8 +74,13 @@ namespace SnakeGame
 		//Special walls settings
 		//True if additional random walls will spawn
 		bool randomWallsOn;
+		//True if showing only levels with temporary walls
+		bool temporaryWallsOn;
 		//Coefficient of how much empty cells will be occupied with new walls
 		float randomWallCoefficient;
+		float temporaryWallLifeTime;
+		
+		float temporaryWallFadingTime;
 
 
 		//Sound settings

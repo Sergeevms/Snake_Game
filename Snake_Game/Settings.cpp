@@ -12,9 +12,8 @@ namespace SnakeGame
 		screenHeight = 600;
 		gameName = L"Змейка";
 		defaultPlayerName = L"XYZ";
-		epsilon = 1e-7f;
 		defaultSnakeSize = 4;
-		selectedLevel = "level1.lvl";
+		selectedLevel = "TemporaryWall.lvlt";
 		tileSize = 30;
 		baseTimeOnCell = 0.75f;
 		difficultyLevelCount = 5;		
@@ -29,7 +28,7 @@ namespace SnakeGame
 			difficultyToScore[i] = scoreOnDifficultyStep * (i + 1);
 		}
 		
-		UpdateDifficulty(3);
+		UpdateDifficulty(2);
 
 		specialAppleSpawnChance = 75;
 		disorientAppleOn = true;
@@ -51,6 +50,9 @@ namespace SnakeGame
 
 		randomWallsOn = true;
 		randomWallCoefficient = 0.15f;
+
+		temporaryWallsOn = true;
+		temporaryWallLifeTime = 8.f;
 
 		keyMap[sf::Keyboard::W] = ActionsTypesOnInput::Up;
 		keyMap[sf::Keyboard::D] = ActionsTypesOnInput::Right;
@@ -86,7 +88,7 @@ namespace SnakeGame
 	{
 		currentDifficulty = newDiffculty;
 		timeOnCell = difficultyToTimeOnCell[currentDifficulty];
-		movementSpeed = static_cast<float>(tileSize) / timeOnCell;
+		movementSpeed = tileSize / timeOnCell;
 	}
 
 	int Settings::GetCurrentDifficulty() const

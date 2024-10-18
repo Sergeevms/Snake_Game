@@ -53,6 +53,14 @@ namespace SnakeGame
 		Min, Middle, Max
 	};
 
+	const static std::unordered_map<Direction, float> directionToRotation
+	{
+		{Direction::Up, 0.f},
+		{Direction::Rigth, 90.f},
+		{Direction::Down, 180.f},
+		{Direction::Left, 270.f}
+	};
+
 	struct TextStyle
 	{
 		sf::Font font;

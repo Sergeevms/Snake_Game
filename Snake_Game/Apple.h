@@ -18,7 +18,6 @@ namespace SnakeGame
     {
     public:
         Apple(sf::Vector2i const& mapCell, sf::Texture const& texture) : MapObject{ mapCell, texture } {};
-        virtual MapObjectType GetObjectType() const override { return MapObjectType::Apple; };
     };
 
     class AppleFactory

@@ -59,23 +59,22 @@ namespace SnakeGame
 
 		Game::GetGame()->SwitchMusicPlaying(true);
 
-		keepSnakeMoveingTime = 0.f;
+		keepSnakeMovingTime = 0.f;
 	}
 
 	void PlayingState::Draw(sf::RenderWindow& window) const
 	{
 		map.Draw(window);
-		snake.Draw(window);
 		window.draw(scoreText);
 	}
 
 	void PlayingState::Update(const float deltaTime)
 	{
-		keepSnakeMoveingTime -= deltaTime;
+		keepSnakeMovingTime -= deltaTime;
 		Settings* settings = Settings::GetSettings();
 		if (isGameOvered)
 		{
-			if (keepSnakeMoveingTime > settings->epsilon)
+			if (keepSnakeMovingTime > 0.f)
 			{
 				snake.Update(deltaTime);
 			}
@@ -83,12 +82,12 @@ namespace SnakeGame
 		else
 		{
 			Game* game = Game::GetGame();
-			if (delayBeforeMoving <= settings->epsilon)
+			if (delayBeforeMoving <= 0.f)
 			{
 				if (std::dynamic_pointer_cast<GoldenApple>(currentApple))
 				{
 					timeTillGoldenAppleDisapear -= deltaTime;
-					if (timeTillGoldenAppleDisapear < settings->epsilon)
+					if (timeTillGoldenAppleDisapear <= 0.f)
 					{
 						map.RemoveMapObject(currentApple);
 						GenerateApple();
@@ -137,7 +136,7 @@ namespace SnakeGame
 			GenerateApple();
 			scoreCount += static_cast<int>((dynamic_cast<GoldenApple*> (collisionObject) ? 
 				settings->goldenAppleScoreModifier : 1.f) * settings->difficultyToScore[settings->GetCurrentDifficulty()]);
-			keepSnakeMoveingTime = settings->GetTimeOnCell() / (snake.IsPoisioned() ? settings->poisonedSpeedModifire : 1.f);
+			keepSnakeMovingTime = settings->GetTimeOnCell() / (snake.IsPoisioned() ? settings->poisonedSpeedModifire : 1.f);
 			if (dynamic_cast<DisorientApple*>(collisionObject))
 			{
 				snake.GetDisoriented();
@@ -149,7 +148,7 @@ namespace SnakeGame
 			map.RemoveMapObject(cell);
 			return true;
 		}
-		else if (dynamic_cast<Wall*>(collisionObject) != nullptr || dynamic_cast<SnakeNode*>(collisionObject) != nullptr)
+		else if (IsCollisionOveringGame(collisionObject))
 		{
 			isGameOvered = true;
 			game->PlaySound(SoundType::OnLose);

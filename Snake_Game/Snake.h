@@ -16,7 +16,6 @@ namespace SnakeGame
 		void UpdateScreenPositionByCell();
 		void SetMovingEnabledState(bool isEnabled);
 		Direction GetDirection() const;
-		virtual MapObjectType GetObjectType() const override { return MapObjectType::Snake; };
 	private:
 		Direction currentDirection;
 		bool isMoving;		
@@ -32,7 +31,6 @@ namespace SnakeGame
 		Snake(PlayingState* currentState, Map* currentMap);
 		void Update(const float deltaTime);
 		void SetNewDirection(Direction direction);
-		void Draw(sf::RenderWindow& window) const;
 		void LoadFromCharMap(const std::vector<std::string>& charMap, const sf::Vector2i& headPosition);
 		void AddNewBody();
 		void GetDisoriented();
