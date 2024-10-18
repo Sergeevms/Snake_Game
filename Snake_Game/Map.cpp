@@ -90,13 +90,17 @@ namespace SnakeGame
 
 	void Map::Draw(sf::RenderWindow& window) const
 	{
+		for (auto& wall : temporaryWalls)
+		{
+			wall->Draw(window);
+		}
 		for (auto& object : map)
 		{
 			if (object)
 			{
 				object->Draw(window);
 			}
-		}
+		}			
 	}
 
 	void Map::EmplaceMapObject(std::shared_ptr<MapObject> object)
@@ -252,6 +256,36 @@ namespace SnakeGame
 			{
 				--availiableToAddWallCells;
 				availableMovingDirectionsFromCells[CellToMapIndex(newWallCell)] = 0;
+			}
+		}
+	}
+
+	void Map::SetTemporaryWallsOpacity(const int opacity)
+	{
+		for (auto& wall : temporaryWalls)
+		{
+			wall->setOpacity(opacity);
+		}
+	}
+
+	void Map::EmplaceTemporaryWalls()
+	{
+		for (auto& wall : temporaryWalls)
+		{
+			if (GetObject(wall->GetCellPosition()) == nullptr)
+			{
+				EmplaceMapObject(wall);
+			}
+		}
+	}
+
+	void Map::RemoveTemporaryWalls()
+	{
+		for (auto& wall : temporaryWalls)
+		{
+			if (GetObject(wall->GetCellPosition()) == wall.get())
+			{
+				RemoveMapObject(wall);
 			}
 		}
 	}

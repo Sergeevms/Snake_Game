@@ -32,6 +32,9 @@ namespace SnakeGame
 		/*Check that cell in borders of loaded map*/
 		bool ValidCell(const sf::Vector2i& cell) const;
 		void GenerateRandomWalls();
+		void SetTemporaryWallsOpacity(const int opacity);
+		void EmplaceTemporaryWalls();
+		void RemoveTemporaryWalls();
 	private:
 		std::vector <std::shared_ptr<MapObject>> map;
 		std::vector <std::string> charMap;
@@ -42,7 +45,6 @@ namespace SnakeGame
 		int width{ 0 };
 		int height{ 0 };
 		int emptyCellCount{ 0 };
-		float temporaryWallsTimer{ 0.f };
 		std::vector <std::shared_ptr<TemporaryWall>> temporaryWalls;
 		Direction getWallDirection(const sf::Vector2i & cell) const;
 	};

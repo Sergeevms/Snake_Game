@@ -52,7 +52,9 @@ namespace SnakeGame
 		randomWallCoefficient = 0.15f;
 
 		temporaryWallsOn = true;
-		temporaryWallLifeTime = 8.f;
+		temporaryWallLifeTime = 10.f;
+		temporaryWallFadingTime = 2.f;
+		fadingBorderValue = 180;
 
 		keyMap[sf::Keyboard::W] = ActionsTypesOnInput::Up;
 		keyMap[sf::Keyboard::D] = ActionsTypesOnInput::Right;

@@ -42,6 +42,12 @@ namespace SnakeGame
 			map.GenerateRandomWalls();
 		}
 
+		if (settings->temporaryWallsOn)
+		{
+			temporaryWallsPlaced = true;
+			temporaryWallsTimer = settings->temporaryWallLifeTime;
+		}
+
 #ifdef _DEBUG
 		assert(font.loadFromFile(settings->fontPath +  "Roboto-Regular.ttf"));
 #elif
@@ -94,6 +100,37 @@ namespace SnakeGame
 					}
 				}
 				snake.Update(deltaTime);
+
+				if (settings->temporaryWallsOn)
+				{
+					temporaryWallsTimer -= deltaTime;
+					if (temporaryWallsTimer <= 0.f)
+					{						
+						if (temporaryWallsPlaced)
+						{
+							map.SetTemporaryWallsOpacity(0);
+							temporaryWallsPlaced = false;
+							map.RemoveTemporaryWalls();
+						}
+						else
+						{
+							map.SetTemporaryWallsOpacity(255);
+							temporaryWallsPlaced = true;
+							map.EmplaceTemporaryWalls();
+						}
+						temporaryWallsTimer = settings->temporaryWallLifeTime;
+					}
+					else
+					{
+						if (temporaryWallsTimer <= settings->temporaryWallFadingTime)
+						{
+							float currentPart = (settings->temporaryWallFadingTime - temporaryWallsTimer) / settings->temporaryWallFadingTime;
+							int opacity = static_cast<int>(temporaryWallsPlaced ? 255 - currentPart * settings->fadingBorderValue :	0 + currentPart * settings->fadingBorderValue);
+							map.SetTemporaryWallsOpacity(opacity);
+						}
+					}					
+				}
+
 				if (!sessionStarted)
 				{
 					sessionStarted = true;

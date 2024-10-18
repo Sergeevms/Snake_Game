@@ -17,7 +17,7 @@ namespace SnakeGame
     class Apple : public MapObject
     {
     public:
-        Apple(sf::Vector2i const& mapCell, sf::Texture const& texture) : MapObject{ mapCell, texture } {};
+        Apple(sf::Vector2i const& mapCell, sf::Texture const& texture) : MapObject(mapCell, texture) {};
     };
 
     class AppleFactory

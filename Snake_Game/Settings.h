@@ -79,7 +79,7 @@ namespace SnakeGame
 		//Coefficient of how much empty cells will be occupied with new walls
 		float randomWallCoefficient;
 		float temporaryWallLifeTime;
-		
+		int fadingBorderValue;
 		float temporaryWallFadingTime;
 
 

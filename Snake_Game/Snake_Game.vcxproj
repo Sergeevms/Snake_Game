@@ -203,6 +203,7 @@
     <None Include="Resources\Levels\micro.lvl" />
     <None Include="Resources\Levels\micro2.lvl" />
     <None Include="Resources\Levels\TemporaryWall.lvlt" />
+    <None Include="Resources\Levels\TemporaryWallSmaller.lvlt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

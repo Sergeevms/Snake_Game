@@ -26,6 +26,8 @@ namespace SnakeGame
         float delayBeforeMoving;
         float keepSnakeMovingTime;
         float timeTillGoldenAppleDisapear{ 0 };
+        float temporaryWallsTimer{ 0.f };
+        bool temporaryWallsPlaced{ false };
         void GenerateApple();
         Map map;
         Snake snake;
