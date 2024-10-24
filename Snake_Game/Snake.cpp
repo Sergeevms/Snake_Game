@@ -106,10 +106,10 @@ namespace SnakeGame
 			timeTillNextCell = settings->GetTimeOnCell() / (timeTillPoisonedFall > 0.f ? settings->poisonedSpeedModifire : 1.f);
 			nodes.back()->SetMovingEnabledState(true);
 			std::shared_ptr<SnakeNode> head = nodes.front();
-			sf::Vector2i cellToCheck = head->GetCellPosition() + directionVectorsI.at(newDirection);
+			Direction nextNodeDirection = newDirection;
+			sf::Vector2i cellToCheck = head->GetCellPosition() + directionVectorsI.at(nextNodeDirection);
 			if (playingState->CheckColition(cellToCheck))
-			{
-				Direction nextNodeDirection = newDirection;
+			{				
 				for (auto node = nodes.begin(); node != nodes.end(); ++node)
 				{
 					map->RemoveMapObject((*node));

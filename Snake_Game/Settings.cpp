@@ -38,7 +38,7 @@ namespace SnakeGame
 		
 		UpdateDifficulty(2);
 
-		specialAppleSpawnChance = 75;
+		specialAppleSpawnChance = 30;
 		disorientAppleOn = false;
 		goldenAppleOn = false;
 		poisionedAppleOn = false;

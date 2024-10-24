@@ -14,7 +14,7 @@ namespace SnakeGame
 	public:
 		Map();
 		//Loading map discription from file setted in Settings::selectedLevel
-		void LoadFromFile(const std::string& fileName);
+		void LoadFromFile(const std::wstring& fileName);
 		//Creates level based on loaded discription
 		void CreateSavedLvl();
 		void Draw(sf::RenderWindow& window) const;
@@ -45,6 +45,7 @@ namespace SnakeGame
 		sf::Vector2i loadedSnakeHeadPosition{ -1, -1 };
 		sf::Vector2i loadedApplePosition{ -1, -1 };
 		sf::Texture wallTexture;
+		bool temporaryWallsEmplaced{ true };
 		int CellToMapIndex(const sf::Vector2i& cell) const;
 		int width{ 0 };
 		int height{ 0 };

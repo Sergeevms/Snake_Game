@@ -9,6 +9,7 @@ namespace SnakeGame
 	enum class RelativePosition;
 	struct TextStyle;
 
+	//Interface for classes that can be used in DrawList function
 	class IListDrawable
 	{
 	public:
@@ -16,9 +17,9 @@ namespace SnakeGame
 		virtual void Draw(sf::RenderWindow&, const sf::Vector2f&, const Orientation, const Alignment) = 0;
 	};
 
-	sf::FloatRect GetListRect(const std::vector<IListDrawable*> itemList, const sf::Vector2f position, const RelativePosition origin,
+		sf::FloatRect GetListRect(const std::vector<IListDrawable*> itemList, const sf::Vector2f position, const RelativePosition origin,
 		const Orientation orientation, const Alignment alignment, const float spacing);
-
+		
 	void DrawList(sf::RenderWindow& window, const std::vector<IListDrawable*> itemList, const sf::Vector2f position,
 		const RelativePosition origin, const Orientation orientation, const Alignment alignment, const float spacing);
 

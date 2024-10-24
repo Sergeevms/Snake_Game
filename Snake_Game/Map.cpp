@@ -89,10 +89,13 @@ namespace SnakeGame
 	}
 
 	void Map::Draw(sf::RenderWindow& window) const
-	{
-		for (auto& wall : temporaryWalls)
+	{		
+		if (temporaryWallsEmplaced == false)
 		{
-			wall->Draw(window);
+			for (auto& wall : temporaryWalls)
+			{
+				wall->Draw(window);
+			}
 		}
 		for (auto& object : map)
 		{
@@ -270,6 +273,7 @@ namespace SnakeGame
 
 	void Map::EmplaceTemporaryWalls()
 	{
+		temporaryWallsEmplaced = true;
 		for (auto& wall : temporaryWalls)
 		{
 			if (GetObject(wall->GetCellPosition()) == nullptr)
@@ -281,6 +285,7 @@ namespace SnakeGame
 
 	void Map::RemoveTemporaryWalls()
 	{
+		temporaryWallsEmplaced = false;
 		for (auto& wall : temporaryWalls)
 		{
 			if (GetObject(wall->GetCellPosition()) == wall.get())

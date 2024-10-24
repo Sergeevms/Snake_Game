@@ -19,5 +19,6 @@ namespace SnakeGame
 		sf::Sprite sprite;
 	};
 
+	//returns true if object colliding leading to game over, false otherwise
 	bool IsCollisionOveringGame(MapObject*);
 }

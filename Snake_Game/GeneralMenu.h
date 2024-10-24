@@ -16,7 +16,7 @@ namespace SnakeGame
 		Exit,
 		MainMenu,
 		EnterName,
-		SkipName,
+		SkipName
 	};
 
 	struct MenuStyle
