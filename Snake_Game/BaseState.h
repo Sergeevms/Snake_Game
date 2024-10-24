@@ -5,6 +5,7 @@
 
 namespace SnakeGame
 {
+	//Game state types
 	enum class GameState
 	{
 		None,
@@ -14,6 +15,7 @@ namespace SnakeGame
 		Pause
 	};
 
+	//Base game state class
 	class BaseState
 	{
 	public:

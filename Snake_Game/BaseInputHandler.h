@@ -6,6 +6,7 @@
 
 namespace SnakeGame
 {
+	//Enum for action type to connect it to input key
 	enum class ActionsTypesOnInput
 	{
 		Up,
@@ -23,6 +24,11 @@ namespace SnakeGame
 	class BaseInputHandler;
 	typedef std::function<void(BaseInputHandler*)> HandlerAction;
 
+	/* Base class for input handler
+	* Have default implementation for events
+	* based on mapping ActionsTypesOnInput -> HandlerAction
+	* each derrived class filling actionMapping for it's own purpose
+	*/
 	class BaseInputHandler
 	{
 	public:

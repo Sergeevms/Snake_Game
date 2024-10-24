@@ -35,7 +35,7 @@ namespace SnakeGame
 			timeTillGoldenAppleDisapear = Settings::GetSettings()->goldenAppleLifeTime;
 		}
 
-		snake.LoadFromCharMap(map.GetcharMap(), map.GetLoadedSnakeHeadPosition());
+		snake.LoadFromCharMap(map.GetCharMap(), map.GetLoadedSnakeHeadPosition());
 
 #ifdef _DEBUG
 		assert(font.loadFromFile(settings->fontPath +  "Roboto-Regular.ttf"));
@@ -54,7 +54,7 @@ namespace SnakeGame
 
 		Game::GetGame()->SwitchMusicPlaying(true);
 
-		keepSnakeMoveingTime = 0.f;
+		keepSnakeMovingTime = 0.f;
 	}
 
 	void PlayingState::Draw(sf::RenderWindow& window) const
@@ -66,18 +66,19 @@ namespace SnakeGame
 
 	void PlayingState::Update(const float deltaTime)
 	{
-		keepSnakeMoveingTime -= deltaTime;
+		keepSnakeMovingTime -= deltaTime;
 		Settings* settings = Settings::GetSettings();
+		Game* game = Game::GetGame();
 		if (isGameOvered)
 		{
-			if (keepSnakeMoveingTime > settings->epsilon)
+			game->SwitchMusicPlaying(false);
+			if (keepSnakeMovingTime > settings->epsilon)
 			{
 				snake.Update(deltaTime);
 			}
 		}
 		else
 		{
-			Game* game = Game::GetGame();
 			if (delayBeforeMoving <= settings->epsilon)
 			{
 				if (std::dynamic_pointer_cast<GoldenApple>(currentApple))
@@ -132,7 +133,7 @@ namespace SnakeGame
 			GenerateApple();
 			scoreCount += static_cast<int>((dynamic_cast<GoldenApple*> (collisionObject) ? 
 				settings->goldenAppleScoreModifier : 1.f) * settings->difficultyToScore[settings->GetCurrentDifficulty()]);
-			keepSnakeMoveingTime = settings->GetTimeOnCell();
+			keepSnakeMovingTime = settings->GetTimeOnCell();
 			if (dynamic_cast<DisorientApple*>(collisionObject))
 			{
 				snake.GetDisoriented();

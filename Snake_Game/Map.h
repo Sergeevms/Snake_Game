@@ -13,21 +13,25 @@ namespace SnakeGame
 	{
 	public:
 		Map();
+		//Loading map discription from file setted in Settings::selectedLevel
 		void LoadFromFile(const std::string& fileName);
+		//Creates level based on loaded discription
 		void CreateSavedLvl();
 		void Draw(sf::RenderWindow& window) const;
 		void EmplaceMapObject(std::shared_ptr <MapObject> object);
-		/*Returns count of cells which colide result woudn't results in Game over*/
+		//Returns count of cells which colide result woudn't results in Game over
 		int GetEmptyCellCount() const;
 		void RemoveMapObject(std::shared_ptr<MapObject> object);
 		void RemoveMapObject(const sf::Vector2i& cell);
 		MapObject* GetObject(const sf::Vector2i& cell);
 		/*Returns coordinates of non-occupied cell*/
 		sf::Vector2i GetRandomEmptyCell() const;
+		//Returns cell coordinate of snake head in loaded map sicription, {-1, -1} otherwise
 		const sf::Vector2i& GetLoadedSnakeHeadPosition() const;
+		//Returns cell coordinate of apple in loaded map sicription, {-1, -1} otherwise
 		const sf::Vector2i& GetLoadedApplePosition() const;
 		sf::Vector2i GetMapSize() const;
-		const std::vector<std::string>& GetcharMap() const;
+		const std::vector<std::string>& GetCharMap() const;
 		bool HaveEmptyCells() const;
 		/*Check that cell in borders of loaded map*/
 		bool ValidCell(const sf::Vector2i& cell) const;

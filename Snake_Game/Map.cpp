@@ -74,7 +74,7 @@ namespace SnakeGame
 				}
 				
 				map.emplace_back(currentObject);
-				if (currentObject && collitionResults.at(currentObject->GetObjectType()) == CollisionResult::GameOver)
+				if (std::dynamic_pointer_cast<Wall>(currentObject) != nullptr || std::dynamic_pointer_cast<SnakeNode>(currentObject) != nullptr)
 				{
 					--emptyCellCount;
 				}
@@ -86,7 +86,7 @@ namespace SnakeGame
 	{
 		for (auto& object : map)
 		{
-			if (object && object->GetObjectType() != MapObjectType::Snake)
+			if (object && !(std::dynamic_pointer_cast<SnakeNode>(object)))
 			{
 				object->Draw(window);
 			}
@@ -155,7 +155,7 @@ namespace SnakeGame
 		return sf::Vector2i{ width, height };
 	}
 
-	const std::vector<std::string>& Map::GetcharMap() const
+	const std::vector<std::string>& Map::GetCharMap() const
 	{
 		return charMap;
 	}

@@ -31,6 +31,7 @@ namespace SnakeGame
 
 	class RecordsStateNameMenu;
 
+	//Pop-up window on asking to enter name or keep default
 	class RecordsStateEnterNameDialog : public NotPlayingWindow
 	{
 	public:
@@ -44,6 +45,7 @@ namespace SnakeGame
 
 	struct TextStyle;
 
+	//Pop-up window on entering name
 	class NameEnteringWindow : public NotPlayingWindow
 	{
 	public:
@@ -58,6 +60,7 @@ namespace SnakeGame
 		TextStyle textStyle;
 	};
 
+	//Pop-up window showing short recrod list and asking on restarting or showing main window
 	class RecordStateMenuWindow : public NotPlayingWindow
 	{
 	public:
@@ -76,6 +79,7 @@ namespace SnakeGame
 
 	class RecordsStateMenu;
 
+	//Window showing on calling recor table from main menu
 	class RecordStateGameWindow : public NotPlayingWindow
 	{
 	public:

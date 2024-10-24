@@ -5,6 +5,9 @@ namespace SnakeGame
     class GeneralMenu;
     enum class MenuNodeActivateReaction;
 
+    /*Extended BasedInputHandler with tipical actions for menu states.
+    * Added map for reacting on menu nodes that needs some actions
+    */
     class BaseMenuInputHandler : public BaseInputHandler
     {
     public:
