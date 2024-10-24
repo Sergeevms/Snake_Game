@@ -32,14 +32,32 @@ namespace SnakeGame
 
 		if (std::dynamic_pointer_cast<GoldenApple>(currentApple))
 		{
-			timeTillGoldenAppleDisapear = Settings::GetSettings()->goldenAppleLifeTime;
+			timeTillGoldenAppleDisapear = settings->goldenAppleLifeTime;
 		}
 
-		snake.LoadFromCharMap(map.GetCharMap(), map.GetLoadedSnakeHeadPosition());
+		if (map.ValidCell(map.GetLoadedSnakeHeadPosition()))
+		{
+			snake.LoadFromCharMap(map.GetCharMap(), map.GetLoadedSnakeHeadPosition());
+		}
+		else
+		{
+			snake.GenerateSnake(&map);
+		}
+
+		if (settings->randomWallsOn)
+		{
+			map.GenerateRandomWalls();
+		}
+
+		if (settings->temporaryWallsOn)
+		{
+			temporaryWallsPlaced = true;
+			temporaryWallsTimer = settings->temporaryWallLifeTime;
+		}
 
 #ifdef _DEBUG
 		assert(font.loadFromFile(settings->fontPath +  "Roboto-Regular.ttf"));
-#elif
+#else
 		font.loadFromFile(settings->fontPath + "Roboto-Regular.ttf");
 #endif // DEBUG
 
@@ -60,7 +78,6 @@ namespace SnakeGame
 	void PlayingState::Draw(sf::RenderWindow& window) const
 	{
 		map.Draw(window);
-		snake.Draw(window);
 		window.draw(scoreText);
 	}
 
@@ -71,26 +88,58 @@ namespace SnakeGame
 		Game* game = Game::GetGame();
 		if (isGameOvered)
 		{
-			game->SwitchMusicPlaying(false);
-			if (keepSnakeMovingTime > settings->epsilon)
+			Game::GetGame()->SwitchMusicPlaying(false);
+			if (keepSnakeMovingTime > 0.f)
 			{
 				snake.Update(deltaTime);
 			}
 		}
 		else
 		{
-			if (delayBeforeMoving <= settings->epsilon)
+			Game* game = Game::GetGame();
+			if (delayBeforeMoving <= 0.f)
 			{
 				if (std::dynamic_pointer_cast<GoldenApple>(currentApple))
 				{
 					timeTillGoldenAppleDisapear -= deltaTime;
-					if (timeTillGoldenAppleDisapear < settings->epsilon)
+					if (timeTillGoldenAppleDisapear <= 0.f)
 					{
 						map.RemoveMapObject(currentApple);
 						GenerateApple();
 					}
 				}
 				snake.Update(deltaTime);
+
+				if (settings->temporaryWallsOn)
+				{
+					temporaryWallsTimer -= deltaTime;
+					if (temporaryWallsTimer <= 0.f)
+					{						
+						if (temporaryWallsPlaced)
+						{
+							map.SetTemporaryWallsOpacity(0);
+							temporaryWallsPlaced = false;
+							map.RemoveTemporaryWalls();
+						}
+						else
+						{
+							map.SetTemporaryWallsOpacity(255);
+							temporaryWallsPlaced = true;
+							map.EmplaceTemporaryWalls();
+						}
+						temporaryWallsTimer = settings->temporaryWallLifeTime;
+					}
+					else
+					{
+						if (temporaryWallsTimer <= settings->temporaryWallFadingTime)
+						{
+							float currentPart = (settings->temporaryWallFadingTime - temporaryWallsTimer) / settings->temporaryWallFadingTime;
+							int opacity = static_cast<int>(temporaryWallsPlaced ? 255 - currentPart * settings->fadingBorderValue :	0 + currentPart * settings->fadingBorderValue);
+							map.SetTemporaryWallsOpacity(opacity);
+						}
+					}					
+				}
+
 				if (!sessionStarted)
 				{
 					sessionStarted = true;
@@ -133,7 +182,7 @@ namespace SnakeGame
 			GenerateApple();
 			scoreCount += static_cast<int>((dynamic_cast<GoldenApple*> (collisionObject) ? 
 				settings->goldenAppleScoreModifier : 1.f) * settings->difficultyToScore[settings->GetCurrentDifficulty()]);
-			keepSnakeMovingTime = settings->GetTimeOnCell();
+			keepSnakeMovingTime = settings->GetTimeOnCell() / (snake.IsPoisioned() ? settings->poisonedSpeedModifire : 1.f);
 			if (dynamic_cast<DisorientApple*>(collisionObject))
 			{
 				snake.GetDisoriented();
@@ -145,7 +194,7 @@ namespace SnakeGame
 			map.RemoveMapObject(cell);
 			return true;
 		}
-		else if (dynamic_cast<Wall*>(collisionObject) != nullptr || dynamic_cast<SnakeNode*>(collisionObject) != nullptr)
+		else if (IsCollisionOveringGame(collisionObject))
 		{
 			isGameOvered = true;
 			game->PlaySound(SoundType::OnLose);
@@ -158,6 +207,7 @@ namespace SnakeGame
 			return true;
 		}
 	}
+
 	void PlayingState::GenerateApple()
 	{
 		if (map.GetEmptyCellCount() > 1)

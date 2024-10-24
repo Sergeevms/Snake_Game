@@ -27,6 +27,8 @@ namespace SnakeGame
         //Time to finish moving after eating apple
         float keepSnakeMovingTime;
         float timeTillGoldenAppleDisapear{ 0 };
+        float temporaryWallsTimer{ 0.f };
+        bool temporaryWallsPlaced{ false };
         void GenerateApple();
         Map map;
         Snake snake;

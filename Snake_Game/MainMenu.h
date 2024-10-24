@@ -5,6 +5,7 @@
 namespace SnakeGame
 {
 	class CheckBoxMenuNode;
+	class LevelSelectMenuNode;
 
 	class MainMenu : public GeneralMenu
 	{
@@ -13,11 +14,14 @@ namespace SnakeGame
 		virtual ~MainMenu() = default;
 		void SwitchChecked();
 		int GetSelectedDifficulty();
+		void SwitchLevelMode();
 	private:
 		CheckBoxMenuNode* InitializeCheckBoxNode(MenuNode* parent, const std::wstring& newName, bool checked, float spacing, const sf::Texture& checkTexture,
 			TextStyle* nodeStyle = nullptr, MenuNodeActivateReaction reaction = MenuNodeActivateReaction::None, bool* correspondingOption = nullptr, MenuStyle* newSubMenuStyle = nullptr);
 		std::unordered_map<MenuNode*, int> nodeToDifficultyLevel;
 		std::unordered_map<MenuNode*, bool*> nodeToCorrespodingOption;
+		MenuNode* levelSelectionNode;
+		CheckBoxMenuNode* levelModeNodeOption;
 		sf::Texture checkTexture;
 	};
 
@@ -43,6 +47,7 @@ namespace SnakeGame
 		CheckBoxMenuNode() = delete;
 		CheckBoxMenuNode(const sf::Texture& checkTexture) : checkBox(std::make_unique<CheckBox>(checkTexture)) {};
 		virtual ~CheckBoxMenuNode() = default;
+		std::wstring GetString() const;
 		void virtual Draw(sf::RenderWindow& window, const sf::Vector2f& position, const Orientation orientation, const Alignment alignment) override;
 		virtual sf::FloatRect GetRect() const override;
 		void SetChecked(const bool checked);
@@ -53,4 +58,10 @@ namespace SnakeGame
 		float spacing{ 30.f };
 	};
 
+	class LevelSelectMenuNode : public MenuNode
+	{
+	public:
+		virtual ~LevelSelectMenuNode() = default;
+	private:
+	};
 }

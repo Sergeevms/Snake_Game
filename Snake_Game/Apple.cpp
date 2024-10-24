@@ -39,7 +39,7 @@ namespace SnakeGame
         if (availableSpecialType.size() > 0)
         {
             int roll = rand() % 100;
-            if (roll < Settings::GetSettings()->spesialAppleSpawnChance)
+            if (roll < Settings::GetSettings()->specialAppleSpawnChance)
             {
                 roll = rand() % availableSpecialType.size();
                 switch (availableSpecialType[roll])

@@ -16,6 +16,8 @@ namespace SnakeGame
 		MenuNode* difficultyNode = InitializeNode(currentNode, L"Уровень сложности", &normalStyle, MenuNodeActivateReaction::None, &subMenuStyle);
 		InitializeNode(currentNode, L"Таблица рекордов", &normalStyle, MenuNodeActivateReaction::Records);
 		MenuNode* settingsNode = InitializeNode(currentNode, L"Настройки", &normalStyle, MenuNodeActivateReaction::None, &subMenuStyle);
+		levelSelectionNode = InitializeNode(currentNode, L"Выбор уровня", &normalStyle, MenuNodeActivateReaction::None, &subMenuStyle);
+		SwitchLevelMode();
 		InitializeNode(currentNode, L"Выход", &normalStyle, MenuNodeActivateReaction::Exit);
 		
 		Settings* settings = Settings::GetSettings();
@@ -23,9 +25,16 @@ namespace SnakeGame
 		InitializeCheckBoxNode(settingsNode, L"Звук", settings->soundOn, 30.f, checkTexture, &selectedStyle, MenuNodeActivateReaction::SwitchOption, &(settings->soundOn));
 		InitializeCheckBoxNode(settingsNode, L"Музыка", settings->musicOn, 30.f, checkTexture, &normalStyle, MenuNodeActivateReaction::SwitchOption,  &(settings->musicOn));
 
-		InitializeCheckBoxNode(settingsNode, L"Золотое яблоко", settings->goldenAppleOn, 30.f, checkTexture, &normalStyle, MenuNodeActivateReaction::SwitchOption, &(settings->goldenAppleOn));
-		InitializeCheckBoxNode(settingsNode, L"Отравленное яблоко", settings->poisionedAppleOn, 30.f, checkTexture, &normalStyle, MenuNodeActivateReaction::SwitchOption, &(settings->poisionedAppleOn));
-		InitializeCheckBoxNode(settingsNode, L"Дизориентирующее яблоко", settings->disorientAppleOn, 30.f, checkTexture, &normalStyle, MenuNodeActivateReaction::SwitchOption, &(settings->disorientAppleOn));
+		InitializeCheckBoxNode(settingsNode, L"Золотое яблоко", settings->goldenAppleOn, 30.f, checkTexture, &normalStyle,
+			MenuNodeActivateReaction::SwitchOption, &(settings->goldenAppleOn));
+		InitializeCheckBoxNode(settingsNode, L"Отравленное яблоко", settings->poisionedAppleOn, 30.f, checkTexture, &normalStyle,
+			MenuNodeActivateReaction::SwitchOption, &(settings->poisionedAppleOn));
+		InitializeCheckBoxNode(settingsNode, L"Дизориентирующее яблоко", settings->disorientAppleOn, 30.f, checkTexture, &normalStyle,
+			MenuNodeActivateReaction::SwitchOption, &(settings->disorientAppleOn));
+		InitializeCheckBoxNode(settingsNode, L"Случайные стены", settings->randomWallsOn, 30.f, checkTexture, &normalStyle,
+			MenuNodeActivateReaction::SwitchOption, &(settings->randomWallsOn));
+		levelModeNodeOption = InitializeCheckBoxNode(settingsNode, L"Исчезающие стены", settings->randomWallsOn, 30.f, checkTexture, &normalStyle,
+			MenuNodeActivateReaction::SwitchOption, &(settings->temporaryWallsOn));
 
 		std::vector<std::wstring> difficultyNames{ L"Простой", L"Тяжелее простого", L"Средний", L"Легче тяжелого", L"Тяжелый" };
 		for (int i = 0; i < settings->difficultyLevelCount; ++i)
@@ -34,7 +43,7 @@ namespace SnakeGame
 			CheckBoxMenuNode* difficultySubNode = InitializeCheckBoxNode(difficultyNode, difficultyNames[i], IsCurrentDifficultyLevel, 30.f, checkTexture, IsCurrentDifficultyLevel ? &selectedStyle : &normalStyle, MenuNodeActivateReaction::SwitchOption);
 			if (IsCurrentDifficultyLevel)
 			{
-				difficultyNode->setSelectedChildID(i);
+				difficultyNode->SetSelectedChildID(i);
 			}
 			nodeToDifficultyLevel[difficultySubNode] = i;
 		}
@@ -54,6 +63,22 @@ namespace SnakeGame
 				selectedNode->SetChecked(true);
 				Settings::GetSettings()->UpdateDifficulty(nodeToDifficultyLevel.at(selectedNode));
 			}
+			else if (selectedNode == levelModeNodeOption)
+			{
+				*(nodeToCorrespodingOption.at(selectedNode)) = !(*(nodeToCorrespodingOption.at(selectedNode)));
+				selectedNode->SetChecked(*(nodeToCorrespodingOption.at(selectedNode)));
+				SwitchLevelMode();
+			}
+			else if (selectedNode->GetParent() == levelSelectionNode)
+			{
+				for (auto& node : selectedNode->GetParent()->GetChilds())
+				{
+					dynamic_cast<CheckBoxMenuNode*>(node)->SetChecked(false);
+				}
+				CheckBoxMenuNode* currentNode = dynamic_cast<CheckBoxMenuNode*>(selectedNode);
+				currentNode->SetChecked(true);
+				Settings::GetSettings()->selectedLevel = currentNode->GetString();
+			}
 			else
 			{
 				*(nodeToCorrespodingOption.at(selectedNode)) = !(*(nodeToCorrespodingOption.at(selectedNode)));
@@ -71,6 +96,19 @@ namespace SnakeGame
 		else
 		{
 			return 0;
+		}
+	}
+
+	void MainMenu::SwitchLevelMode()
+	{
+		levelSelectionNode->ClearChildNodes();
+		Settings* settings = Settings::GetSettings();
+		std::vector<std::wstring>& levelNames = settings->temporaryWallsOn ? settings->temporaryWallsLevels : settings->normalLevels;
+		settings->selectedLevel = levelNames.front();
+		for (auto& level : levelNames)
+		{
+			InitializeCheckBoxNode(levelSelectionNode, level, level == settings->selectedLevel, 10.f, checkTexture,
+				level == settings->selectedLevel ? &selectedStyle : &normalStyle, MenuNodeActivateReaction::SwitchOption);
 		}
 	}
 
@@ -158,5 +196,10 @@ namespace SnakeGame
 			check.setPosition(position);
 			window.draw(check);
 		}
+	}
+
+	std::wstring CheckBoxMenuNode::GetString() const
+	{
+		return text.get()->getString().toWideString();
 	}
 }

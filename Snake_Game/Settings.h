@@ -17,8 +17,7 @@ namespace SnakeGame
 			return settings;
 		};
 
-		void LoadFromFile(const std::string& fileName);
-		void SaveToFile(const std::string& fileName);
+		void LoadLevelsNames();
 		sf::Vector2f ScreenCenter();
 		sf::Vector2f ScreenSize();
 
@@ -26,10 +25,9 @@ namespace SnakeGame
 
 		int screenWidth;
 		int screenHeight;
-		int tileSize;
+		float tileSize;
 		std::wstring gameName;
 		std::wstring defaultPlayerName;
-		float epsilon;
 		float popUpSpacing;
 		float popUpBorder;
 		float movingDelayOnStart;
@@ -53,11 +51,10 @@ namespace SnakeGame
 		int currentDifficulty;
 		float movementSpeed;
 		float timeOnCell;
-
 	public:
-
 		//Special apples settings
-		int spesialAppleSpawnChance;
+		//Chance to spawn special apple instead of usual in percents
+		int specialAppleSpawnChance;
 		bool disorientAppleOn;
 		bool goldenAppleOn;
 		bool poisionedAppleOn;
@@ -71,6 +68,17 @@ namespace SnakeGame
 		sf::Color poisionedAppleColor;
 		sf::Color goldenAppleColor;
 		
+		//Special walls settings
+		//True if additional random walls will spawn
+		bool randomWallsOn;
+		//True if showing only levels with temporary walls
+		bool temporaryWallsOn;
+		//Coefficient of how much empty cells will be occupied with new walls
+		float randomWallCoefficient;
+		float temporaryWallLifeTime;
+		int fadingBorderValue;
+		float temporaryWallFadingTime;
+
 		//Sound settings
 
 		bool musicOn;
@@ -79,13 +87,14 @@ namespace SnakeGame
 		//Paths to files
 
 		std::string resourcesPath;
-		std::string levelPath;
+		std::wstring levelPath;
 		std::string soundPath;
 		std::string fontPath;
 		std::string texturePath;
 
-
-		std::string selectedLevel;
+		std::wstring selectedLevel;
+		std::vector<std::wstring> normalLevels;
+		std::vector<std::wstring> temporaryWallsLevels;
 		std::string recordsFileName;
 		
 		//Control settings

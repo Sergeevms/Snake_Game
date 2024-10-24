@@ -1,4 +1,5 @@
 #include "Settings.h"
+#include <filesystem>
 #include "BaseInputHandler.h"
 #include "Utility.h"
 
@@ -8,13 +9,19 @@ namespace SnakeGame
 
 	Settings::Settings()
 	{
+		resourcesPath = "Resources\\";
+		levelPath = L"Resources\\Levels\\";
+		soundPath = resourcesPath + "Sounds\\";
+		fontPath = resourcesPath + "Fonts\\";
+		texturePath = resourcesPath + "Textures\\";
+
+		LoadLevelsNames();
+
 		screenWidth = 800;
 		screenHeight = 600;
 		gameName = L"Змейка";
 		defaultPlayerName = L"XYZ";
-		epsilon = 1e-7f;
 		defaultSnakeSize = 4;
-		selectedLevel = "level1.lvl";
 		tileSize = 30;
 		baseTimeOnCell = 0.75f;
 		difficultyLevelCount = 5;		
@@ -29,12 +36,12 @@ namespace SnakeGame
 			difficultyToScore[i] = scoreOnDifficultyStep * (i + 1);
 		}
 		
-		UpdateDifficulty(3);
+		UpdateDifficulty(2);
 
-		spesialAppleSpawnChance = 75;
-		disorientAppleOn = true;
-		goldenAppleOn = true;
-		poisionedAppleOn = true;
+		specialAppleSpawnChance = 75;
+		disorientAppleOn = false;
+		goldenAppleOn = false;
+		poisionedAppleOn = false;
 		disorientationTime = 10.f;
 		goldenAppleLifeTime = 10.f;
 		goldenAppleScoreModifier = 1.5f;
@@ -49,6 +56,14 @@ namespace SnakeGame
 		musicOn = true;
 		soundOn = true;
 
+		randomWallsOn = false;
+		randomWallCoefficient = 0.15f;
+
+		temporaryWallsOn = false;
+		temporaryWallLifeTime = 10.f;
+		temporaryWallFadingTime = 2.f;
+		fadingBorderValue = 180;
+
 		keyMap[sf::Keyboard::W] = ActionsTypesOnInput::Up;
 		keyMap[sf::Keyboard::D] = ActionsTypesOnInput::Right;
 		keyMap[sf::Keyboard::S] = ActionsTypesOnInput::Down;
@@ -62,28 +77,15 @@ namespace SnakeGame
 		smallRecordsSize = 5;
 		bigRecordsSize = 10;
 
-		resourcesPath = "Resources\\";
-		levelPath = resourcesPath + "Levels\\";
-		soundPath = resourcesPath + "Sounds\\";
-		fontPath = resourcesPath + "Fonts\\";
-		texturePath = resourcesPath + "Textures\\";
-	}
-
-	void Settings::LoadFromFile(const std::string& fileName)
-	{
-
-	}
-
-	void Settings::SaveToFile(const std::string& fileName)
-	{
-
+		selectedLevel = temporaryWallsOn ? temporaryWallsLevels.front() : normalLevels.front();
+		selectedLevel = L"emptyMini.lvl";
 	}
 
 	void Settings::UpdateDifficulty(const int newDiffculty)
 	{
 		currentDifficulty = newDiffculty;
 		timeOnCell = difficultyToTimeOnCell[currentDifficulty];
-		movementSpeed = static_cast<float>(tileSize) / timeOnCell;
+		movementSpeed = tileSize / timeOnCell;
 	}
 
 	int Settings::GetCurrentDifficulty() const
@@ -101,9 +103,24 @@ namespace SnakeGame
 		return timeOnCell;
 	}
 
+	void Settings::LoadLevelsNames()
+	{
+		for (const auto& file : std::filesystem::directory_iterator(levelPath))
+		{
+			if (file.path().extension() == ".lvlt")
+			{
+				temporaryWallsLevels.push_back(file.path().filename());
+			}
+			else
+			{
+				normalLevels.push_back(file.path().filename());
+			}
+		}
+	}
+
 	sf::Vector2f Settings::ScreenCenter()
 	{
-		return sf::Vector2f(multiplyVectorByScalar(ScreenSize(), 0.5f));
+		return ScreenSize() * 0.5f;
 	}
 
 	sf::Vector2f Settings::ScreenSize()

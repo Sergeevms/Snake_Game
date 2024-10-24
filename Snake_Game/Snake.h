@@ -11,12 +11,14 @@ namespace SnakeGame
 	public:
 		SnakeNode(const sf::Vector2i& mapCell, const sf::Texture& texture, const Direction direction, const bool isMovingEnabled = true);
 		void Update(const float deltaTime, const float speedModifire);
+		//Set direction where SnakeNode mooving
 		void SetDirection(Direction newDirection);
+		//Set direction where SnakeNode looking
+		void SetVisualDirection(Direction direction);
 		void SetCellPositionIfMoving(const sf::Vector2i& newCell);
 		void UpdateScreenPositionByCell();
 		void SetMovingEnabledState(bool isEnabled);
 		Direction GetDirection() const;
-		virtual MapObjectType GetObjectType() const override { return MapObjectType::Snake; };
 	private:
 		Direction currentDirection;
 		bool isMoving;		
@@ -31,12 +33,16 @@ namespace SnakeGame
 	public:
 		Snake(PlayingState* currentState, Map* currentMap);
 		void Update(const float deltaTime);
+		//Set direction applayed on next cell step
 		void SetNewDirection(Direction direction);
-		void Draw(sf::RenderWindow& window) const;
+		//Create snake based on level info
 		void LoadFromCharMap(const std::vector<std::string>& charMap, const sf::Vector2i& headPosition);
+		//Create snake at random position
+		void GenerateSnake(Map* currentMap);
 		void AddNewBody();
 		void GetDisoriented();
 		void GetPoisioned();
+		bool IsPoisioned() const;
 	private:
 		bool AddNextBodyFromMap(std::vector<std::vector<bool>>& addedCells, const std::vector<std::string>& charMap, const sf::Vector2i& currentCell);
 
