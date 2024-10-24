@@ -24,8 +24,10 @@ namespace SnakeGame
         bool sessionStarted{ false };
         int scoreCount{ 0 };
         float delayBeforeMoving;
-        float keepSnakeMoveingTime;
+        float keepSnakeMovingTime;
         float timeTillGoldenAppleDisapear{ 0 };
+        float temporaryWallsTimer{ 0.f };
+        bool temporaryWallsPlaced{ false };
         void GenerateApple();
         Map map;
         Snake snake;

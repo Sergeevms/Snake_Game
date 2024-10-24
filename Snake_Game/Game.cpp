@@ -20,6 +20,7 @@ namespace SnakeGame
 #else// _DEBUG
 		backGroundMusic.openFromFile(settings->soundPath + "Clinthammer__Background_Music.wav");
 #endif
+		backGroundMusic.setLoop(true);
 		loadSound(SoundType::OnKeyHit, "Owlstorm__Snake_hit.wav");
 		loadSound(SoundType::OnLose, "Maodin204__Lose.wav");
 		loadSound(SoundType::OnSnakeHit, "Theevilsocks__menu-hover.wav");
@@ -34,9 +35,16 @@ namespace SnakeGame
 	void Game::Update(const float deltaTime, const std::vector<sf::Event>& inputEvents)
 	{
 		stateStack.rbegin()->get()->HandleInput(inputEvents);
-		for (auto& state : stateStack)
+		if (dynamic_cast<PauseState*>(stateStack.rbegin()->get()))
 		{
-			state.get()->Update(deltaTime);
+			stateStack.rbegin()->get()->Update(deltaTime);
+		}
+		else
+		{
+			for (auto& state : stateStack)
+			{
+				state.get()->Update(deltaTime);
+			}
 		}
 	}
 
@@ -135,7 +143,7 @@ namespace SnakeGame
 #ifdef _DEBUG
 		assert((*soundBuffers.back()).loadFromFile(settings->soundPath + fileName));
 #else
-		newBuffer.loadFromFile(settings->soundPath + fileName);
+		(*soundBuffers.back()).loadFromFile(settings->soundPath + fileName);
 #endif // _DEBUG
 		sounds[type] = sf::Sound(*soundBuffers.back());
 	}

@@ -6,14 +6,14 @@
 namespace SnakeGame
 {
 	enum class Direction;
-	enum class MapObjectType;
 	class MapObject;
+	class TemporaryWall;
 
 	class Map
 	{
 	public:
 		Map();
-		void LoadFromFile(const std::string& fileName);
+		void LoadFromFile(const std::wstring& fileName);
 		void CreateSavedLvl();
 		void Draw(sf::RenderWindow& window) const;
 		void EmplaceMapObject(std::shared_ptr <MapObject> object);
@@ -27,22 +27,25 @@ namespace SnakeGame
 		const sf::Vector2i& GetLoadedSnakeHeadPosition() const;
 		const sf::Vector2i& GetLoadedApplePosition() const;
 		sf::Vector2i GetMapSize() const;
-		const std::vector<std::string>& GetcharMap() const;
+		const std::vector<std::string>& GetCharMap() const;
 		bool HaveEmptyCells() const;
 		/*Check that cell in borders of loaded map*/
 		bool ValidCell(const sf::Vector2i& cell) const;
+		void GenerateRandomWalls();
+		void SetTemporaryWallsOpacity(const int opacity);
+		void EmplaceTemporaryWalls();
+		void RemoveTemporaryWalls();
 	private:
 		std::vector <std::shared_ptr<MapObject>> map;
-		std::unordered_map<char, sf::Texture> spritesCharToTexture;
 		std::vector <std::string> charMap;
 		sf::Vector2i loadedSnakeHeadPosition{ -1, -1 };
 		sf::Vector2i loadedApplePosition{ -1, -1 };
+		sf::Texture wallTexture;
 		int CellToMapIndex(const sf::Vector2i& cell) const;
 		int width{ 0 };
 		int height{ 0 };
 		int emptyCellCount{ 0 };
-
-		void addSpriteTexture(const char type, const std::string fileName);
+		std::vector <std::shared_ptr<TemporaryWall>> temporaryWalls;
 		Direction getWallDirection(const sf::Vector2i & cell) const;
 	};
 }

@@ -13,10 +13,10 @@ namespace SnakeGame
 {
 	Map::Map()
 	{
-		addSpriteTexture('W', "Wall.png");
+		LoadTexture("Wall.png", wallTexture);
 	}
 
-	void Map::LoadFromFile(const std::string& fileName)
+	void Map::LoadFromFile(const std::wstring& fileName)
 	{
 		std::ifstream input;
 		Settings* settings = Settings::GetSettings();
@@ -58,7 +58,13 @@ namespace SnakeGame
 				{
 				case 'W':
 				{
-					currentObject = std::make_shared<Wall>(currentCell, spritesCharToTexture['W'], getWallDirection(currentCell));
+					currentObject = std::make_shared<Wall>(currentCell, wallTexture, getWallDirection(currentCell));
+					break;
+				}
+				case 'T':
+				{
+					temporaryWalls.push_back(std::make_shared<TemporaryWall>(currentCell, wallTexture, getWallDirection(currentCell)));
+					currentObject = temporaryWalls.back();
 					break;
 				}
 				case 'A':
@@ -74,7 +80,7 @@ namespace SnakeGame
 				}
 				
 				map.emplace_back(currentObject);
-				if (currentObject && collitionResults.at(currentObject->GetObjectType()) == CollisionResult::GameOver)
+				if (IsCollisionOveringGame(currentObject.get()))
 				{
 					--emptyCellCount;
 				}
@@ -84,13 +90,17 @@ namespace SnakeGame
 
 	void Map::Draw(sf::RenderWindow& window) const
 	{
+		for (auto& wall : temporaryWalls)
+		{
+			wall->Draw(window);
+		}
 		for (auto& object : map)
 		{
-			if (object && object->GetObjectType() != MapObjectType::Snake)
+			if (object)
 			{
 				object->Draw(window);
 			}
-		}
+		}			
 	}
 
 	void Map::EmplaceMapObject(std::shared_ptr<MapObject> object)
@@ -98,7 +108,7 @@ namespace SnakeGame
 		sf::Vector2i objectCell = object->GetCellPosition();
 		map[CellToMapIndex(objectCell)] = object;
 
-		if (dynamic_cast<Wall*>(object.get()) != nullptr || (dynamic_cast<SnakeNode*>(object.get()) != nullptr))
+		if (IsCollisionOveringGame(object.get()))
 		{
 			--emptyCellCount;
 		}
@@ -118,7 +128,7 @@ namespace SnakeGame
 	void Map::RemoveMapObject(const sf::Vector2i& cell)
 	{
 		if (map[CellToMapIndex(cell)] &&
-			(dynamic_cast<Wall*>(map[CellToMapIndex(cell)].get()) != nullptr || (dynamic_cast<SnakeNode*>(map[CellToMapIndex(cell)].get()) != nullptr)))
+			(IsCollisionOveringGame(map[CellToMapIndex(cell)].get())))
 		{
 			++emptyCellCount;
 		}
@@ -128,11 +138,11 @@ namespace SnakeGame
 	MapObject* Map::GetObject(const sf::Vector2i& cell)
 	{
 		return map[CellToMapIndex(cell)].get();
-	}	
+	}
 
 	sf::Vector2i Map::GetRandomEmptyCell() const
 	{
-		sf::Vector2i checkingCell{ rand() % width, rand() % height }; 
+		sf::Vector2i checkingCell{ rand() % width, rand() % height };
 		while (map[CellToMapIndex(checkingCell)] != nullptr)
 		{
 			checkingCell = { rand() % width, rand() % height };
@@ -155,7 +165,7 @@ namespace SnakeGame
 		return sf::Vector2i{ width, height };
 	}
 
-	const std::vector<std::string>& Map::GetcharMap() const
+	const std::vector<std::string>& Map::GetCharMap() const
 	{
 		return charMap;
 	}
@@ -170,22 +180,124 @@ namespace SnakeGame
 		return InRightOpenInterval(0, width, cell.x) && InRightOpenInterval(0, height, cell.y);
 	}
 
+	void Map::GenerateRandomWalls()
+	{
+		std::vector<int> availableMovingDirectionsFromCells(map.size(), 4);
+		//Number of cells, adding wall to witch would'n block way throug nearby cells
+		size_t availiableToAddWallCells = map.size();
+
+		//Counting availiableToAddWallCells based on current map
+		for (auto& object : map)
+		{
+			if (std::dynamic_pointer_cast<Wall>(object))
+			{
+				--availiableToAddWallCells;
+				availableMovingDirectionsFromCells[CellToMapIndex(object->GetCellPosition())] = 0;
+				for (auto& directionVector : directionVectorsI)
+				{
+					sf::Vector2i possibleCell = object->GetCellPosition() + directionVector.second;
+					if (ValidCell(possibleCell) && availableMovingDirectionsFromCells[CellToMapIndex(possibleCell)] > 0)
+					{
+						--availableMovingDirectionsFromCells[CellToMapIndex(possibleCell)];
+						if (availableMovingDirectionsFromCells[CellToMapIndex(possibleCell)] == 2)
+						{
+							--availiableToAddWallCells;
+						}
+					}
+				}
+			}
+			else if (std::dynamic_pointer_cast<MapObject>(object))
+			{
+				--availiableToAddWallCells;
+			}
+		}
+
+		int targetRandomWallsCount = static_cast<int> (Settings::GetSettings()->randomWallCoefficient * availiableToAddWallCells);
+
+		//Adding walls while target count is reached or availiable cells are gone
+		while (targetRandomWallsCount > 0 && availiableToAddWallCells > 0)
+		{
+			sf::Vector2i newWallCell = GetRandomEmptyCell();
+			bool goodCell = availableMovingDirectionsFromCells[CellToMapIndex(newWallCell)] > 0;
+			//check that emplacing a wall wouldn't block nearby cells
+			for (auto& directionVector : directionVectorsI)
+			{
+				sf::Vector2i nearCell = directionVector.second + newWallCell;
+				if (ValidCell(nearCell) && (availableMovingDirectionsFromCells[CellToMapIndex(nearCell)] > 2 || availableMovingDirectionsFromCells[CellToMapIndex(nearCell)] == 0))
+				{
+					goodCell = goodCell && true;
+				}
+				else
+				{
+					goodCell = goodCell && false;
+				}
+			}
+			//add wall is cell is acceptable; mark as unacceptable and decrease availiableToAddWallCells otherwise
+			if (goodCell)
+			{
+				--availiableToAddWallCells;
+				--targetRandomWallsCount;
+				EmplaceMapObject(std::make_shared<Wall>(newWallCell, wallTexture, getWallDirection(newWallCell)));
+				availableMovingDirectionsFromCells[CellToMapIndex(newWallCell)] = 0;
+				for (auto& directionVector : directionVectorsI)
+				{
+					sf::Vector2i possibleCell = newWallCell + directionVector.second;
+					if (ValidCell(possibleCell) && availableMovingDirectionsFromCells[CellToMapIndex(possibleCell)] > 0)
+					{
+						--availableMovingDirectionsFromCells[CellToMapIndex(possibleCell)];
+						if (availableMovingDirectionsFromCells[CellToMapIndex(possibleCell)] == 2)
+						{
+							--availiableToAddWallCells;
+						}
+					}
+				}
+			}
+			else
+			{
+				--availiableToAddWallCells;
+				availableMovingDirectionsFromCells[CellToMapIndex(newWallCell)] = 0;
+			}
+		}
+	}
+
+	void Map::SetTemporaryWallsOpacity(const int opacity)
+	{
+		for (auto& wall : temporaryWalls)
+		{
+			wall->setOpacity(opacity);
+		}
+	}
+
+	void Map::EmplaceTemporaryWalls()
+	{
+		for (auto& wall : temporaryWalls)
+		{
+			if (GetObject(wall->GetCellPosition()) == nullptr)
+			{
+				EmplaceMapObject(wall);
+			}
+		}
+	}
+
+	void Map::RemoveTemporaryWalls()
+	{
+		for (auto& wall : temporaryWalls)
+		{
+			if (GetObject(wall->GetCellPosition()) == wall.get())
+			{
+				RemoveMapObject(wall);
+			}
+		}
+	}
+
 	int Map::CellToMapIndex(const sf::Vector2i& cell) const
 	{
 		return cell.y * width + cell.x;
 	}
 
-	void Map::addSpriteTexture(const char type, const std::string fileName)
-	{
-		sf::Texture currentTexture;
-		Settings* settings = Settings::GetSettings();
-		LoadTexture(fileName, currentTexture);
-		spritesCharToTexture[type] = currentTexture;
-	}
-
 	Direction Map::getWallDirection(const sf::Vector2i & cell) const
 	{
-		if (cell.x > 0 && charMap[cell.y].at(cell.x - 1) == 'W')
+		if (cell.x > 0 && (charMap[cell.y].at(cell.x - 1) == 'W'))
 		{
 			return Direction::Up;
 		}

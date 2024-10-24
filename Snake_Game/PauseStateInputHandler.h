@@ -12,8 +12,8 @@ namespace SnakeGame
     public:
         PauseStateInputHandler(PauseMenu* currentMenu);
     private:
-        void returnToGame();
-        void returnToMenu();
+        void ReturnToGame();
+        void ReturnToMenu();
 	};
 }
 

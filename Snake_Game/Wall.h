@@ -7,11 +7,16 @@ namespace SnakeGame
 
     struct Settings;
 
-    class Wall :
-        public MapObject
+    class Wall : public MapObject
     {
     public:
         Wall(const sf::Vector2i& mapCell, const sf::Texture& texture, const Direction direction);
-        virtual MapObjectType GetObjectType() const override { return MapObjectType::Wall; };
+    };
+
+    class TemporaryWall : public Wall
+    {
+    public:
+        TemporaryWall(const sf::Vector2i& mapCell, const sf::Texture& texture, const Direction direction);
+        void setOpacity(const int opacity);
     };
 }
