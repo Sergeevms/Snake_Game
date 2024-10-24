@@ -13,7 +13,7 @@ namespace SnakeGame
 	{
 	public:
 		Map();
-		void LoadFromFile(const std::string& fileName);
+		void LoadFromFile(const std::wstring& fileName);
 		void CreateSavedLvl();
 		void Draw(sf::RenderWindow& window) const;
 		void EmplaceMapObject(std::shared_ptr <MapObject> object);

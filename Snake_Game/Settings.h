@@ -17,8 +17,7 @@ namespace SnakeGame
 			return settings;
 		};
 
-		void LoadFromFile(const std::string& fileName);
-		void SaveToFile(const std::string& fileName);
+		void LoadLevelsNames();
 		sf::Vector2f ScreenCenter();
 		sf::Vector2f ScreenSize();
 
@@ -52,9 +51,7 @@ namespace SnakeGame
 		int currentDifficulty;
 		float movementSpeed;
 		float timeOnCell;
-
 	public:
-
 		//Special apples settings
 		//Chance to spawn special apple instead of usual in percents
 		int specialAppleSpawnChance;
@@ -82,7 +79,6 @@ namespace SnakeGame
 		int fadingBorderValue;
 		float temporaryWallFadingTime;
 
-
 		//Sound settings
 
 		bool musicOn;
@@ -91,13 +87,14 @@ namespace SnakeGame
 		//Paths to files
 
 		std::string resourcesPath;
-		std::string levelPath;
+		std::wstring levelPath;
 		std::string soundPath;
 		std::string fontPath;
 		std::string texturePath;
 
-
-		std::string selectedLevel;
+		std::wstring selectedLevel;
+		std::vector<std::wstring> normalLevels;
+		std::vector<std::wstring> temporaryWallsLevels;
 		std::string recordsFileName;
 		
 		//Control settings

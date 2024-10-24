@@ -9,7 +9,7 @@ namespace SnakeGame
         Settings* settings = Settings::GetSettings();
 #ifdef _DEBUG
         assert(font.loadFromFile(settings->fontPath + fontName));
-#elif
+#else
         font.loadFromFile(settings->fontPath + fontName);
 #endif // DEBUG
         color = newColor;
@@ -17,7 +17,7 @@ namespace SnakeGame
         characterSize = newSize;
     }
 
-    Direction SnakeGame::OpossiteDirection(Direction direction)
+    Direction SnakeGame::OppossiteDirection(Direction direction)
     {
         switch (direction)
         {

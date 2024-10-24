@@ -26,7 +26,7 @@ namespace SnakeGame
 		{Direction::Rigth, {1, 0}}
 	};
 	
-	Direction OpossiteDirection(Direction);
+	Direction OppossiteDirection(Direction);
 
 	enum class RelativePosition
 	{

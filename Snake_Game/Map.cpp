@@ -16,7 +16,7 @@ namespace SnakeGame
 		LoadTexture("Wall.png", wallTexture);
 	}
 
-	void Map::LoadFromFile(const std::string& fileName)
+	void Map::LoadFromFile(const std::wstring& fileName)
 	{
 		std::ifstream input;
 		Settings* settings = Settings::GetSettings();

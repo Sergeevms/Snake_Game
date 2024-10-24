@@ -43,14 +43,15 @@ namespace SnakeGame
 		virtual void SelectNextChild();
 		virtual void SelectPreviousChild();
 		virtual std::vector<MenuNode*> GetChilds();
-		virtual void setSelectedChildID(int id);
+		virtual void SetSelectedChildID(int id);
+		virtual void ClearChildNodes();
 	protected:
 		std::unique_ptr<ListDrawableText> text = std::make_unique<ListDrawableText>();
+		std::vector<std::unique_ptr<MenuNode>> childNodes;
 	private:
 		int selectedChildID{ -1 };
 		MenuStyle* subMenuStyle{ nullptr };
 		MenuNode* parentNode{};
-		std::vector<std::unique_ptr<MenuNode>> childNodes;
 	};	
 
 	class GeneralMenu : public IListDrawable

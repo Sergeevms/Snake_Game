@@ -35,7 +35,14 @@ namespace SnakeGame
 			timeTillGoldenAppleDisapear = settings->goldenAppleLifeTime;
 		}
 
-		snake.LoadFromCharMap(map.GetCharMap(), map.GetLoadedSnakeHeadPosition());
+		if (map.ValidCell(map.GetLoadedSnakeHeadPosition()))
+		{
+			snake.LoadFromCharMap(map.GetCharMap(), map.GetLoadedSnakeHeadPosition());
+		}
+		else
+		{
+			snake.GenerateSnake(&map);
+		}
 
 		if (settings->randomWallsOn)
 		{
@@ -50,7 +57,7 @@ namespace SnakeGame
 
 #ifdef _DEBUG
 		assert(font.loadFromFile(settings->fontPath +  "Roboto-Regular.ttf"));
-#elif
+#else
 		font.loadFromFile(settings->fontPath + "Roboto-Regular.ttf");
 #endif // DEBUG
 
@@ -80,6 +87,7 @@ namespace SnakeGame
 		Settings* settings = Settings::GetSettings();
 		if (isGameOvered)
 		{
+			Game::GetGame()->SwitchMusicPlaying(false);
 			if (keepSnakeMovingTime > 0.f)
 			{
 				snake.Update(deltaTime);

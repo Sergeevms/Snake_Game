@@ -214,5 +214,7 @@
     <None Include="Resources\Levels\micro.lvl" />
     <None Include="Resources\Levels\TemporaryWall.lvlt" />
     <None Include="Resources\Levels\TemporaryWallSmaller.lvlt" />
+    <None Include="Resources\Levels\level2.lvl" />
+    <None Include="Resources\Levels\emptyMini.lvl" />
   </ItemGroup>
 </Project>

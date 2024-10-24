@@ -1,4 +1,5 @@
 #include "Snake.h"
+#include "Apple.h"
 #include "Settings.h"
 #include "PlayingState.h"
 
@@ -25,7 +26,12 @@ namespace SnakeGame
 	void SnakeNode::SetDirection(Direction newDirection)
 	{
 		currentDirection = newDirection;
-		sprite.setRotation(directionToRotation.at(currentDirection));
+		SetVisualDirection(newDirection);
+	}
+
+	void SnakeNode::SetVisualDirection(Direction direction)
+	{
+		sprite.setRotation(directionToRotation.at(direction));
 	}
 
 	void SnakeNode::SetCellPositionIfMoving(const sf::Vector2i& newCell)
@@ -126,8 +132,8 @@ namespace SnakeGame
 
 	void Snake::SetNewDirection(Direction direction)
 	{
-		Direction possibleDirection = timeTillDisorientedFall > 0.f ? OpossiteDirection(direction) : direction;
-		if (possibleDirection != OpossiteDirection(nodes.front()->GetDirection()))
+		Direction possibleDirection = timeTillDisorientedFall > 0.f ? OppossiteDirection(direction) : direction;
+		if (possibleDirection != OppossiteDirection(nodes.front()->GetDirection()))
 		{
 			newDirection = possibleDirection;
 		}
@@ -145,33 +151,79 @@ namespace SnakeGame
 		}
 		addedToSnake[currentCell.y][currentCell.x] = true;
 		nodes.push_back(std::make_shared<SnakeNode>(currentCell, headTexture, Direction::None));
+
+		//Adding body from map
 		while (AddNextBodyFromMap(addedToSnake, charMap, currentCell))
 		{
 			currentCell = nodes.back()->GetCellPosition();
 		}
-		Direction possibleDirection = ((++nodes.begin())->get())->GetDirection();
-		if (charMap[headPosition.y + static_cast<int>(directionVectorsF.at(possibleDirection).y)][headPosition.x + static_cast<int>(directionVectorsF.at(possibleDirection).x)] == 'E' ||
-			charMap[headPosition.y + static_cast<int>(directionVectorsF.at(possibleDirection).y)][headPosition.x + static_cast<int>(directionVectorsF.at(possibleDirection).x)] == 'A')
+
+		//Select new direction
+		Direction possibleDirection = ((nodes.begin())->get())->GetDirection();
+		if (charMap[headPosition.y + (directionVectorsI.at(possibleDirection).y)][headPosition.x + (directionVectorsI.at(possibleDirection).x)] == 'E' ||
+			charMap[headPosition.y + (directionVectorsI.at(possibleDirection).y)][headPosition.x + (directionVectorsI.at(possibleDirection).x)] == 'A')
 		{
-			nodes.front()->SetDirection(possibleDirection);
 			newDirection = possibleDirection;
 		}
 		else
 		{
-			for (auto& curDir : directionVectorsF)
+			for (auto& curDir : directionVectorsI)
 			{
-				if (charMap[headPosition.y + static_cast<int>(curDir.second.y)][headPosition.x + static_cast<int>(curDir.second.x)] == 'E' ||
-					charMap[headPosition.y + static_cast<int>(curDir.second.y)][headPosition.x + static_cast<int>(curDir.second.x)] == 'A')
+				if (charMap[headPosition.y + (curDir.second.y)][headPosition.x + (curDir.second.x)] == 'E' ||
+					charMap[headPosition.y + (curDir.second.y)][headPosition.x + (curDir.second.x)] == 'A')
 				{
-					nodes.front()->SetDirection(curDir.first);
 					newDirection = curDir.first;
 				}
 			}
 		}
+		nodes.front()->SetVisualDirection(newDirection);
+
 		for (auto& node : nodes)
 		{
 			map->EmplaceMapObject((node));
 		}
+	}
+
+	void Snake::GenerateSnake(Map* currentMap)
+	{
+		sf::Vector2i currentNode = currentMap->GetRandomEmptyCell();
+		nodes.push_back(std::make_shared<SnakeNode>(currentNode, headTexture, Direction::None));
+		map->EmplaceMapObject(nodes.back());
+
+		Direction previosDirection = Direction::None;
+
+		//Choosing head direction
+		for (const auto& direction : directionVectorsI)
+		{
+			if (map->GetObject(currentNode + direction.second) == nullptr || dynamic_cast<Apple*>(map->GetObject(currentNode + direction.second)))
+			{
+				newDirection = direction.first;
+				previosDirection = direction.first;
+				break;
+			}
+		}		
+
+		//Adding snake body nodes while can or default snake size reached
+		for (int i = 1; i < Settings::GetSettings()->defaultSnakeSize; ++i)
+		{
+			for (const auto& direction : directionVectorsI)
+			{
+				if (direction.first != previosDirection)
+				{
+					sf::Vector2i newNodeCell = currentNode + direction.second;
+					if (map->GetObject(newNodeCell) == nullptr)
+					{
+						nodes.back().get()->SetDirection(OppossiteDirection(direction.first));
+						previosDirection = OppossiteDirection(direction.first);
+						nodes.push_back(std::make_shared<SnakeNode>(newNodeCell, bodyTexture, Direction::None));
+						map->EmplaceMapObject(nodes.back());
+						currentNode = newNodeCell;
+						break;
+					}
+				}
+			}
+		}
+		nodes.front()->SetVisualDirection(newDirection);
 	}
 
 	void Snake::AddNewBody()
@@ -207,7 +259,8 @@ namespace SnakeGame
 				charMap[checkingCell.y][checkingCell.x] == 'B' &&
 				addedCells[checkingCell.y][checkingCell.x] == false)
 			{				
-				nodes.push_back(std::make_shared<SnakeNode>(checkingCell, bodyTexture, OpossiteDirection(curDir.first)));
+				nodes.back()->SetDirection(OppossiteDirection(curDir.first));
+				nodes.push_back(std::make_shared<SnakeNode>(checkingCell, bodyTexture, Direction::None));
 				addedCells[checkingCell.y][checkingCell.x] = true;
 				return true;
 			}

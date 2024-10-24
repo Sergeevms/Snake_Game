@@ -86,7 +86,7 @@ namespace SnakeGame
 		return childList;
 	}
 
-	void MenuNode::setSelectedChildID(int id)
+	void MenuNode::SetSelectedChildID(int id)
 	{
 		if (id >= 0 && id < childNodes.size())
 		{
@@ -221,6 +221,7 @@ namespace SnakeGame
 			return nullptr;
 		}
 	}
+
 	void GeneralMenu::ConfigurateNode(MenuNode* node, MenuNode* parent, const std::wstring& newName,
 		TextStyle* nodeStyle, MenuNodeActivateReaction reaction, MenuStyle* newSubMenuStyle)
 	{
@@ -237,5 +238,10 @@ namespace SnakeGame
 		{
 			activateReactions[node] = reaction;
 		}
+	}
+
+	void MenuNode::ClearChildNodes()
+	{
+		childNodes.clear();
 	}
 }

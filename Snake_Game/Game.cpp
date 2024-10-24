@@ -143,7 +143,7 @@ namespace SnakeGame
 #ifdef _DEBUG
 		assert((*soundBuffers.back()).loadFromFile(settings->soundPath + fileName));
 #else
-		newBuffer.loadFromFile(settings->soundPath + fileName);
+		(*soundBuffers.back()).loadFromFile(settings->soundPath + fileName);
 #endif // _DEBUG
 		sounds[type] = sf::Sound(*soundBuffers.back());
 	}
